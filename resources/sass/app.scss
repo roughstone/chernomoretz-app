@@ -8,7 +8,92 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
-.navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+// Font Awesome
+$fa-font-path: "../webfonts";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "~@fortawesome/fontawesome-free/scss/solid.scss";
+@import "~@fortawesome/fontawesome-free/scss/regular.scss";
+@import "~@fortawesome/fontawesome-free/scss/brands.scss";
+
+body {
+    background-image: url(../../storage/app/public/images/gymnastic-low-poly-artwork.jpg)
 }
+.title {
+    background-image: url(../../storage/app/public/images/man.png), url(../../storage/app/public/images/woman.png);
+	background-position: right bottom, left top;
+    background-repeat: no-repeat, no-repeat;
+    background-size:auto 100%;
+    a{
+        color: #e7dfdf;
+        font-family: 'Kelly Slab', cursive;
+    }
+    a:hover {
+        color: #efefef;
+        text-decoration: none;
+    }
+}
+.loginPanel {
+    text-align: right;
+    margin-top: 0.3rem;
+    margin-right: 0.3rem;
+    a{
+        color: #e7dfdf;
+        font-family: 'Kelly Slab', cursive;
+    }
+    a:hover {
+        color: #efefef;
+        text-decoration: none;
+    }
+}
+.navbar {
+    background:linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 23, 255, 0.7), rgba(0, 0, 0, 0.7), rgba(0, 23, 255, 0.7), rgba(0, 0, 0, 0.7));
+    padding: 0.3rem;
+    a {
+        color: #d6d5d5 !important;
+    }
+    a:hover {
+        color: #ffffff !important;
+    }
+    .router-link-active {
+        background-color: rgba(29, 30, 36, 0.8);
+        border-radius: 0.5rem;
+    }
+}
+
+.dropdown-menu {
+    background-color: rgba(0, 23, 255, 0.4);
+}
+html {
+    font-size: 0.7rem;
+  }
+
+  @include media-breakpoint-up(sm) {
+    html {
+      font-size: 0.9rem;
+    }
+  }
+
+  @include media-breakpoint-up(md) {
+    html {
+      font-size: 1.1rem;
+    }
+  }
+
+  @include media-breakpoint-up(lg) {
+    html {
+      font-size: 1.3rem;
+    }
+  }
+
+
