@@ -26730,7 +26730,7 @@ body {
   color: #ffffff !important;
 }
 
-.navbar .router-link-active {
+.navbar .router-link-exact-active {
   background-color: rgba(29, 30, 36, 0.8);
   border-radius: 0.5rem;
 }

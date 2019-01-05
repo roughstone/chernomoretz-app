@@ -21,32 +21,39 @@
 </head>
     <body>
         <div class="flex-center position-ref full-height" id="app">
-                @if (Route::has('login'))
-                <div class="loginPanel">
-                    @auth
-                        <a href="{{ url('/home') }}"><i class="far fa-user green"></i> Моят профил &#160</a>
-                        <a href="{{ route('logout') }}"
-                            onclick="event.preventDefault();
-                                            document.getElementById('logout-form').submit();"><i class="fas fa-power-off red"></i>
-                                {{ __('Изход') }}
-                            </a>
+            @if (Route::has('login'))
+            <div class="loginPanel">
+                @auth
+                    <a href="{{ url('/home') }}"><i class="far fa-user green"></i> Моят профил &#160</a>
+                    <a href="{{ route('logout') }}"
+                        onclick="event.preventDefault();
+                                        document.getElementById('logout-form').submit();"><i class="fas fa-power-off red"></i>
+                            {{ __('Изход') }}
+                        </a>
 
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form>
-                    @else
-                        <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#userModal">
-                            <i class="fas fa-sign-in-alt green"></i></i>&#160Вход
-                        </button>
-                    @endauth
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                @else
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#userModal">
+                        <i class="fas fa-sign-in-alt green"></i></i>&#160Вход
+                    </button>
+                @endauth
+            </div>
+            @endif
+            <authentication-component></authentication-component>
+            <master-header></master-header>
+            <master-navigation></master-navigation>
+            <div class="container-fluid">
+                <div class="row flex-xl-nowrap">
+                    <router-view></router-view>
                 </div>
-                @endif
-                <authentication-component></authentication-component>
-                <master-header></master-header>
-                <master-navigation></master-navigation>
-            <div class="content">
-                <router-view></router-view>
             </div>
         </div>
-    </body>
+@auth
+    <script>
+        window.user = @json(auth()->user())
+    </script>
+@endauth
+</body>
 </html>

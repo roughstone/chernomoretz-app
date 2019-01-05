@@ -84,6 +84,7 @@
                 .then(() => {
                     $('#userModal').modal('hide');
                     this.form.reset();
+                    location.reload();
                 }).catch(() =>{
 
                 })

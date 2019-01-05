@@ -3,6 +3,12 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+/*
+ * MyGate
+*/
+import Gate from './Gate';
+Vue.prototype.$gate = new Gate(window.user);
+
 /**
  * Vue Globally Registered Components
  */
@@ -20,6 +26,8 @@ import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
 const routes = [
+     { path: '/', component: require('./components/content/slider/SlidersComponent.vue').default},
+     { path: '/За-спорта/:id', name: 'За-спорта',  component: require('./components/content/slider/SliderComponent.vue').default },
      { path: '/test', component: require('./components/ExampleComponent.vue').default},
 ];
 

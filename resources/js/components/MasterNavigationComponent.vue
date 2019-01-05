@@ -8,10 +8,10 @@
 <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
     <li class="nav-item">
-        <a class="nav-link" href="/"><i class="fas fa-home purple"></i> Начало</a>
+        <router-link class="nav-link" to="/#"><i class="fas fa-home purple"></i> Начало</router-link>
     </li>
     <li class="nav-item">
-        <router-link class="nav-link" to="/foo"><i class="far fa-newspaper purple"></i> Новини</router-link>
+        <router-link class="nav-link" to="/test"><i class="far fa-newspaper purple"></i> Новини</router-link>
     </li>
 
     <li class="nav-item dropdown">
