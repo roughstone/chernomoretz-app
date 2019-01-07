@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Slider;
+use App\News;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Intervention\Image\ImageManagerStatic as Image;
 
-
-
-class SlidersController extends Controller
+class NewsController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +16,7 @@ class SlidersController extends Controller
      */
     public function index()
     {
-            return Slider::paginate(25);
+        return News::paginate(10);
     }
 
     /**
@@ -35,18 +32,22 @@ class SlidersController extends Controller
                 'title' => ['required', 'min:3'],
                 'photos' => ['required'],
                 'description' => ['required', 'min:6',],
+                'category' => ['required', 'min:6',],
+                'date' => ['required', 'min:6',],
             ]);
 
             if ($request->photos) {
                 $fileName = time().'.'.explode('/', explode(':', substr($request->photos, 0, strpos($request->photos, ';')))[1])[1];
 
-                Image::make($request->photos)->save(public_path('/storage/sliders/'.$fileName));
+                Image::make($request->photos)->save(public_path('/storage/news/'.$fileName));
             }
-            $object = new Slider();
+            $object = new News();
 
             $object->title = request('title');
             $object->description = request('description');
             $object->photos = $fileName;
+            $object->category = request('category');
+            $object->date = request('date');
 
             $object->save();
         }
@@ -55,37 +56,39 @@ class SlidersController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Slider  $sliders
+     * @param  \App\News  $news
      * @return \Illuminate\Http\Response
      */
-    public function show(Slider $Slider)
+    public function show(News $news)
     {
-        return Slider::all()->where('id','=',$Slider->id);
+        return News::all()->where('id','=',$news->id);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Slider  $sliders
+     * @param  \App\News  $news
      * @return \Illuminate\Http\Response
-        */
-        public function update(Request $request, Slider $Slider)
+     */
+    public function update(Request $request, News $news)
     {
         if (\Gate::allows('admin')) {
-            $object = Slider::all()->where('id','=',$Slider->id)->first();
+            $object = News::all()->where('id','=',$news->id)->first();
 
             request()->validate([
                 'title' => ['required', 'min:3'],
                 'photos' => ['required'],
                 'description' => ['required', 'min:6',],
+                'category' => ['required', 'min:6',],
+                'date' => ['required', 'min:6',],
             ]);
 
             if (strlen($request->photos) > 20) {
                 $fileName = time().'.'.explode('/', explode(':', substr($request->photos, 0, strpos($request->photos, ';')))[1])[1];
 
-                Image::make($request->photos)->save(public_path('/storage/sliders/'.$fileName));
-                unlink('../public/storage/sliders/' . $object->photos);
+                Image::make($request->photos)->save(public_path('/storage/news/'.$fileName));
+                unlink('../public/storage/news/' . $object->photos);
             } else {
                 $fileName = $object->photos;
             }
@@ -94,6 +97,8 @@ class SlidersController extends Controller
                 'title' => $request['title'],
                 'photos' => $fileName,
                 'description' => $request['description'],
+                'category' => $request['category'],
+                'date' => $request['date']
             ]);
         }
     }
@@ -101,16 +106,16 @@ class SlidersController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Slider  $sliders
+     * @param  \App\News  $news
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Slider $Slider)
+    public function destroy(News $news)
     {
         if (\Gate::allows('admin')) {
 
-            $Slider->delete();
+            $news->delete();
 
-            unlink('../public/storage/sliders/' . $Slider->photos);
+            unlink('../public/storage/news/' . $news->photos);
         }
     }
 }

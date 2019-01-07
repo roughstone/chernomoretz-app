@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Slider;
+use App\Coach;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Intervention\Image\ImageManagerStatic as Image;
 
-
-
-class SlidersController extends Controller
+class CoachController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +15,7 @@ class SlidersController extends Controller
      */
     public function index()
     {
-            return Slider::paginate(25);
+        return Coach::paginate(25);
     }
 
     /**
@@ -40,9 +36,9 @@ class SlidersController extends Controller
             if ($request->photos) {
                 $fileName = time().'.'.explode('/', explode(':', substr($request->photos, 0, strpos($request->photos, ';')))[1])[1];
 
-                Image::make($request->photos)->save(public_path('/storage/sliders/'.$fileName));
+                Image::make($request->photos)->save(public_path('/storage/coachs/'.$fileName));
             }
-            $object = new Slider();
+            $object = new Coach();
 
             $object->title = request('title');
             $object->description = request('description');
@@ -55,25 +51,25 @@ class SlidersController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Slider  $sliders
+     * @param  \App\Coach  $coach
      * @return \Illuminate\Http\Response
      */
-    public function show(Slider $Slider)
+    public function show(Coach $coach)
     {
-        return Slider::all()->where('id','=',$Slider->id);
+        return Coach::all()->where('id','=',$coach->id);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Slider  $sliders
+     * @param  \App\Coach  $coach
      * @return \Illuminate\Http\Response
-        */
-        public function update(Request $request, Slider $Slider)
+     */
+    public function update(Request $request, Coach $coach)
     {
         if (\Gate::allows('admin')) {
-            $object = Slider::all()->where('id','=',$Slider->id)->first();
+            $object = Coach::all()->where('id','=',$coach->id)->first();
 
             request()->validate([
                 'title' => ['required', 'min:3'],
@@ -84,8 +80,8 @@ class SlidersController extends Controller
             if (strlen($request->photos) > 20) {
                 $fileName = time().'.'.explode('/', explode(':', substr($request->photos, 0, strpos($request->photos, ';')))[1])[1];
 
-                Image::make($request->photos)->save(public_path('/storage/sliders/'.$fileName));
-                unlink('../public/storage/sliders/' . $object->photos);
+                Image::make($request->photos)->save(public_path('/storage/coachs/'.$fileName));
+                unlink('../public/storage/coachs/' . $object->photos);
             } else {
                 $fileName = $object->photos;
             }
@@ -101,16 +97,16 @@ class SlidersController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Slider  $sliders
+     * @param  \App\Coach  $coach
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Slider $Slider)
+    public function destroy(Coach $coach)
     {
         if (\Gate::allows('admin')) {
 
-            $Slider->delete();
+            $coach->delete();
 
-            unlink('../public/storage/sliders/' . $Slider->photos);
+            unlink('../public/storage/coachs/' . $coach->photos);
         }
     }
 }

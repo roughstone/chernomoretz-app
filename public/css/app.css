@@ -40,6 +40,14 @@
   color: #6cb2eb;
 }
 
+.dwhite {
+  color: #d6d5d5;
+}
+
+.black {
+  color: #000000;
+}
+
 /*!
  * Bootstrap v4.2.1 (https://getbootstrap.com/)
  * Copyright 2011-2018 The Bootstrap Authors
@@ -5763,13 +5771,13 @@ a.badge-dark:focus {
   font-size: 1.35rem;
   font-weight: 700;
   line-height: 1;
-  color: #000;
+  color: #000000;
   text-shadow: 0 1px 0 #fff;
   opacity: 0.5;
 }
 
 .close:hover {
-  color: #000;
+  color: #000000;
   text-decoration: none;
 }
 
@@ -5919,7 +5927,7 @@ a.close.disabled {
   z-index: 1040;
   width: 100vw;
   height: 100vh;
-  background-color: #000;
+  background-color: #000000;
 }
 
 .modal-backdrop.fade {
@@ -6070,7 +6078,7 @@ a.close.disabled {
 .bs-tooltip-auto[x-placement^=top] .arrow::before {
   top: 0;
   border-width: 0.4rem 0.4rem 0;
-  border-top-color: #000;
+  border-top-color: #000000;
 }
 
 .bs-tooltip-right,
@@ -6089,7 +6097,7 @@ a.close.disabled {
 .bs-tooltip-auto[x-placement^=right] .arrow::before {
   right: 0;
   border-width: 0.4rem 0.4rem 0.4rem 0;
-  border-right-color: #000;
+  border-right-color: #000000;
 }
 
 .bs-tooltip-bottom,
@@ -6106,7 +6114,7 @@ a.close.disabled {
 .bs-tooltip-auto[x-placement^=bottom] .arrow::before {
   bottom: 0;
   border-width: 0 0.4rem 0.4rem;
-  border-bottom-color: #000;
+  border-bottom-color: #000000;
 }
 
 .bs-tooltip-left,
@@ -6125,7 +6133,7 @@ a.close.disabled {
 .bs-tooltip-auto[x-placement^=left] .arrow::before {
   left: 0;
   border-width: 0.4rem 0 0.4rem 0.4rem;
-  border-left-color: #000;
+  border-left-color: #000000;
 }
 
 .tooltip-inner {
@@ -6133,7 +6141,7 @@ a.close.disabled {
   padding: 0.25rem 0.5rem;
   color: #fff;
   text-align: center;
-  background-color: #000;
+  background-color: #000000;
   border-radius: 0.25rem;
 }
 
@@ -10496,7 +10504,7 @@ a.text-dark:focus {
   }
 
   .badge {
-    border: 1px solid #000;
+    border: 1px solid #000000;
   }
 
   .table {
@@ -10568,6 +10576,71 @@ a.text-dark:focus {
 
 .cyan {
   color: #6cb2eb;
+}
+
+.dwhite {
+  color: #d6d5d5;
+}
+
+.black {
+  color: #000000;
+}
+
+.sliderNav {
+  z-index: 50;
+  display: block;
+  position: absolute;
+  top: 0.2vw;
+  width: 100%;
+  border-radius: 1vw;
+  padding-right: 30px;
+}
+
+.slider {
+  display: none;
+}
+
+.active {
+  display: block;
+  background-color: rgba(0, 0, 0, 0.25);
+  margin-top: 0.5vw;
+  padding-bottom: 0.5vw;
+  border-radius: 1vw;
+  width: 100%;
+}
+
+.active img {
+  width: 88%;
+  margin: 0 6%;
+}
+
+.active h3 {
+  font-size: 2vw;
+}
+
+.for-user {
+  background-image: url(/images/gymnastic-low-poly-artwork.jpg?ed1e0ee7ad4872727e567d5bcd15b998);
+  background-size: 100% 100%;
+}
+
+.for-user .modal-header {
+  background-color: none !important;
+}
+
+.for-user .close {
+  color: #d6d5d5;
+}
+
+.for-user .close:hover {
+  color: white;
+}
+
+.for-user h5 {
+  font-size: 2vw;
+}
+
+.for-user p {
+  font-size: 1.2vw;
 }
 
 /*!
@@ -16283,13 +16356,13 @@ a.badge-dark:focus {
   font-size: 1.35rem;
   font-weight: 700;
   line-height: 1;
-  color: #000;
+  color: #000000;
   text-shadow: 0 1px 0 #fff;
   opacity: 0.5;
 }
 
 .close:hover {
-  color: #000;
+  color: #000000;
   text-decoration: none;
 }
 
@@ -16439,7 +16512,7 @@ a.close.disabled {
   z-index: 1040;
   width: 100vw;
   height: 100vh;
-  background-color: #000;
+  background-color: #000000;
 }
 
 .modal-backdrop.fade {
@@ -16590,7 +16663,7 @@ a.close.disabled {
 .bs-tooltip-auto[x-placement^=top] .arrow::before {
   top: 0;
   border-width: 0.4rem 0.4rem 0;
-  border-top-color: #000;
+  border-top-color: #000000;
 }
 
 .bs-tooltip-right,
@@ -16609,7 +16682,7 @@ a.close.disabled {
 .bs-tooltip-auto[x-placement^=right] .arrow::before {
   right: 0;
   border-width: 0.4rem 0.4rem 0.4rem 0;
-  border-right-color: #000;
+  border-right-color: #000000;
 }
 
 .bs-tooltip-bottom,
@@ -16626,7 +16699,7 @@ a.close.disabled {
 .bs-tooltip-auto[x-placement^=bottom] .arrow::before {
   bottom: 0;
   border-width: 0 0.4rem 0.4rem;
-  border-bottom-color: #000;
+  border-bottom-color: #000000;
 }
 
 .bs-tooltip-left,
@@ -16645,7 +16718,7 @@ a.close.disabled {
 .bs-tooltip-auto[x-placement^=left] .arrow::before {
   left: 0;
   border-width: 0.4rem 0 0.4rem 0.4rem;
-  border-left-color: #000;
+  border-left-color: #000000;
 }
 
 .tooltip-inner {
@@ -16653,7 +16726,7 @@ a.close.disabled {
   padding: 0.25rem 0.5rem;
   color: #fff;
   text-align: center;
-  background-color: #000;
+  background-color: #000000;
   border-radius: 0.25rem;
 }
 
@@ -21014,7 +21087,7 @@ a.text-dark:focus {
   }
 
   .badge {
-    border: 1px solid #000;
+    border: 1px solid #000000;
   }
 
   .table {
@@ -26682,11 +26755,13 @@ readers do not read off random characters that represent icons */
 
 body {
   background-image: url(/images/gymnastic-low-poly-artwork.jpg?ed1e0ee7ad4872727e567d5bcd15b998);
+  background-attachment: fixed;
+  background-size: 100% auto;
 }
 
 .title {
   background-image: url(/images/man.png?85840f1e44716ffaa798ef7d39401ee2), url(/images/woman.png?4313cb6c41cf121f38ec3e12b07d642c);
-  background-position: right bottom, left top;
+  background-position: 90% 0, 10% 0;
   background-repeat: no-repeat, no-repeat;
   background-size: auto 100%;
 }
@@ -26737,6 +26812,16 @@ body {
 
 .dropdown-menu {
   background-color: rgba(0, 23, 255, 0.4);
+}
+
+.announcement {
+  background-color: rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0px 0px 4px 2px #10172e;
+  border-radius: 0.3vw;
+}
+
+.announcement hr {
+  border-top: 1px solid #87deee;
 }
 
 html {

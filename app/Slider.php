@@ -4,8 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Sliders extends Model
+class Slider extends Model
 {
+    protected $table = 'sliders';
+
     protected $fillable = [
         'title', 'photos', 'description',
     ];
