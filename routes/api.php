@@ -20,18 +20,16 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/Sliders', 'API\SlidersController@index');
 Route::post('/Sliders', 'API\SlidersController@store')->middleware('auth:api');
-Route::get('Sliders/{Slider}', 'API\SlidersController@show');
 Route::patch('/Sliders/{Slider}', 'API\SlidersController@update')->middleware('auth:api');
 Route::delete('/Sliders/{Slider}', 'API\SlidersController@destroy')->middleware('auth:api');
 
+Route::get('/moreNews', 'API\NewsController@moreNewsIndex');
 Route::get('/news', 'API\NewsController@index');
 Route::post('/news', 'API\NewsController@store')->middleware('auth:api');
-Route::get('news/{news}', 'API\NewsController@show');
 Route::patch('/news/{news}', 'API\NewsController@update')->middleware('auth:api');
 Route::delete('/news/{news}', 'API\NewsController@destroy')->middleware('auth:api');
 
 Route::get('/coachs', 'API\CoachController@index');
 Route::post('/coachs', 'API\CoachController@store')->middleware('auth:api');
-Route::get('coachs/{coach}', 'API\CoachController@show');
 Route::patch('/coachs/{coach}', 'API\CoachController@update')->middleware('auth:api');
 Route::delete('/coachs/{coach}', 'API\CoachController@destroy')->middleware('auth:api');

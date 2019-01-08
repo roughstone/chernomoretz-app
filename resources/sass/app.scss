@@ -15,7 +15,10 @@
 
 // Variables
 @import 'variables';
+
+//myCSS
 @import 'slider';
+@import 'team';
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
@@ -34,7 +37,7 @@ body {
 }
 .title {
     background-image: url(../../storage/app/public/images/man.png), url(../../storage/app/public/images/woman.png);
-	background-position: 90% 0, 10% 0;
+	background-position: 85% 0, 15% 0;
     background-repeat: no-repeat, no-repeat;
     background-size:auto 100%;
     a{
@@ -44,6 +47,13 @@ body {
     a:hover {
         color: #efefef;
         text-decoration: none;
+    }
+    h1 {
+        font-size: 3vw;
+    }
+    h2 {
+        font-size: 2vw;
+        line-height: 2vw;
     }
 }
 .loginPanel {
@@ -76,13 +86,45 @@ body {
 .dropdown-menu {
     background-color: rgba(0, 23, 255, 0.4);
 }
-.announcement {
+.announcement, .news {
     background-color: rgba(0, 0, 0, 0.25);
     box-shadow: inset 0px 0px 4px 2px #10172e;
     border-radius: 0.3vw;
+    margin-right: 2.5vw;
     hr {
         border-top: 1px solid rgb(135, 222, 238);
     }
+    h3 {
+        background-color: rgba(0, 0, 0, 0.25);
+        border-radius: 0.3vw 0.3vw 0 0;
+    }
+    a:hover {
+        text-decoration: none !important;
+    }
+}
+
+.for-user {
+    background-image: url(../../storage/app/public/images/gymnastic-low-poly-artwork.jpg);
+    background-size: 100% 100%;
+    .modal-header {
+        background-color: none !important;
+    }
+    .close {
+        color: #d6d5d5;
+    }
+    .close:hover {
+        color: white;
+    }
+    h5 {
+        font-size: 2vw;
+    }
+    p {
+        font-size: 1.2vw;
+        white-space: pre-wrap;
+    }
+}
+.underline {
+    text-decoration: underline !important;
 }
 
 html {

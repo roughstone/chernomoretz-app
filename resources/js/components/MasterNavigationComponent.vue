@@ -11,7 +11,7 @@
         <router-link class="nav-link" to="/#"><i class="fas fa-home purple"></i> Начало</router-link>
     </li>
     <li class="nav-item">
-        <router-link class="nav-link" to="/test"><i class="far fa-newspaper purple"></i> Новини</router-link>
+        <router-link class="nav-link" to="/Новини"><i class="far fa-newspaper purple"></i> Новини</router-link>
     </li>
 
     <li class="nav-item dropdown">
@@ -20,8 +20,8 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <router-link class="dropdown-item" to="/Треньори">Треньори</router-link>
-            <router-link class="dropdown-item" to="/bar">Състезатели</router-link>
-            <router-link class="dropdown-item" to="/man">График</router-link>
+            <router-link class="dropdown-item" to="/Състезатели">Състезатели</router-link>
+            <router-link class="dropdown-item" to="/График">График</router-link>
         </div>
     </li>
 
@@ -30,13 +30,13 @@
             <i class="far fa-images purple"></i> Галерия
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="#">Състезания</a>
-        <a class="dropdown-item" href="#">Събития</a>
-        <a class="dropdown-item" href="#">Тренировки</a>
+            <router-link class="dropdown-item" to="/Стстезания">Стстезания</router-link>
+            <router-link class="dropdown-item" to="/Събития">Събития</router-link>
+            <router-link class="dropdown-item" to="/Тренировки">Тренировки</router-link>
         </div>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#"><i class="fas fa-phone-square purple"></i> Контакти с нас!</a>
+        <router-link class="nav-link" to="/Контакти"><i class="fas fa-phone-square purple"></i> Контакти с нас!</router-link>
     </li>
     </ul>
 </div>

@@ -19,7 +19,7 @@ class SlidersController extends Controller
      */
     public function index()
     {
-            return Slider::paginate(25);
+            return Slider::all();
     }
 
     /**
@@ -50,17 +50,6 @@ class SlidersController extends Controller
 
             $object->save();
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Slider  $sliders
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Slider $Slider)
-    {
-        return Slider::all()->where('id','=',$Slider->id);
     }
 
     /**

@@ -10618,29 +10618,31 @@ a.text-dark:focus {
   font-size: 2vw;
 }
 
-.for-user {
-  background-image: url(/images/gymnastic-low-poly-artwork.jpg?ed1e0ee7ad4872727e567d5bcd15b998);
-  background-size: 100% 100%;
+.viewSliderDescription {
+  white-space: pre-wrap;
 }
 
-.for-user .modal-header {
-  background-color: none !important;
+.coachs {
+  padding: 1vw 0.5vw 0 0.5vw;
 }
 
-.for-user .close {
-  color: #d6d5d5;
-}
-
-.for-user .close:hover {
+.coachs a:hover {
   color: white;
+  text-decoration: none;
 }
 
-.for-user h5 {
-  font-size: 2vw;
+.coachs .coach {
+  background-color: rgba(0, 94, 128, 0.7);
+  border-radius: 1vw 1vw 0 0;
+  box-shadow: inset 0px 0px 6px 4px #00294e;
+  padding-bottom: 2vw;
 }
 
-.for-user p {
-  font-size: 1.2vw;
+.coachs img {
+  border-radius: 1vw;
+  width: 70%;
+  margin: 1vw 15% 0 15%;
+  box-shadow: 0px 0px 10px 5px #00294e;
 }
 
 /*!
@@ -26761,7 +26763,7 @@ body {
 
 .title {
   background-image: url(/images/man.png?85840f1e44716ffaa798ef7d39401ee2), url(/images/woman.png?4313cb6c41cf121f38ec3e12b07d642c);
-  background-position: 90% 0, 10% 0;
+  background-position: 85% 0, 15% 0;
   background-repeat: no-repeat, no-repeat;
   background-size: auto 100%;
 }
@@ -26774,6 +26776,15 @@ body {
 .title a:hover {
   color: #efefef;
   text-decoration: none;
+}
+
+.title h1 {
+  font-size: 3vw;
+}
+
+.title h2 {
+  font-size: 2vw;
+  line-height: 2vw;
 }
 
 .loginPanel {
@@ -26814,14 +26825,58 @@ body {
   background-color: rgba(0, 23, 255, 0.4);
 }
 
-.announcement {
+.announcement,
+.news {
   background-color: rgba(0, 0, 0, 0.25);
   box-shadow: inset 0px 0px 4px 2px #10172e;
   border-radius: 0.3vw;
+  margin-right: 2.5vw;
 }
 
-.announcement hr {
+.announcement hr,
+.news hr {
   border-top: 1px solid #87deee;
+}
+
+.announcement h3,
+.news h3 {
+  background-color: rgba(0, 0, 0, 0.25);
+  border-radius: 0.3vw 0.3vw 0 0;
+}
+
+.announcement a:hover,
+.news a:hover {
+  text-decoration: none !important;
+}
+
+.for-user {
+  background-image: url(/images/gymnastic-low-poly-artwork.jpg?ed1e0ee7ad4872727e567d5bcd15b998);
+  background-size: 100% 100%;
+}
+
+.for-user .modal-header {
+  background-color: none !important;
+}
+
+.for-user .close {
+  color: #d6d5d5;
+}
+
+.for-user .close:hover {
+  color: white;
+}
+
+.for-user h5 {
+  font-size: 2vw;
+}
+
+.for-user p {
+  font-size: 1.2vw;
+  white-space: pre-wrap;
+}
+
+.underline {
+  text-decoration: underline !important;
 }
 
 html {

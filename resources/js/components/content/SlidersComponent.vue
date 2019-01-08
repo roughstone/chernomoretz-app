@@ -1,6 +1,6 @@
 <template>
 <div class="row flex-xl-nowrap">
-    <a href="#" class="float-right" v-if="sliderAdminMode" @click.prevent="showModal()"><i class="fas fa-file-import fa-3x green"></i></a>
+    <a href="" class="float-right" v-if="sliderAdminMode" @click.prevent="showModal()"><i class="fas fa-file-import fa-3x green"></i></a>
     <div class="col-12 col-md-9">
         <div>
             <div class="sliderNav d-flex justify-content-between" v-once>
@@ -16,15 +16,15 @@
                         </a>
                     </div>
                     <div v-if="!sliderMode">
-                        <h3 class="text-center dwhite">{{ slider.title }}aaaaaaaaaaaaaaaaaa</h3>
-                        <p class="dwhite pr-2">
-                            <a href="#" @click.prevent="choiseSlider()">
+                        <h3 class="text-center dwhite">{{ slider.title }}</h3>
+                        <p class="dwhite pr-2 viewSliderDescription">
+                            <a href="" @click.prevent="choiseSlider()">
                                 <img class="w-50 d-inline float-left" :src="'/storage/sliders/' + slider.photos" :alt="slider.title">
                             </a>{{ slider.description }}
                         </p>
                         <div class="p-1 d-inline-block w-100">
-                            <hr v-if="!SliderAdminMode" class="mb-0 mt-0">
-                            <a href="#" v-if="sliderAdminMode" @click.prevent="editSlider(slider)"><i class="fas fa-edit yellow"></i>&#160;</a>
+                            <hr v-if="sliderAdminMode" class="mb-0 mt-0">
+                            <a href="" v-if="sliderAdminMode" @click.prevent="editSlider(slider)"><i class="fas fa-edit yellow"></i>&#160;</a>
                             <a href="" v-if="sliderAdminMode" @click.prevent="deleteSlider(slider.id)"><i class="fas fa-trash red"></i>&#160;</a>
                         </div>
                     </div>
@@ -36,7 +36,8 @@
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="sliderModalLabel">Добавяне на слайд</h5>
+                        <h5 v-if="!editMode" class="modal-title" id="sliderModalLabel">Добавяне на слайд</h5>
+                        <h5 v-if="editMode" class="modal-title" id="sliderModalLabel">Промяна на слайд {{ this.form.id }}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -44,20 +45,24 @@
                     <form @submit.prevent="editMode ? updateSlider() : createSlider()" id="slidersForm" enctype="multipart/form-data">
                         <div class="modal-body">
                             <div class="form-group">
+                                <label>Заглавие:</label>
                                 <input v-model="form.title" type="text" name="title"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('title') }" placeholder="Заглавие" required>
                                 <has-error :form="form" field="title"></has-error>
                             </div>
                             <div class="form-group">
-                             <input type="file" @change="onFileSelect" name="photos" class="form-control">
+                                <label>Снимка:</label>
+                                <input type="file" @change="onFileSelect" name="photos" class="form-control">
                             </div>
                             <div class="form-group">
+                                <label>Описание:</label>
                                 <textarea v-model="form.description" type="text" name="description"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('description') }" placeholder="Описание" required></textarea>
                                 <has-error :form="form" field="description"></has-error>
                             </div>
                         </div>
                         <div class="modal-footer">
+                            <button type="button" @click="clearForm()" class="btn btn-danger">Изчисти</button>
                             <button type="submit" v-show="editMode" class="btn btn-primary">Промени</button>
                             <button type="submit" v-show="!editMode" class="btn btn-success">Добави</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Затвори</button>
@@ -77,7 +82,6 @@
             return {
                 sliderAdminMode: false,
                 sliders: null,
-                slider: null,
                 sliderInterval : setInterval(this.runInterval, 6000),
                 sliderMode : true,
                 editMode : false,
@@ -90,9 +94,20 @@
             }
         },
         methods :{
+             clearForm() {
+                if (this.editMode) {
+                    this.form.originalData.id = this.form.id
+                    this.form.originalData.photos = this.form.photos
+                    this.form.reset();
+                } else if (!this.editMode){
+                    this.form.originalData.id = null
+                    this.form.originalData.photos = null
+                    this.form.reset();
+                }
+            },
             getSliders() {
                 axios.get("/api/Sliders")
-                .then(({ data }) => {this.sliders = data.data});
+                .then(( data ) => {this.sliders = data.data});
             },
             choiseSlider() {
                 if (this.sliderMode) {
@@ -105,7 +120,6 @@
             },
             showModal(){
                 this.editMode = false
-                this.form.reset();
                 $("#sliderModal").modal("show");
             },
             onFileSelect(event) {
@@ -124,22 +138,23 @@
                         toast({type: 'success', title: 'Успешно добавихте нов слайд!'})
                         $('#sliderModal').modal('hide');
                         this.getSliders()
+                        this.form.reset();
                     })
                     .catch(() => {
 
                     })
                 }
             },
-            editSlider(slider){
+            editSlider(data){
                 this.editMode = true;
                 $("#sliderModal").modal("show");
-                this.form.fill( slider );
+                this.form.fill( data );
             },
             updateSlider() {
                 this.form.patch('/api/Sliders/' + this.form.id)
                 .then(() => {
-                    $('#sliderModal').modal('hide')
-                    this.getSlider();
+                    $('#sliderModal').modal('hide');
+                    this.getSliders();
                 })
                 .catch(() => {
                 })
@@ -147,7 +162,7 @@
             deleteSlider (id) {
                 axios.delete('/api/Sliders/' + id)
                 .then(() => {
-                    this.getSlider();
+                    this.getSliders();
                 })
                 .catch(() => {
 
@@ -172,19 +187,19 @@
                 };
             },
             leftArrow(){
-                if (sliderMode) {
+                if (this.sliderMode) {
                 clearInterval(this.sliderInterval);
                 }
                 var currentSlide = $(".active");
                 var prevSlide = currentSlide.prev();
 
                 currentSlide.fadeOut(0).removeClass("active");
-                prevSlide.fadeIn(500).addClass("active");
+                prevSlide.fadeIn(0).addClass("active");
 
                 if (prevSlide.length == 0) {
-                    $(".slider").last().fadeIn(500).addClass("active");
+                    $(".slider").last().fadeIn(0).addClass("active");
                 }
-                if (sliderMode) {
+                if (this.sliderMode) {
                 this.sliderInterval = setInterval(this.runInterval, 6000);
                 }
             },
@@ -202,10 +217,10 @@
                 var nextSlide = currentSlide.next();
 
                 currentSlide.fadeOut(0).removeClass("active");
-                nextSlide.fadeIn(500).addClass("active");
+                nextSlide.fadeIn(0).addClass("active");
 
                 if (nextSlide.length == 0) {
-                    $(".slider").first().fadeIn(500).addClass("active");
+                    $(".slider").first().fadeIn(0).addClass("active");
                 }
                 if (this.sliderMode) {
                 this.sliderInterval = setInterval(this.runInterval, 6000);

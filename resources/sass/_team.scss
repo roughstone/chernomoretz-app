@@ -1,0 +1,19 @@
+.coachs {
+    padding: 1vw 0.5vw 0 0.5vw;
+    a:hover {
+        color: white;
+        text-decoration: none;
+    }
+    .coach {
+    background-color: rgba(0, 94, 128, 0.7);
+    border-radius: 1vw 1vw 0 0;
+    box-shadow: inset 0px 0px 6px 4px #00294e;
+    padding-bottom: 2vw;
+    }
+    img {
+        border-radius: 1vw;
+        width: 70%;
+        margin: 1vw 15% 0 15%;
+        box-shadow: 0px 0px 10px 5px #00294e;
+    }
+}

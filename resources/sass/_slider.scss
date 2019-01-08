@@ -28,22 +28,6 @@
         font-size: 2vw;
     }
 }
-.for-user {
-    background-image: url(../../storage/app/public/images/gymnastic-low-poly-artwork.jpg);
-    background-size: 100% 100%;
-    .modal-header {
-        background-color: none !important;
-    }
-    .close {
-        color: #d6d5d5;
-    }
-    .close:hover {
-        color: white;
-    }
-    h5 {
-        font-size: 2vw;
-    }
-    p {
-        font-size: 1.2vw;
-    }
+.viewSliderDescription {
+    white-space: pre-wrap;
 }

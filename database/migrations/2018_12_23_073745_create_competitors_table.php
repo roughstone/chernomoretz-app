@@ -20,6 +20,7 @@ class CreateCompetitorsTable extends Migration
             $table->text('photos');
             $table->date('birthday');
             $table->text('description');
+            $table->text('sport')->nullable();
             $table->timestamps();
         });
     }

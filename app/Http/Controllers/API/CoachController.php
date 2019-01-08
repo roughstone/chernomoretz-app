@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Coach;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class CoachController extends Controller
 {
@@ -15,7 +16,7 @@ class CoachController extends Controller
      */
     public function index()
     {
-        return Coach::paginate(25);
+        return Coach::paginate(5);
     }
 
     /**
@@ -28,8 +29,10 @@ class CoachController extends Controller
     {
         if (\Gate::allows('admin')) {
             request()->validate([
-                'title' => ['required', 'min:3'],
-                'photos' => ['required'],
+                'firstName' => ['required', 'min:3'],
+                'lastName' => ['required', 'min:3'],
+                'photos' => ['required', 'min:3'],
+                'birthday' => ['required', 'date'],
                 'description' => ['required', 'min:6',],
             ]);
 
@@ -40,23 +43,15 @@ class CoachController extends Controller
             }
             $object = new Coach();
 
-            $object->title = request('title');
-            $object->description = request('description');
+            $object->firstName = request('firstName');
+            $object->lastName = request('lastName');
             $object->photos = $fileName;
+            $object->birthday = request('birthday');
+            $object->position = request('position');
+            $object->description = request('description');
 
             $object->save();
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Coach  $coach
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Coach $coach)
-    {
-        return Coach::all()->where('id','=',$coach->id);
     }
 
     /**
@@ -72,8 +67,10 @@ class CoachController extends Controller
             $object = Coach::all()->where('id','=',$coach->id)->first();
 
             request()->validate([
-                'title' => ['required', 'min:3'],
-                'photos' => ['required'],
+                'firstName' => ['required', 'min:3'],
+                'lastName' => ['required', 'min:3'],
+                'photos' => ['required', 'min:3'],
+                'birthday' => ['required', 'date'],
                 'description' => ['required', 'min:6',],
             ]);
 
@@ -87,9 +84,12 @@ class CoachController extends Controller
             }
 
             $object->update([
-                'title' => $request['title'],
+                'firstName' => $request['firstName'],
+                'lastName' => $request['lastName'],
                 'photos' => $fileName,
+                'birthday' => $request['birthday'],
                 'description' => $request['description'],
+                'position' => $request['position'],
             ]);
         }
     }

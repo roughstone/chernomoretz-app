@@ -16,7 +16,12 @@ class NewsController extends Controller
      */
     public function index()
     {
-        return News::paginate(10);
+        return News::where('category', '=', 'announcement')->latest()->paginate(10);
+    }
+
+    public function moreNewsIndex()
+    {
+        return News::where('category', '=', 'news')->latest()->paginate(5);
     }
 
     /**
@@ -32,8 +37,8 @@ class NewsController extends Controller
                 'title' => ['required', 'min:3'],
                 'photos' => ['required'],
                 'description' => ['required', 'min:6',],
-                'category' => ['required', 'min:6',],
-                'date' => ['required', 'min:6',],
+                'category' => ['required', 'min:4',],
+                'date' => ['required', 'date',],
             ]);
 
             if ($request->photos) {
@@ -54,17 +59,6 @@ class NewsController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\News  $news
-     * @return \Illuminate\Http\Response
-     */
-    public function show(News $news)
-    {
-        return News::all()->where('id','=',$news->id);
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -80,7 +74,7 @@ class NewsController extends Controller
                 'title' => ['required', 'min:3'],
                 'photos' => ['required'],
                 'description' => ['required', 'min:6',],
-                'category' => ['required', 'min:6',],
+                'category' => ['required', 'min:3',],
                 'date' => ['required', 'min:6',],
             ]);
 
