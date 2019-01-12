@@ -42,8 +42,10 @@ const routes = [
     { path: '/', component: require('./components/content/SlidersComponent.vue').default},
     { path: '/Новини', component: require('./components/content/NewsComponent.vue').default},
     { path: '/Треньори', component: require('./components/content/CoachsComponent.vue').default},
-    { path: '/Състезатели', component: require('./components/content/CompetitorsComponent.vue').default},
+    { path: '/Състезатели/:page', component: require('./components/content/CompetitorsComponent.vue').default},
     { path: '/График', component: require('./components/content/SchedulesComponent.vue').default},
+    { path: '/Галерии/:type', component: require('./components/content/GalleriesComponent.vue').default},
+    { path: '/Галерии/:type/Галерия/:title/Id/:id', component: require('./components/content/GalleryComponent.vue').default},
 ];
 
 let router = new VueRouter({
@@ -109,4 +111,5 @@ const app = new Vue({
     el: '#app',
     router
 });
+
 

@@ -1868,9 +1868,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mounted: function mounted() {
-    console.log('Component mounted.');
-  }
+  mounted: function mounted() {}
 });
 
 /***/ }),
@@ -2302,6 +2300,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2359,18 +2358,6 @@ __webpack_require__.r(__webpack_exports__);
           _this2.form.reset();
         }).catch(function () {});
       }
-    },
-    getAge: function getAge(date) {
-      var today = new Date();
-      var birthDate = new Date(date);
-      var age = today.getFullYear() - birthDate.getFullYear();
-      var m = today.getMonth() - birthDate.getMonth();
-
-      if (m < 0 || m === 0 && today.getDate() < birthDate.getDate()) {
-        age--;
-      }
-
-      return age;
     },
     editCoach: function editCoach(data) {
       this.editMode = true;
@@ -2447,13 +2434,675 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      adminMode: false,
+      competitors: null,
+      editMode: false,
+      form: new Form({
+        id: null,
+        firstName: null,
+        lastName: null,
+        birthday: null,
+        photos: null,
+        sport: null,
+        description: null
+      }),
+      page: 1,
+      pages: null
+    };
   },
-  methods: {},
+  methods: {
+    clearForm: function clearForm() {
+      if (this.editMode) {
+        this.form.originalData.id = this.form.id;
+        this.form.originalData.photos = this.form.photos;
+        this.form.reset();
+      } else if (!this.editMode) {
+        this.form.originalData.id = null;
+        this.form.originalData.photos = null;
+        this.form.reset();
+      }
+    },
+    showModal: function showModal() {
+      this.editMode = false;
+      $("#competitorsModal").modal("show");
+    },
+    getCompetitors: function getCompetitors() {
+      var _this = this;
+
+      axios.get("/api/competitors?page=" + this.$route.params.page).then(function (_ref) {
+        var data = _ref.data;
+        _this.competitors = data.data;
+        _this.pages = data.last_page;
+      }).catch(function () {});
+    },
+    nextPage: function nextPage() {
+      if (this.page < this.pages) {
+        this.page++;
+        this.getPage();
+      }
+    },
+    prevPage: function prevPage() {
+      if (this.page > 1) {
+        this.page--;
+        this.getPage();
+      }
+    },
+    getPage: function getPage() {
+      this.$route.params.page = this.page;
+
+      if (history.pushState) {
+        var url = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        var slicedUrl = url.slice(0, url.lastIndexOf('/'));
+        var newUrl = slicedUrl + '/' + this.$route.params.page;
+        window.history.pushState({
+          path: newUrl
+        }, '', newUrl);
+        this.getCompetitors();
+      }
+    },
+    createCompetitor: function createCompetitor() {
+      var _this2 = this;
+
+      if (this.$gate.isAdmin()) {
+        this.form.post('/api/competitors').then(function () {
+          toast({
+            type: 'success',
+            title: 'Успешно добавихте нов треньор!'
+          });
+          $('#competitorsModal').modal('hide');
+
+          _this2.getCompetitors();
+
+          _this2.form.reset();
+        }).catch(function () {});
+      }
+    },
+    editCompetitor: function editCompetitor(data) {
+      this.editMode = true;
+      $("#competitorsModal").modal("show");
+      this.form.fill(data);
+    },
+    updateCompetitor: function updateCompetitor() {
+      var _this3 = this;
+
+      this.form.patch('/api/competitors/' + this.form.id).then(function () {
+        $('#competitorsModal').modal('hide');
+
+        _this3.getCompetitors();
+      }).catch(function () {});
+    },
+    deleteCompetitor: function deleteCompetitor(id) {
+      var _this4 = this;
+
+      axios.delete('/api/competitors/' + id).then(function () {
+        _this4.getCompetitors();
+      }).catch(function () {});
+    },
+    changeAdminMode: function changeAdminMode() {
+      if (this.$gate.isAdmin()) {
+        this.adminMode = true;
+      } else {
+        this.adminMode = false;
+      }
+    },
+    onFileSelect: function onFileSelect(event) {
+      var _this5 = this;
+
+      var file = event.target.files[0];
+      this.form.photos = event.target.files[0];
+      var reader = new FileReader();
+
+      reader.onloadend = function () {
+        _this5.form.photos = reader.result;
+      };
+
+      reader.readAsDataURL(file);
+    }
+  },
   mounted: function mounted() {
-    console.log('Component mounted.');
+    this.changeAdminMode();
+    this.getCompetitors();
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/content/GalleriesComponent.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/content/GalleriesComponent.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      adminMode: false,
+      galleries: null,
+      editMode: false,
+      form: new Form({
+        id: null,
+        title: null,
+        date: null,
+        photos: null,
+        category: this.$route.params.type,
+        description: null
+      }),
+      page: 1,
+      pages: null
+    };
+  },
+  methods: {
+    clearForm: function clearForm() {
+      if (this.editMode) {
+        this.form.originalData.id = this.form.id;
+        this.form.originalData.photos = this.form.photos;
+        this.form.reset();
+      } else if (!this.editMode) {
+        this.form.originalData.id = null;
+        this.form.originalData.photos = null;
+        this.form.reset();
+      }
+    },
+    showModal: function showModal() {
+      this.editMode = false;
+      $("#galleriesModal").modal("show");
+    },
+    changeAdminMode: function changeAdminMode() {
+      if (this.$gate.isAdmin()) {
+        this.adminMode = true;
+      } else {
+        this.adminMode = false;
+      }
+    },
+    getGalleries: function getGalleries() {
+      var _this = this;
+
+      axios.get("/api/galleries/" + this.$route.params.type).then(function (_ref) {
+        var data = _ref.data;
+        _this.galleries = data.data;
+        _this.pages = data.last_page;
+      }).catch(function () {});
+    },
+    createGalleries: function createGalleries() {
+      var _this2 = this;
+
+      if (this.$gate.isAdmin()) {
+        this.form.post('/api/galleries').then(function () {
+          toast({
+            type: 'success',
+            title: 'Успешно добавихте нов треньор!'
+          });
+          $('#galleriesModal').modal('hide');
+
+          _this2.getGalleries();
+
+          _this2.form.reset();
+        }).catch(function () {});
+      }
+    },
+    editGalleries: function editGalleries(data) {
+      this.editMode = true;
+      $("#galleriesModal").modal("show");
+      this.form.fill(data);
+    },
+    updateGalleries: function updateGalleries() {
+      var _this3 = this;
+
+      this.form.patch('/api/galleries/' + this.form.id).then(function () {
+        $('#galleriesModal').modal('hide');
+
+        _this3.getGalleries();
+      }).catch(function () {});
+    },
+    deleteGalleries: function deleteGalleries(id) {
+      var _this4 = this;
+
+      if (this.$gate.isAdmin()) {
+        axios.delete('/api/galleries/' + id).then(function () {
+          _this4.getGalleries();
+        }).catch(function () {});
+      }
+    },
+    onFileSelect: function onFileSelect(event) {
+      var _this5 = this;
+
+      var file = event.target.files[0];
+      this.form.photos = event.target.files[0];
+      var reader = new FileReader();
+
+      reader.onloadend = function () {
+        _this5.form.photos = reader.result;
+      };
+
+      reader.readAsDataURL(file);
+    }
+  },
+  beforeRouteUpdate: function beforeRouteUpdate(to, from, next) {
+    next();
+    this.form.category = this.$route.params.type;
+    this.getGalleries();
+  },
+  mounted: function mounted() {
+    this.changeAdminMode();
+    this.getGalleries();
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/content/GalleryComponent.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/content/GalleryComponent.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      adminMode: false,
+      editMode: false,
+      photoMethod: false,
+      gallery: null,
+      displayedGallery: null,
+      photoModal: null,
+      photoIndex: null,
+      thePhoto: null,
+      allPhotos: null,
+      loadedPhoto: 16,
+      form: new Form({
+        title: null,
+        photos: null
+      })
+    };
+  },
+  methods: {
+    showModal: function showModal() {
+      this.editMode = false;
+      $("#photosModal").modal("show");
+    },
+    changeAdminMode: function changeAdminMode() {
+      if (this.$gate.isAdmin()) {
+        this.adminMode = true;
+      } else {
+        this.adminMode = false;
+      }
+    },
+    getPhotos: function getPhotos() {
+      var _this = this;
+
+      axios.get("/api/gallery/" + this.$route.params.id).then(function (_ref) {
+        var data = _ref.data;
+        console.log(data);
+        _this.gallery = data;
+        _this.allPhotos = data.length;
+
+        _this.displayGallery();
+      }).catch(function () {});
+    },
+    createPhoto: function createPhoto() {
+      var _this2 = this;
+
+      if (this.$gate.isAdmin()) {
+        this.form.post('/api/gallery/' + this.$route.params.id).then(function () {
+          toast({
+            type: 'success',
+            title: 'Успешно добавихте нов треньор!'
+          });
+          $('#photosModal').modal('hide');
+
+          _this2.getPhotos();
+
+          _this2.form.reset();
+        }).catch(function () {});
+      }
+    },
+    deletePhoto: function deletePhoto(id) {
+      var _this3 = this;
+
+      if (this.$gate.isAdmin()) {
+        axios.delete('/api/gallery/' + id).then(function () {
+          _this3.getPhotos();
+        }).catch(function () {});
+      }
+    },
+    onFileSelect: function onFileSelect(event) {
+      var _this4 = this;
+
+      var file = event.target.files[0];
+      this.form.photos = event.target.files[0];
+      var reader = new FileReader();
+
+      reader.onloadend = function () {
+        _this4.form.photos = reader.result;
+      };
+
+      reader.readAsDataURL(file);
+    },
+    displayGallery: function displayGallery() {
+      this.displayedGallery = this.gallery.slice(0, this.loadedPhoto);
+    },
+    singlePhotoModal: function singlePhotoModal(index) {
+      if (!this.photoMethod) {
+        this.photoIndex = index;
+        this.photoMethod = true;
+        this.thePhoto = this.gallery[this.photoIndex];
+      } else {
+        this.photoMethod = false;
+        this.photoIndex = null;
+        this.thePhoto = null;
+      }
+    },
+    nextPhoto: function nextPhoto() {
+      if (this.photoIndex < this.gallery.length - 1) {
+        this.photoIndex += 1;
+        this.thePhoto = this.gallery[this.photoIndex];
+      } else {
+        this.photoIndex = 0;
+        this.thePhoto = this.gallery[this.photoIndex];
+      }
+    },
+    prevPhoto: function prevPhoto() {
+      if (this.photoIndex >= 1) {
+        this.photoIndex -= 1;
+        this.thePhoto = this.gallery[this.photoIndex];
+      } else {
+        this.photoIndex = this.gallery.length - 1;
+        this.thePhoto = this.gallery[this.photoIndex];
+      }
+    },
+    loadMorePhoto: function loadMorePhoto() {
+      this.loadedPhoto += 16;
+      this.displayGallery();
+    }
+  },
+  mounted: function mounted() {
+    console.log(this.$route.params);
+    this.getPhotos();
+    this.changeAdminMode();
   }
 });
 
@@ -2689,13 +3338,185 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      adminMode: false,
+      editMode: false,
+      schedules: null,
+      form: new Form({
+        id: null,
+        title: null,
+        comment: null,
+        mon: null,
+        tue: null,
+        wen: null,
+        thr: null,
+        fri: null,
+        sat: null,
+        sun: null
+      })
+    };
   },
-  methods: {},
+  methods: {
+    clearForm: function clearForm() {
+      if (this.editMode) {
+        this.form.originalData.id = this.form.id;
+        this.form.reset();
+      } else if (!this.editMode) {
+        this.form.originalData.id = null;
+        this.form.reset();
+      }
+    },
+    changeAdminMode: function changeAdminMode() {
+      if (this.$gate.isAdmin()) {
+        this.adminMode = true;
+      } else {
+        this.adminMode = false;
+      }
+    },
+    getSchedules: function getSchedules() {
+      var _this = this;
+
+      axios.get("/api/schedules").then(function (data) {
+        _this.schedules = data.data;
+      }).catch(function () {});
+    },
+    showModal: function showModal() {
+      this.editMode = false;
+      $("#scheduleModal").modal("show");
+    },
+    createSchedule: function createSchedule() {
+      var _this2 = this;
+
+      if (this.$gate.isAdmin()) {
+        this.form.post('/api/schedules').then(function () {
+          toast({
+            type: 'success',
+            title: 'Успешно добавихте нов график!'
+          });
+          $('#scheduleModal').modal('hide');
+
+          _this2.getSchedules();
+
+          _this2.form.reset();
+        }).catch(function () {});
+      }
+    },
+    editSchedule: function editSchedule(data) {
+      this.editMode = true;
+      $("#scheduleModal").modal("show");
+      this.form.fill(data);
+    },
+    updateSchedule: function updateSchedule() {
+      var _this3 = this;
+
+      this.form.patch('/api/schedules/' + this.form.id).then(function () {
+        $('#scheduleModal').modal('hide');
+
+        _this3.getSchedules();
+      }).catch(function () {});
+    },
+    deleteSchedule: function deleteSchedule(id) {
+      var _this4 = this;
+
+      axios.delete('/api/schedules/' + id).then(function () {
+        _this4.getSchedules();
+      }).catch(function () {});
+    }
+  },
   mounted: function mounted() {
-    console.log('Component mounted.');
+    this.getSchedules();
+    this.changeAdminMode();
   }
 });
 
@@ -58906,141 +59727,154 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("nav", { staticClass: "navbar navbar-expand-lg navbar-dark" }, [
-    _vm._m(0),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "collapse navbar-collapse",
-        attrs: { id: "navbarSupportedContent" }
-      },
-      [
-        _c("ul", { staticClass: "navbar-nav mr-auto" }, [
-          _c(
-            "li",
-            { staticClass: "nav-item" },
-            [
-              _c(
-                "router-link",
-                { staticClass: "nav-link", attrs: { to: "/#" } },
-                [
-                  _c("i", { staticClass: "fas fa-home purple" }),
-                  _vm._v(" Начало")
-                ]
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "li",
-            { staticClass: "nav-item" },
-            [
-              _c(
-                "router-link",
-                { staticClass: "nav-link", attrs: { to: "/Новини" } },
-                [
-                  _c("i", { staticClass: "far fa-newspaper purple" }),
-                  _vm._v(" Новини")
-                ]
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c("li", { staticClass: "nav-item dropdown" }, [
-            _vm._m(1),
-            _vm._v(" "),
+  return _c(
+    "nav",
+    {
+      staticClass: "navbar navbar-expand-lg navbar-dark",
+      attrs: { id: "navBar" }
+    },
+    [
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "collapse navbar-collapse",
+          attrs: { id: "navbarSupportedContent" }
+        },
+        [
+          _c("ul", { staticClass: "navbar-nav mr-auto" }, [
             _c(
-              "div",
-              {
-                staticClass: "dropdown-menu",
-                attrs: { "aria-labelledby": "navbarDropdown" }
-              },
+              "li",
+              { staticClass: "nav-item" },
               [
                 _c(
                   "router-link",
-                  { staticClass: "dropdown-item", attrs: { to: "/Треньори" } },
-                  [_vm._v("Треньори")]
-                ),
-                _vm._v(" "),
+                  { staticClass: "nav-link", attrs: { to: "/#" } },
+                  [
+                    _c("i", { staticClass: "fas fa-home purple" }),
+                    _vm._v(" Начало")
+                  ]
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "li",
+              { staticClass: "nav-item" },
+              [
                 _c(
                   "router-link",
-                  {
-                    staticClass: "dropdown-item",
-                    attrs: { to: "/Състезатели" }
-                  },
-                  [_vm._v("Състезатели")]
-                ),
-                _vm._v(" "),
+                  { staticClass: "nav-link", attrs: { to: "/Новини" } },
+                  [
+                    _c("i", { staticClass: "far fa-newspaper purple" }),
+                    _vm._v(" Новини")
+                  ]
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c("li", { staticClass: "nav-item dropdown" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "dropdown-menu",
+                  attrs: { "aria-labelledby": "navbarDropdown" }
+                },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "dropdown-item",
+                      attrs: { to: "/Треньори" }
+                    },
+                    [_vm._v("Треньори")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "dropdown-item",
+                      attrs: { to: "/Състезатели/1" }
+                    },
+                    [_vm._v("Състезатели")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "router-link",
+                    { staticClass: "dropdown-item", attrs: { to: "/График" } },
+                    [_vm._v("График")]
+                  )
+                ],
+                1
+              )
+            ]),
+            _vm._v(" "),
+            _c("li", { staticClass: "nav-item dropdown" }, [
+              _vm._m(2),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "dropdown-menu",
+                  attrs: { "aria-labelledby": "navbarDropdown" }
+                },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "dropdown-item",
+                      attrs: { to: "/Галерии/Състезания" }
+                    },
+                    [_vm._v("Стстезания")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "dropdown-item",
+                      attrs: { to: "/Галерии/Събития" }
+                    },
+                    [_vm._v("Събития")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "dropdown-item",
+                      attrs: { to: "/Галерии/Тренировки" }
+                    },
+                    [_vm._v("Тренировки")]
+                  )
+                ],
+                1
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "li",
+              { staticClass: "nav-item" },
+              [
                 _c(
                   "router-link",
-                  { staticClass: "dropdown-item", attrs: { to: "/График" } },
-                  [_vm._v("График")]
+                  { staticClass: "nav-link", attrs: { to: "/Контакти" } },
+                  [
+                    _c("i", { staticClass: "fas fa-phone-square purple" }),
+                    _vm._v(" Контакти с нас!")
+                  ]
                 )
               ],
               1
             )
-          ]),
-          _vm._v(" "),
-          _c("li", { staticClass: "nav-item dropdown" }, [
-            _vm._m(2),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "dropdown-menu",
-                attrs: { "aria-labelledby": "navbarDropdown" }
-              },
-              [
-                _c(
-                  "router-link",
-                  {
-                    staticClass: "dropdown-item",
-                    attrs: { to: "/Стстезания" }
-                  },
-                  [_vm._v("Стстезания")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "router-link",
-                  { staticClass: "dropdown-item", attrs: { to: "/Събития" } },
-                  [_vm._v("Събития")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "router-link",
-                  {
-                    staticClass: "dropdown-item",
-                    attrs: { to: "/Тренировки" }
-                  },
-                  [_vm._v("Тренировки")]
-                )
-              ],
-              1
-            )
-          ]),
-          _vm._v(" "),
-          _c(
-            "li",
-            { staticClass: "nav-item" },
-            [
-              _c(
-                "router-link",
-                { staticClass: "nav-link", attrs: { to: "/Контакти" } },
-                [
-                  _c("i", { staticClass: "fas fa-phone-square purple" }),
-                  _vm._v(" Контакти с нас!")
-                ]
-              )
-            ],
-            1
-          )
-        ])
-      ]
-    )
-  ])
+          ])
+        ]
+      )
+    ]
+  )
 }
 var staticRenderFns = [
   function() {
@@ -60060,7 +60894,9 @@ var render = function() {
                               }
                             },
                             [
-                              _c("i", { staticClass: "fas fa-trash red" }),
+                              _c("i", {
+                                staticClass: "fas fa-trash red float-right"
+                              }),
                               _vm._v(" ")
                             ]
                           )
@@ -60276,7 +61112,7 @@ var render = function() {
                         ),
                         _vm._v(" "),
                         _c("div", { staticClass: "form-group" }, [
-                          _c("label", [_vm._v("Снимка")]),
+                          _c("label", [_vm._v("Снимка:")]),
                           _vm._v(" "),
                           _c("input", {
                             staticClass: "form-control",
@@ -60336,7 +61172,7 @@ var render = function() {
                           "div",
                           { staticClass: "form-group" },
                           [
-                            _c("label", [_vm._v("Автобиография")]),
+                            _c("label", [_vm._v("Автобиография:")]),
                             _vm._v(" "),
                             _c("textarea", {
                               directives: [
@@ -60550,27 +61386,1549 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "row flex-xl-nowrap" }, [
+    _c(
+      "div",
+      { staticClass: "col-12" },
+      [
+        _vm.adminMode
+          ? _c("div", { staticClass: "col-12" }, [
+              _c(
+                "a",
+                {
+                  attrs: { href: "" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      _vm.showModal()
+                    }
+                  }
+                },
+                [_c("i", { staticClass: "fas fa-file-import fa-3x green" })]
+              )
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        this.pages > 1
+          ? _c("div", { staticClass: "page-navigation d-inline-block" }, [
+              _c(
+                "div",
+                { staticClass: "page-button float-left d-inline-block" },
+                [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "page-link",
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          _vm.prevPage()
+                        }
+                      }
+                    },
+                    [_c("i", { staticClass: "fas fa-chevron-left" })]
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _vm._m(0),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "page-input float-left d-inline-block" },
+                [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.page,
+                        expression: "page"
+                      }
+                    ],
+                    staticClass: "page-link",
+                    attrs: {
+                      maxlength: "2",
+                      size: "2",
+                      type: "text",
+                      name: "page"
+                    },
+                    domProps: { value: _vm.page },
+                    on: {
+                      keyup: function($event) {
+                        _vm.getPage()
+                      },
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.page = $event.target.value
+                      }
+                    }
+                  })
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "page-input float-left d-inline-block" },
+                [
+                  _c("p", { staticClass: "page-text" }, [
+                    _vm._v("от: " + _vm._s(this.pages))
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "page-button float-left d-inline-block" },
+                [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "page-link",
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          _vm.nextPage()
+                        }
+                      }
+                    },
+                    [_c("i", { staticClass: "fas fa-chevron-right" })]
+                  )
+                ]
+              )
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm._l(_vm.competitors, function(competitor) {
+          return _c(
+            "div",
+            {
+              key: competitor.id,
+              class: "pt-0 col-12 col-md-4 float-left competitors"
+            },
+            [
+              _c("div", { staticClass: "competitor d-inline-block" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "dwhite",
+                    attrs: { href: "#" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        _vm.editCompetitor(competitor)
+                      }
+                    }
+                  },
+                  [
+                    _c(
+                      "div",
+                      { staticClass: "col-md-6 mb-2 mt-2 float-left" },
+                      [
+                        _c("img", {
+                          class: "img-fluid",
+                          attrs: {
+                            src: "/storage/competitors/" + competitor.photos,
+                            alt: competitor.title
+                          }
+                        })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _vm._m(1, true),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "col-6 col-md-3 pl-0 float-left mt-3" },
+                      [
+                        _c("p", { staticClass: "text-left h4" }, [
+                          _vm._v(_vm._s(competitor.firstName))
+                        ]),
+                        _vm._v(" "),
+                        _c("p", { staticClass: "text-left h4" }, [
+                          _vm._v(_vm._s(competitor.lastName))
+                        ]),
+                        _vm._v(" "),
+                        _c("p", { staticClass: "text-left h4" }, [
+                          _vm._v(_vm._s(_vm._f("getAge")(competitor.birthday)))
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-12" }, [
+                      _c(
+                        "p",
+                        { staticClass: "text-center h6 mb-0 underline" },
+                        [_vm._v("Състезател по")]
+                      ),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "text-center h4" }, [
+                        _vm._v(_vm._s(competitor.sport))
+                      ])
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _vm.adminMode
+                  ? _c("div", { staticClass: "p-1 d-inline-block w-100" }, [
+                      _c("hr", { staticClass: "mb-0 mt-0" }),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          attrs: { href: "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              _vm.editCompetitor(competitor)
+                            }
+                          }
+                        },
+                        [
+                          _c("i", {
+                            staticClass: "fas fa-edit yellow float-left"
+                          }),
+                          _vm._v(" ")
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          attrs: { href: "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              _vm.deleteCompetitor(competitor.id)
+                            }
+                          }
+                        },
+                        [
+                          _c("i", {
+                            staticClass: "fas fa-trash red float-right"
+                          }),
+                          _vm._v(" ")
+                        ]
+                      )
+                    ])
+                  : _vm._e()
+              ])
+            ]
+          )
+        })
+      ],
+      2
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "competitorsModal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "newsModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog modal-xl", attrs: { role: "document" } },
+          [
+            _vm.adminMode
+              ? _c("div", { staticClass: "modal-content" }, [
+                  _c("div", { staticClass: "modal-header" }, [
+                    !_vm.editMode
+                      ? _c(
+                          "h5",
+                          {
+                            staticClass: "modal-title",
+                            attrs: { id: "newsModalLabel" }
+                          },
+                          [_vm._v("Добавяне на състезател")]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.editMode
+                      ? _c(
+                          "h5",
+                          {
+                            staticClass: "modal-title",
+                            attrs: { id: "newsModalLabel" }
+                          },
+                          [
+                            _vm._v(
+                              "Промяна на състезател " + _vm._s(this.form.id)
+                            )
+                          ]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm._m(2)
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "form",
+                    {
+                      attrs: { id: "newsForm", enctype: "multipart/form-data" },
+                      on: {
+                        submit: function($event) {
+                          $event.preventDefault()
+                          _vm.editMode
+                            ? _vm.updateCompetitor()
+                            : _vm.createCompetitor()
+                        }
+                      }
+                    },
+                    [
+                      _c("div", { staticClass: "modal-body" }, [
+                        _c(
+                          "div",
+                          { staticClass: "form-group" },
+                          [
+                            _c("label", [_vm._v("Име:")]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.firstName,
+                                  expression: "form.firstName"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("firstName")
+                              },
+                              attrs: {
+                                type: "text",
+                                name: "firstName",
+                                placeholder: "Име",
+                                required: ""
+                              },
+                              domProps: { value: _vm.form.firstName },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.form,
+                                    "firstName",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("has-error", {
+                              attrs: { form: _vm.form, field: "firstName" }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "form-group" },
+                          [
+                            _c("label", [_vm._v("Фамилия:")]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.lastName,
+                                  expression: "form.lastName"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("lastName")
+                              },
+                              attrs: {
+                                type: "text",
+                                name: "lastName",
+                                placeholder: "Фамилия",
+                                required: ""
+                              },
+                              domProps: { value: _vm.form.lastName },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.form,
+                                    "lastName",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("has-error", {
+                              attrs: { form: _vm.form, field: "lastName" }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "form-group" },
+                          [
+                            _c("label", [_vm._v("Рожданна дата:")]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.birthday,
+                                  expression: "form.birthday"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("birthday")
+                              },
+                              attrs: {
+                                type: "date",
+                                name: "birthday",
+                                placeholder: "Дата",
+                                required: ""
+                              },
+                              domProps: { value: _vm.form.birthday },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.form,
+                                    "birthday",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("has-error", {
+                              attrs: { form: _vm.form, field: "birthday" }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group" }, [
+                          _c("label", [_vm._v("Снимка:")]),
+                          _vm._v(" "),
+                          _c("input", {
+                            staticClass: "form-control",
+                            attrs: { type: "file", name: "photos" },
+                            on: { change: _vm.onFileSelect }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "form-group" },
+                          [
+                            _c("label", [_vm._v("Спорт:")]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.sport,
+                                  expression: "form.sport"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("sport")
+                              },
+                              attrs: {
+                                type: "text",
+                                name: "sport",
+                                placeholder: "Позиция",
+                                required: ""
+                              },
+                              domProps: { value: _vm.form.sport },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.form,
+                                    "sport",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("has-error", {
+                              attrs: { form: _vm.form, field: "sport" }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "form-group" },
+                          [
+                            _c("label", [_vm._v("Автобиография:")]),
+                            _vm._v(" "),
+                            _c("textarea", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.description,
+                                  expression: "form.description"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("description")
+                              },
+                              attrs: {
+                                type: "text",
+                                name: "description",
+                                placeholder: "Автобиография",
+                                required: ""
+                              },
+                              domProps: { value: _vm.form.description },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.form,
+                                    "description",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("has-error", {
+                              attrs: { form: _vm.form, field: "description" }
+                            })
+                          ],
+                          1
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "modal-footer" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-danger",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                _vm.clearForm()
+                              }
+                            }
+                          },
+                          [_vm._v("Изчисти")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: !_vm.editMode,
+                                expression: "!editMode"
+                              }
+                            ],
+                            staticClass: "btn btn-success",
+                            attrs: { type: "submit" }
+                          },
+                          [_vm._v("Добави")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.editMode,
+                                expression: "editMode"
+                              }
+                            ],
+                            staticClass: "btn btn-primary",
+                            attrs: { type: "submit" }
+                          },
+                          [_vm._v("Промени")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-secondary",
+                            attrs: { type: "button", "data-dismiss": "modal" }
+                          },
+                          [_vm._v("Затвори")]
+                        )
+                      ])
+                    ]
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            !_vm.adminMode
+              ? _c("div", { staticClass: "modal-content for-user" }, [
+                  _c("div", { staticClass: "modal-header" }, [
+                    _c(
+                      "h5",
+                      { staticClass: "modal-title w-100 dwhite text-center" },
+                      [
+                        _vm._v(
+                          _vm._s(this.form.firstName) +
+                            " " +
+                            _vm._s(this.form.lastName)
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _vm._m(3)
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "modal-body" }, [
+                    _c("p", { staticClass: "dwhite" }, [
+                      _c("img", {
+                        class: "img-fluid img-fluid col-6 p-1 float-left mt-1",
+                        attrs: {
+                          src: "/storage/competitors/" + this.form.photos,
+                          alt: this.form.firstName + " " + this.form.lastName
+                        }
+                      }),
+                      _vm._v(_vm._s(this.form.description))
+                    ])
+                  ])
+                ])
+              : _vm._e()
+          ]
+        )
+      ]
+    )
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "col-md-8" }, [
-          _c("div", { staticClass: "card card-default" }, [
-            _c("div", { staticClass: "card-header" }, [
-              _vm._v("Example Component")
-            ]),
+    return _c("div", { staticClass: "page-input float-left d-inline-block" }, [
+      _c("p", { staticClass: "page-text" }, [_vm._v("Страница")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-6 col-md-3 pr-0 float-left mt-3" }, [
+      _c("p", { staticClass: "text-right h4" }, [_vm._v("Име: ")]),
+      _vm._v(" "),
+      _c("p", { staticClass: "text-right h4" }, [_vm._v("Презиме: ")]),
+      _vm._v(" "),
+      _c("p", { staticClass: "text-right h4" }, [_vm._v("Години: ")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/content/GalleriesComponent.vue?vue&type=template&id=3cb1c424&":
+/*!*****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/content/GalleriesComponent.vue?vue&type=template&id=3cb1c424& ***!
+  \*****************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "row flex-xl-nowrap" }, [
+    _c("div", { staticClass: "col-12 pl-0 pr-0" }, [
+      _vm.adminMode
+        ? _c("div", { staticClass: "col-12" }, [
+            _c(
+              "a",
+              {
+                attrs: { href: "" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.showModal()
+                  }
+                }
+              },
+              [_c("i", { staticClass: "fas fa-file-import fa-3x green" })]
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "div",
+        _vm._l(_vm.galleries, function(gallery) {
+          return _c(
+            "div",
+            { key: gallery.id },
+            [
+              _c(
+                "router-link",
+                {
+                  attrs: {
+                    to:
+                      gallery.category +
+                      "/Галерия/" +
+                      gallery.title +
+                      "/Id/" +
+                      gallery.id
+                  }
+                },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "gallery float-left",
+                      style: {
+                        "background-image":
+                          "url(/storage/galleries/" + gallery.photos + ")"
+                      }
+                    },
+                    [
+                      _c(
+                        "p",
+                        {
+                          staticClass: "gallery-title dwhite w-100 text-center"
+                        },
+                        [_vm._v("Галерия - " + _vm._s(gallery.title))]
+                      ),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "gallery-date dwhite mb-0" }, [
+                        _vm._v("Дата: " + _vm._s(gallery.date))
+                      ]),
+                      _vm._v(" "),
+                      _vm.adminMode
+                        ? _c("div", [
+                            _c(
+                              "a",
+                              {
+                                attrs: { href: "" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    _vm.editGalleries(gallery)
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "fas fa-edit yellow fa-2x"
+                                }),
+                                _vm._v(" ")
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                attrs: { href: "" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    _vm.deleteGalleries(gallery.id)
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "fas fa-trash red fa-2x"
+                                }),
+                                _vm._v(" ")
+                              ]
+                            )
+                          ])
+                        : _vm._e()
+                    ]
+                  )
+                ]
+              )
+            ],
+            1
+          )
+        }),
+        0
+      )
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "galleriesModal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "newsModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog modal-xl", attrs: { role: "document" } },
+          [
+            _vm.adminMode
+              ? _c("div", { staticClass: "modal-content" }, [
+                  _c("div", { staticClass: "modal-header" }, [
+                    !_vm.editMode
+                      ? _c(
+                          "h5",
+                          {
+                            staticClass: "modal-title",
+                            attrs: { id: "newsModalLabel" }
+                          },
+                          [_vm._v("Добавяне на галерия")]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.editMode
+                      ? _c(
+                          "h5",
+                          {
+                            staticClass: "modal-title",
+                            attrs: { id: "newsModalLabel" }
+                          },
+                          [_vm._v("Промяна на галерия " + _vm._s(this.form.id))]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm._m(0)
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "form",
+                    {
+                      attrs: { id: "newsForm", enctype: "multipart/form-data" },
+                      on: {
+                        submit: function($event) {
+                          $event.preventDefault()
+                          _vm.editMode
+                            ? _vm.updateGalleries()
+                            : _vm.createGalleries()
+                        }
+                      }
+                    },
+                    [
+                      _c("div", { staticClass: "modal-body" }, [
+                        _c(
+                          "div",
+                          { staticClass: "form-group" },
+                          [
+                            _c("label", [_vm._v("Заглавие:")]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.title,
+                                  expression: "form.title"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("title")
+                              },
+                              attrs: {
+                                type: "text",
+                                name: "title",
+                                placeholder: "Заглавие",
+                                required: ""
+                              },
+                              domProps: { value: _vm.form.title },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.form,
+                                    "title",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("has-error", {
+                              attrs: { form: _vm.form, field: "title" }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "form-group" },
+                          [
+                            _c("label", [_vm._v("Дата:")]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.date,
+                                  expression: "form.date"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("date")
+                              },
+                              attrs: {
+                                type: "date",
+                                name: "date",
+                                placeholder: "Дата",
+                                required: ""
+                              },
+                              domProps: { value: _vm.form.date },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.form,
+                                    "date",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("has-error", {
+                              attrs: { form: _vm.form, field: "date" }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group" }, [
+                          _c("label", [_vm._v("Снимка:")]),
+                          _vm._v(" "),
+                          _c("input", {
+                            staticClass: "form-control",
+                            attrs: { type: "file", name: "photos" },
+                            on: { change: _vm.onFileSelect }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "form-group" },
+                          [
+                            _c("label", [_vm._v("Описание:")]),
+                            _vm._v(" "),
+                            _c("textarea", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.description,
+                                  expression: "form.description"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("description")
+                              },
+                              attrs: {
+                                type: "text",
+                                name: "description",
+                                placeholder: "Описание",
+                                required: ""
+                              },
+                              domProps: { value: _vm.form.description },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.form,
+                                    "description",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("has-error", {
+                              attrs: { form: _vm.form, field: "description" }
+                            })
+                          ],
+                          1
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "modal-footer" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-danger",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                _vm.clearForm()
+                              }
+                            }
+                          },
+                          [_vm._v("Изчисти")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: !_vm.editMode,
+                                expression: "!editMode"
+                              }
+                            ],
+                            staticClass: "btn btn-success",
+                            attrs: { type: "submit" }
+                          },
+                          [_vm._v("Добави")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.editMode,
+                                expression: "editMode"
+                              }
+                            ],
+                            staticClass: "btn btn-primary",
+                            attrs: { type: "submit" }
+                          },
+                          [_vm._v("Промени")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-secondary",
+                            attrs: { type: "button", "data-dismiss": "modal" }
+                          },
+                          [_vm._v("Затвори")]
+                        )
+                      ])
+                    ]
+                  )
+                ])
+              : _vm._e(),
             _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _vm._v("\n                    Sastezateli\n                ")
+            !_vm.adminMode
+              ? _c("div", { staticClass: "modal-content for-user" }, [
+                  _c("div", { staticClass: "modal-header" }, [
+                    _c(
+                      "h5",
+                      { staticClass: "modal-title w-100 dwhite text-center" },
+                      [
+                        _vm._v(
+                          _vm._s(this.form.firstName) +
+                            " " +
+                            _vm._s(this.form.lastName)
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _vm._m(1)
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "modal-body" }, [
+                    _c("p", { staticClass: "dwhite" }, [
+                      _c("img", {
+                        class: "img-fluid img-fluid col-6 p-1 float-left mt-1",
+                        attrs: {
+                          src: "/storage/galleries/" + this.form.photos,
+                          alt: this.form.firstName + " " + this.form.lastName
+                        }
+                      }),
+                      _vm._v(_vm._s(this.form.description))
+                    ])
+                  ])
+                ])
+              : _vm._e()
+          ]
+        )
+      ]
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/content/GalleryComponent.vue?vue&type=template&id=1f8870e8&":
+/*!***************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/content/GalleryComponent.vue?vue&type=template&id=1f8870e8& ***!
+  \***************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "row flex-xl-nowrap" }, [
+    _c("div", { staticClass: "col-12 pl-0 pr-0" }, [
+      _vm.adminMode
+        ? _c("div", { staticClass: "col-12" }, [
+            _c(
+              "a",
+              {
+                attrs: { href: "" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.showModal()
+                  }
+                }
+              },
+              [_c("i", { staticClass: "fas fa-file-import fa-3x green" })]
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c("h2", { staticClass: "text-center dwhite" }, [
+        _vm._v("Галерия: " + _vm._s(this.$route.params.title))
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        _vm._l(_vm.displayedGallery, function(photo, index) {
+          return _c("div", { key: photo.photo }, [
+            _c(
+              "div",
+              {
+                staticClass: "photoGallery float-left",
+                style: {
+                  "background-image":
+                    "url(/storage/galleries/" + photo.photos + ")"
+                },
+                on: {
+                  click: function($event) {
+                    _vm.singlePhotoModal(index)
+                  }
+                }
+              },
+              [
+                _vm.adminMode && index > 0
+                  ? _c(
+                      "a",
+                      {
+                        attrs: { href: "" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            _vm.deletePhoto(photo.id)
+                          }
+                        }
+                      },
+                      [
+                        _c("i", {
+                          staticClass: "fas fa-trash red float-right fa-2x"
+                        }),
+                        _vm._v(" ")
+                      ]
+                    )
+                  : _vm._e()
+              ]
+            )
+          ])
+        }),
+        0
+      ),
+      _vm._v(" "),
+      _vm.allPhotos > _vm.loadedPhoto
+        ? _c("div", { class: "col-12 d-inline-block mt-3 dwhite " }, [
+            _c("p", { staticClass: "text-center galleryMenu" }, [
+              _c("span", [_vm._v("Общо снимки: " + _vm._s(_vm.allPhotos))]),
+              _c("span", [_vm._v("Показани: " + _vm._s(_vm.loadedPhoto))]),
+              _c(
+                "span",
+                {
+                  on: {
+                    click: function($event) {
+                      _vm.loadMorePhoto()
+                    }
+                  }
+                },
+                [_vm._v("Покажи още")]
+              )
             ])
           ])
-        ])
-      ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.photoMethod
+        ? _c("div", { class: "pModal" }, [
+            _c(
+              "div",
+              {
+                staticClass: "text-center imgContainer row align-items-center"
+              },
+              [
+                _c("div", { staticClass: "col" }, [
+                  _c("img", {
+                    class: "img-fluid mt-5 imgContainer",
+                    attrs: {
+                      src: "/storage/galleries/" + _vm.thePhoto.photos,
+                      alt: _vm.thePhoto.photos
+                    }
+                  })
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "downloadButton" }, [
+              _c(
+                "a",
+                {
+                  staticClass: "dwhite",
+                  attrs: {
+                    href: "/storage/galleries/" + _vm.thePhoto.photos,
+                    download: ""
+                  }
+                },
+                [
+                  _vm._v("Изтегли "),
+                  _c("i", { staticClass: "fas fa-file-download" })
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "closeButton" }, [
+              _c(
+                "a",
+                {
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      _vm.singlePhotoModal()
+                    }
+                  }
+                },
+                [_c("i", { staticClass: "fas fa-times dwhite fa-3x" })]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "rightButton" }, [
+              _c(
+                "a",
+                {
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      _vm.nextPhoto()
+                    }
+                  }
+                },
+                [_c("i", { staticClass: "fas fa-chevron-right dwhite fa-3x" })]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "leftButton" }, [
+              _c(
+                "a",
+                {
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      _vm.prevPhoto()
+                    }
+                  }
+                },
+                [_c("i", { staticClass: "fas fa-chevron-left dwhite fa-3x" })]
+              )
+            ])
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "modal fade",
+          attrs: {
+            id: "photosModal",
+            tabindex: "-1",
+            role: "dialog",
+            "aria-labelledby": "photosModalLabel",
+            "aria-hidden": "true"
+          }
+        },
+        [
+          _c(
+            "div",
+            {
+              staticClass: "modal-dialog modal-xl",
+              attrs: { role: "document" }
+            },
+            [
+              _vm.adminMode
+                ? _c("div", { staticClass: "modal-content" }, [
+                    _vm._m(0),
+                    _vm._v(" "),
+                    _c(
+                      "form",
+                      {
+                        attrs: {
+                          id: "photosForm",
+                          enctype: "multipart/form-data"
+                        },
+                        on: {
+                          submit: function($event) {
+                            $event.preventDefault()
+                            _vm.createPhoto("this")
+                          }
+                        }
+                      },
+                      [
+                        _c("div", { staticClass: "modal-body" }, [
+                          _c(
+                            "div",
+                            { staticClass: "form-group" },
+                            [
+                              _c("label", [_vm._v("Заглавие:")]),
+                              _vm._v(" "),
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.form.title,
+                                    expression: "form.title"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                class: {
+                                  "is-invalid": _vm.form.errors.has("title")
+                                },
+                                attrs: {
+                                  type: "text",
+                                  name: "title",
+                                  placeholder: "Заглавие",
+                                  required: ""
+                                },
+                                domProps: { value: _vm.form.title },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.form,
+                                      "title",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("has-error", {
+                                attrs: { form: _vm.form, field: "title" }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "form-group" }, [
+                            _c("label", [_vm._v("Снимка:")]),
+                            _vm._v(" "),
+                            _c("input", {
+                              staticClass: "form-control",
+                              attrs: { type: "file", name: "photos" },
+                              on: { change: _vm.onFileSelect }
+                            })
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "modal-footer" }, [
+                          _c(
+                            "button",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: !_vm.editMode,
+                                  expression: "!editMode"
+                                }
+                              ],
+                              staticClass: "btn btn-success",
+                              attrs: { type: "submit" }
+                            },
+                            [_vm._v("Добави")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-secondary",
+                              attrs: { type: "button", "data-dismiss": "modal" }
+                            },
+                            [_vm._v("Затвори")]
+                          )
+                        ])
+                      ]
+                    )
+                  ])
+                : _vm._e()
+            ]
+          )
+        ]
+      )
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "photosModalLabel" } },
+        [_vm._v("Добавяне на галерия")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
     ])
   }
 ]
@@ -60625,7 +62983,7 @@ var render = function() {
                 _c(
                   "a",
                   {
-                    attrs: { href: "#" },
+                    attrs: { href: "" },
                     on: {
                       click: function($event) {
                         $event.preventDefault()
@@ -61110,28 +63468,661 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "row flex-xl-nowrap" }, [
+    _c(
+      "div",
+      { staticClass: "schedules col-12" },
+      [
+        _vm.adminMode
+          ? _c(
+              "a",
+              {
+                attrs: { href: "#" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.showModal()
+                  }
+                }
+              },
+              [_c("i", { staticClass: "fas fa-file-import fa-3x green" })]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm._l(_vm.schedules, function(schedule) {
+          return _c("div", { key: schedule.id }, [
+            _c("div", { staticClass: "schedule" }, [
+              _c("div", { staticClass: "schTitle h3" }, [
+                _c("p", { staticClass: "dwhite" }, [
+                  _vm._v(_vm._s(schedule.title))
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "schDay float-left" }, [
+                _c("p", [_vm._v("Понеделник:")]),
+                _c("p", [_vm._v(_vm._s(schedule.mon))])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "schDay float-left" }, [
+                _c("p", [_vm._v("Вторник:")]),
+                _c("p", [_vm._v(_vm._s(schedule.tue))])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "schDay float-left" }, [
+                _c("p", [_vm._v("Сряда:")]),
+                _c("p", [_vm._v(_vm._s(schedule.wen))])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "schDay float-left" }, [
+                _c("p", [_vm._v("Четвъртък:")]),
+                _c("p", [_vm._v(_vm._s(schedule.thr))])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "schDay float-left" }, [
+                _c("p", [_vm._v("Петък:")]),
+                _c("p", [_vm._v(_vm._s(schedule.fri))])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "schDay float-left" }, [
+                _c("p", [_vm._v("Събота:")]),
+                _c("p", [_vm._v(_vm._s(schedule.sat))])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "schDay float-left" }, [
+                _c("p", [_vm._v("Неделя:")]),
+                _c("p", [_vm._v(_vm._s(schedule.sun))])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "schComment w-100 d-inline-block" }, [
+                _c("p", { staticClass: "dwhite" }, [
+                  _vm._v(_vm._s(schedule.comment))
+                ])
+              ]),
+              _vm._v(" "),
+              _vm.adminMode
+                ? _c("div", { staticClass: "p-1 w-100" }, [
+                    _c("hr", { staticClass: "mb-0 mt-0" }),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "float-left",
+                        attrs: { href: "#" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            _vm.editSchedule(schedule)
+                          }
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "fas fa-edit yellow" }),
+                        _vm._v(" ")
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "float-right",
+                        attrs: { href: "#" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            _vm.deleteSchedule(schedule.id)
+                          }
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "fas fa-trash red" }),
+                        _vm._v(" ")
+                      ]
+                    )
+                  ])
+                : _vm._e()
+            ])
+          ])
+        })
+      ],
+      2
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "scheduleModal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "scheduleModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog modal-xl", attrs: { role: "document" } },
+          [
+            _vm.adminMode
+              ? _c("div", { staticClass: "modal-content" }, [
+                  _c("div", { staticClass: "modal-header" }, [
+                    !_vm.editMode
+                      ? _c(
+                          "h5",
+                          {
+                            staticClass: "modal-title",
+                            attrs: { id: "scheduleModalLabel" }
+                          },
+                          [_vm._v("Добавяне на график")]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.editMode
+                      ? _c(
+                          "h5",
+                          {
+                            staticClass: "modal-title",
+                            attrs: { id: "scheduleModalLabel" }
+                          },
+                          [_vm._v("Промяна на график " + _vm._s(this.form.id))]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm._m(0)
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "form",
+                    {
+                      attrs: {
+                        id: "scheduleForm",
+                        enctype: "multipart/form-data"
+                      },
+                      on: {
+                        submit: function($event) {
+                          $event.preventDefault()
+                          _vm.editMode
+                            ? _vm.updateSchedule()
+                            : _vm.createSchedule()
+                        }
+                      }
+                    },
+                    [
+                      _c("div", { staticClass: "modal-body" }, [
+                        _c(
+                          "div",
+                          { staticClass: "form-group" },
+                          [
+                            _c("label", [_vm._v("Заглавие:")]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.title,
+                                  expression: "form.title"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("title")
+                              },
+                              attrs: {
+                                type: "text",
+                                name: "title",
+                                placeholder: "Заглавие",
+                                required: ""
+                              },
+                              domProps: { value: _vm.form.title },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.form,
+                                    "title",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("has-error", {
+                              attrs: { form: _vm.form, field: "title" }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "form-group" },
+                          [
+                            _c("label", [_vm._v("Коментар:")]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.comment,
+                                  expression: "form.comment"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("comment")
+                              },
+                              attrs: {
+                                type: "text",
+                                name: "comment",
+                                placeholder: "Коментар"
+                              },
+                              domProps: { value: _vm.form.comment },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.form,
+                                    "comment",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("has-error", {
+                              attrs: { form: _vm.form, field: "comment" }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "form-group" },
+                          [
+                            _c("label", [_vm._v("Понеделник:")]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.mon,
+                                  expression: "form.mon"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("mon")
+                              },
+                              attrs: {
+                                type: "text",
+                                name: "mon",
+                                placeholder: "Понеделник"
+                              },
+                              domProps: { value: _vm.form.mon },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(_vm.form, "mon", $event.target.value)
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("has-error", {
+                              attrs: { form: _vm.form, field: "mon" }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "form-group" },
+                          [
+                            _c("label", [_vm._v("Вторник:")]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.tue,
+                                  expression: "form.tue"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("tue")
+                              },
+                              attrs: {
+                                type: "text",
+                                name: "tue",
+                                placeholder: "Вторник"
+                              },
+                              domProps: { value: _vm.form.tue },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(_vm.form, "tue", $event.target.value)
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("has-error", {
+                              attrs: { form: _vm.form, field: "tue" }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "form-group" },
+                          [
+                            _c("label", [_vm._v("Сряда:")]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.wen,
+                                  expression: "form.wen"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("wen")
+                              },
+                              attrs: {
+                                type: "text",
+                                name: "wen",
+                                placeholder: "Сряда"
+                              },
+                              domProps: { value: _vm.form.wen },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(_vm.form, "wen", $event.target.value)
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("has-error", {
+                              attrs: { form: _vm.form, field: "wen" }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "form-group" },
+                          [
+                            _c("label", [_vm._v("Четвъртък:")]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.thr,
+                                  expression: "form.thr"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("thr")
+                              },
+                              attrs: {
+                                type: "text",
+                                name: "thr",
+                                placeholder: "Четвъртък"
+                              },
+                              domProps: { value: _vm.form.thr },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(_vm.form, "thr", $event.target.value)
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("has-error", {
+                              attrs: { form: _vm.form, field: "thr" }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "form-group" },
+                          [
+                            _c("label", [_vm._v("Петък:")]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.fri,
+                                  expression: "form.fri"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("fri")
+                              },
+                              attrs: {
+                                type: "text",
+                                name: "fri",
+                                placeholder: "Петък"
+                              },
+                              domProps: { value: _vm.form.fri },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(_vm.form, "fri", $event.target.value)
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("has-error", {
+                              attrs: { form: _vm.form, field: "fri" }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "form-group" },
+                          [
+                            _c("label", [_vm._v("Събота:")]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.sat,
+                                  expression: "form.sat"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("sat")
+                              },
+                              attrs: {
+                                type: "text",
+                                name: "sat",
+                                placeholder: "Събота"
+                              },
+                              domProps: { value: _vm.form.sat },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(_vm.form, "sat", $event.target.value)
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("has-error", {
+                              attrs: { form: _vm.form, field: "sat" }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "form-group" },
+                          [
+                            _c("label", [_vm._v("Неделя:")]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.sun,
+                                  expression: "form.sun"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("sun")
+                              },
+                              attrs: {
+                                type: "text",
+                                name: "sun",
+                                placeholder: "Неделя"
+                              },
+                              domProps: { value: _vm.form.sun },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(_vm.form, "sun", $event.target.value)
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("has-error", {
+                              attrs: { form: _vm.form, field: "sun" }
+                            })
+                          ],
+                          1
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "modal-footer" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-danger",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                _vm.clearForm()
+                              }
+                            }
+                          },
+                          [_vm._v("Изчисти")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: !_vm.editMode,
+                                expression: "!editMode"
+                              }
+                            ],
+                            staticClass: "btn btn-success",
+                            attrs: { type: "submit" }
+                          },
+                          [_vm._v("Добави")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.editMode,
+                                expression: "editMode"
+                              }
+                            ],
+                            staticClass: "btn btn-primary",
+                            attrs: { type: "submit" }
+                          },
+                          [_vm._v("Промени")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-secondary",
+                            attrs: { type: "button", "data-dismiss": "modal" }
+                          },
+                          [_vm._v("Затвори")]
+                        )
+                      ])
+                    ]
+                  )
+                ])
+              : _vm._e()
+          ]
+        )
+      ]
+    )
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "col-md-8" }, [
-          _c("div", { staticClass: "card card-default" }, [
-            _c("div", { staticClass: "card-header" }, [
-              _vm._v("Example Component")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _vm._v("\n                    Grafik\n                ")
-            ])
-          ])
-        ])
-      ])
-    ])
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
   }
 ]
 render._withStripped = true
@@ -75619,11 +78610,17 @@ var routes = [{
   path: '/Треньори',
   component: __webpack_require__(/*! ./components/content/CoachsComponent.vue */ "./resources/js/components/content/CoachsComponent.vue").default
 }, {
-  path: '/Състезатели',
+  path: '/Състезатели/:page',
   component: __webpack_require__(/*! ./components/content/CompetitorsComponent.vue */ "./resources/js/components/content/CompetitorsComponent.vue").default
 }, {
   path: '/График',
   component: __webpack_require__(/*! ./components/content/SchedulesComponent.vue */ "./resources/js/components/content/SchedulesComponent.vue").default
+}, {
+  path: '/Галерии/:type',
+  component: __webpack_require__(/*! ./components/content/GalleriesComponent.vue */ "./resources/js/components/content/GalleriesComponent.vue").default
+}, {
+  path: '/Галерии/:type/Галерия/:title/Id/:id',
+  component: __webpack_require__(/*! ./components/content/GalleryComponent.vue */ "./resources/js/components/content/GalleryComponent.vue").default
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   mode: 'history',
@@ -76217,6 +79214,144 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CompetitorsComponent_vue_vue_type_template_id_7573abd7___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CompetitorsComponent_vue_vue_type_template_id_7573abd7___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/content/GalleriesComponent.vue":
+/*!****************************************************************!*\
+  !*** ./resources/js/components/content/GalleriesComponent.vue ***!
+  \****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _GalleriesComponent_vue_vue_type_template_id_3cb1c424___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GalleriesComponent.vue?vue&type=template&id=3cb1c424& */ "./resources/js/components/content/GalleriesComponent.vue?vue&type=template&id=3cb1c424&");
+/* harmony import */ var _GalleriesComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./GalleriesComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/content/GalleriesComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _GalleriesComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _GalleriesComponent_vue_vue_type_template_id_3cb1c424___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _GalleriesComponent_vue_vue_type_template_id_3cb1c424___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/content/GalleriesComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/content/GalleriesComponent.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/components/content/GalleriesComponent.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GalleriesComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./GalleriesComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/content/GalleriesComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GalleriesComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/content/GalleriesComponent.vue?vue&type=template&id=3cb1c424&":
+/*!***********************************************************************************************!*\
+  !*** ./resources/js/components/content/GalleriesComponent.vue?vue&type=template&id=3cb1c424& ***!
+  \***********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GalleriesComponent_vue_vue_type_template_id_3cb1c424___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./GalleriesComponent.vue?vue&type=template&id=3cb1c424& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/content/GalleriesComponent.vue?vue&type=template&id=3cb1c424&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GalleriesComponent_vue_vue_type_template_id_3cb1c424___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GalleriesComponent_vue_vue_type_template_id_3cb1c424___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/content/GalleryComponent.vue":
+/*!**************************************************************!*\
+  !*** ./resources/js/components/content/GalleryComponent.vue ***!
+  \**************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _GalleryComponent_vue_vue_type_template_id_1f8870e8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GalleryComponent.vue?vue&type=template&id=1f8870e8& */ "./resources/js/components/content/GalleryComponent.vue?vue&type=template&id=1f8870e8&");
+/* harmony import */ var _GalleryComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./GalleryComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/content/GalleryComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _GalleryComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _GalleryComponent_vue_vue_type_template_id_1f8870e8___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _GalleryComponent_vue_vue_type_template_id_1f8870e8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/content/GalleryComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/content/GalleryComponent.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/components/content/GalleryComponent.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GalleryComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./GalleryComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/content/GalleryComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GalleryComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/content/GalleryComponent.vue?vue&type=template&id=1f8870e8&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/components/content/GalleryComponent.vue?vue&type=template&id=1f8870e8& ***!
+  \*********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GalleryComponent_vue_vue_type_template_id_1f8870e8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./GalleryComponent.vue?vue&type=template&id=1f8870e8& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/content/GalleryComponent.vue?vue&type=template&id=1f8870e8&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GalleryComponent_vue_vue_type_template_id_1f8870e8___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GalleryComponent_vue_vue_type_template_id_1f8870e8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

@@ -25,7 +25,7 @@
                     <div v-if="adminMode" class="p-1 d-inline-block w-100">
                         <hr class="mb-0 mt-0">
                         <a href="" @click.prevent="editCoach(coach)"><i class="fas fa-edit yellow"></i>&#160;</a>
-                        <a href="" @click.prevent="deleteCoach(coach.id)"><i class="fas fa-trash red"></i>&#160;</a>
+                        <a href="" @click.prevent="deleteCoach(coach.id)"><i class="fas fa-trash red float-right"></i>&#160;</a>
                     </div>
                 </a>
             </div>
@@ -65,7 +65,7 @@
                             <has-error :form="form" field="birthday"></has-error>
                         </div>
                         <div class="form-group">
-                            <label>Снимка</label>
+                            <label>Снимка:</label>
                             <input type="file" @change="onFileSelect" name="photos" class="form-control">
                         </div>
                         <div class="form-group">
@@ -75,7 +75,7 @@
                             <has-error :form="form" field="position"></has-error>
                         </div>
                         <div class="form-group">
-                            <label>Автобиография</label>
+                            <label>Автобиография:</label>
                             <textarea v-model="form.description" type="text" name="description"
                             class="form-control" :class="{ 'is-invalid': form.errors.has('description') }" placeholder="Автобиография" required></textarea>
                             <has-error :form="form" field="description"></has-error>
@@ -89,6 +89,7 @@
                     </div>
                 </form>
             </div>
+
 
 
             <div v-if="!adminMode" class="modal-content for-user">
@@ -161,16 +162,6 @@
 
                     })
                 }
-            },
-            getAge(date) {
-                let today = new Date();
-                let birthDate = new Date(date);
-                let age = today.getFullYear() - birthDate.getFullYear();
-                let m = today.getMonth() - birthDate.getMonth();
-                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-                    age--;
-                }
-                return age;
             },
             editCoach(data){
                 this.editMode = true;

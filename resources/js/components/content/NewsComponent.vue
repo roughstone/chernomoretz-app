@@ -4,7 +4,7 @@
         <a href="#" v-if="newsAdminMode" @click.prevent="showModal()"><i class="fas fa-file-import fa-3x green"></i></a>
         <div v-for="news in allNews" :key="news.id">
             <div class="mt-3 news">
-                <a href="#" @click.prevent="editNews(news)">
+                <a href="" @click.prevent="editNews(news)">
                     <h3 class="dwhite">{{ news.title }}</h3>
                     <p class="mb-0 float-left w-100 dwhite"><img :class="'col-6 col-md-3 p-1 float-left'" :src="'/storage/news/' + news.photos" :alt="news.title">{{ news.description }}</p>
                     <div v-if="!newsAdminMode" class="p-1 d-inline-block w-100">

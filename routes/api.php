@@ -33,3 +33,22 @@ Route::get('/coachs', 'API\CoachController@index');
 Route::post('/coachs', 'API\CoachController@store')->middleware('auth:api');
 Route::patch('/coachs/{coach}', 'API\CoachController@update')->middleware('auth:api');
 Route::delete('/coachs/{coach}', 'API\CoachController@destroy')->middleware('auth:api');
+
+Route::get('/competitors', 'API\CompetitorsController@index');
+Route::post('/competitors', 'API\CompetitorsController@store')->middleware('auth:api');
+Route::patch('/competitors/{competitor}', 'API\CompetitorsController@update')->middleware('auth:api');
+Route::delete('/competitors/{competitor}', 'API\CompetitorsController@destroy')->middleware('auth:api');
+
+Route::get('/schedules', 'API\SchedulesController@index');
+Route::post('/schedules', 'API\SchedulesController@store')->middleware('auth:api');
+Route::patch('/schedules/{schedule}', 'API\SchedulesController@update')->middleware('auth:api');
+Route::delete('/schedules/{schedule}', 'API\SchedulesController@destroy')->middleware('auth:api');
+
+Route::get('/galleries/{category}', 'API\GalleriesController@index');
+Route::post('/galleries', 'API\GalleriesController@store')->middleware('auth:api');
+Route::patch('/galleries/{gallery}', 'API\GalleriesController@update')->middleware('auth:api');
+Route::delete('/galleries/{gallery}', 'API\GalleriesController@destroy')->middleware('auth:api');
+
+Route::get('/gallery/{id}', 'API\PhotosController@index');
+Route::post('/gallery/{id}', 'API\PhotosController@store')->middleware('auth:api');
+Route::delete('/gallery/{photo}', 'API\PhotosController@destroy')->middleware('auth:api');

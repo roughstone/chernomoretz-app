@@ -1,5 +1,5 @@
 <template>
-<nav class="navbar navbar-expand-lg navbar-dark">
+<nav id="navBar" class="navbar navbar-expand-lg navbar-dark">
 
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -20,7 +20,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <router-link class="dropdown-item" to="/Треньори">Треньори</router-link>
-            <router-link class="dropdown-item" to="/Състезатели">Състезатели</router-link>
+            <router-link class="dropdown-item" to="/Състезатели/1">Състезатели</router-link>
             <router-link class="dropdown-item" to="/График">График</router-link>
         </div>
     </li>
@@ -30,9 +30,9 @@
             <i class="far fa-images purple"></i> Галерия
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <router-link class="dropdown-item" to="/Стстезания">Стстезания</router-link>
-            <router-link class="dropdown-item" to="/Събития">Събития</router-link>
-            <router-link class="dropdown-item" to="/Тренировки">Тренировки</router-link>
+            <router-link class="dropdown-item" to="/Галерии/Състезания">Стстезания</router-link>
+            <router-link class="dropdown-item" to="/Галерии/Събития">Събития</router-link>
+            <router-link class="dropdown-item" to="/Галерии/Тренировки">Тренировки</router-link>
         </div>
     </li>
     <li class="nav-item">
@@ -46,7 +46,7 @@
 <script>
     export default {
         mounted() {
-            console.log('Component mounted.')
+
         }
     }
 </script>

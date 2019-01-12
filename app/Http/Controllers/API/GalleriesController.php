@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Competitor;
+use App\Photo;
+use App\Gallery;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Intervention\Image\ImageManagerStatic as Image;
 
-class CompetitorsController extends Controller
+class GalleriesController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Competitor::paginate(9);
+        return Gallery::where('category', '=', $request->category)->latest()->paginate(10);
     }
 
     /**
@@ -29,25 +30,23 @@ class CompetitorsController extends Controller
     {
         if (\Gate::allows('admin')) {
             request()->validate([
-                'firstName' => ['required', 'min:3'],
-                'lastName' => ['required', 'min:3'],
+                'title' => ['required', 'min:3'],
+                'date' => ['required', 'date'],
+                'category' => ['required', 'min:3'],
                 'photos' => ['required', 'min:3'],
-                'birthday' => ['required', 'date'],
-                'description' => ['required', 'min:6',],
             ]);
 
             if ($request->photos) {
                 $fileName = time().'.'.explode('/', explode(':', substr($request->photos, 0, strpos($request->photos, ';')))[1])[1];
 
-                Image::make($request->photos)->save(public_path('/storage/competitors/'.$fileName));
+                Image::make($request->photos)->save(public_path('/storage/galleries/'.$fileName));
             }
-            $object = new Competitor();
+            $object = new Gallery();
 
-            $object->firstName = request('firstName');
-            $object->lastName = request('lastName');
+            $object->title = request('title');
+            $object->date = request('date');
             $object->photos = $fileName;
-            $object->birthday = request('birthday');
-            $object->sport = request('sport');
+            $object->category = request('category');
             $object->description = request('description');
 
             $object->save();
@@ -58,38 +57,36 @@ class CompetitorsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Competitor  $competitor
+     * @param  \App\Gallery  $gallery
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Competitor $competitor)
+    public function update(Request $request, Gallery $gallery)
     {
         if (\Gate::allows('admin')) {
-            $object = Competitor::all()->where('id','=',$competitor->id)->first();
+            $object = Gallery::all()->where('id','=',$galleries->id)->first();
 
             request()->validate([
-                'firstName' => ['required', 'min:3'],
-                'lastName' => ['required', 'min:3'],
+                'title' => ['required', 'min:3'],
+                'date' => ['required', 'date'],
+                'category' => ['required', 'min:3'],
                 'photos' => ['required', 'min:3'],
-                'birthday' => ['required', 'date'],
-                'description' => ['required', 'min:6',],
             ]);
 
             if (strlen($request->photos) > 20) {
                 $fileName = time().'.'.explode('/', explode(':', substr($request->photos, 0, strpos($request->photos, ';')))[1])[1];
 
-                Image::make($request->photos)->save(public_path('/storage/competitors/'.$fileName));
-                unlink('../public/storage/competitors/' . $object->photos);
+                Image::make($request->photos)->save(public_path('/storage/galleries/'.$fileName));
+                unlink('../public/storage/galleries/' . $object->photos);
             } else {
                 $fileName = $object->photos;
             }
 
             $object->update([
-                'firstName' => $request['firstName'],
-                'lastName' => $request['lastName'],
+                'title' => $request['firstName'],
+                'date' => $request['lastName'],
                 'photos' => $fileName,
-                'birthday' => $request['birthday'],
+                'category' => $request['birthday'],
                 'description' => $request['description'],
-                'sport' => $request['sport'],
             ]);
         }
     }
@@ -97,16 +94,16 @@ class CompetitorsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Competitor  $competitor
+     * @param  \App\Gallery  $gallery
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Competitor $competitor)
+    public function destroy(Gallery $gallery)
     {
         if (\Gate::allows('admin')) {
 
-            $competitor->delete();
+            $gallery->delete();
 
-            unlink('../public/storage/competitors/' . $competitor->photos);
+            unlink('../public/storage/galleries/' . $gallery->photos);
         }
     }
 }
