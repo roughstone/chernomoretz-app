@@ -26,6 +26,7 @@ Vue.component('master-navigation', require('./components/MasterNavigationCompone
 Vue.component('master-header', require('./components/MasterHeaderComponent.vue').default);
 Vue.component('master-footer', require('./components/MasterFooterComponent.vue').default);
 Vue.component('authentication-component', require('./components/auth/AuthenticationComponent.vue').default);
+Vue.component('contacts-component', require('./components/ContactsComponent.vue').default);
 
 
 
@@ -95,10 +96,16 @@ Vue.filter('myDate', function (created) {
 });
 
 Vue.filter('getAge', function (birthday) {
-    birthday = new Date(birthday)
-    let today = new Date()
-    let age = moment(today).format('YYYY') - moment(birthday).format('YYYY');
-    return age
+
+    let today = new Date();
+    birthday = new Date(birthday);
+    let age = today.getFullYear() - birthday.getFullYear();
+    let m = today.getMonth() - birthday.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthday.getDate()))
+    {
+        age--;
+    }
+    return age;
 });
 
 

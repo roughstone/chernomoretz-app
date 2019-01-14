@@ -8,14 +8,14 @@
 <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
     <li class="nav-item">
-        <router-link class="nav-link" to="/#"><i class="fas fa-home purple"></i> Начало</router-link>
+        <router-link class="nav-link" to="/"><i class="fas fa-home purple"></i> Начало</router-link>
     </li>
     <li class="nav-item">
         <router-link class="nav-link" to="/Новини"><i class="far fa-newspaper purple"></i> Новини</router-link>
     </li>
 
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-users purple"></i> Отбор
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -36,7 +36,7 @@
         </div>
     </li>
     <li class="nav-item">
-        <router-link class="nav-link" to="/Контакти"><i class="fas fa-phone-square purple"></i> Контакти с нас!</router-link>
+        <a href="" @click.prevent="openContactsModal()" class="nav-link" to="/Контакти"><i class="fas fa-phone-square purple"></i> Контакти с нас!</a>
     </li>
     </ul>
 </div>
@@ -45,8 +45,17 @@
 
 <script>
     export default {
+        methods: {
+            openContactsModal() {
+                if(this.$route.params.contactsForm) {
+                    this.$route.params.contactsForm = false
+                } else {
+                    this.$route.params.contactsForm = true
+                }
+            }
+        },
         mounted() {
-
+            this.$route.params.contactsForm = false;
         }
     }
 </script>

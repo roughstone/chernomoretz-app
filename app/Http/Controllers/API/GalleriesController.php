@@ -101,9 +101,13 @@ class GalleriesController extends Controller
     {
         if (\Gate::allows('admin')) {
 
-            $gallery->delete();
+            foreach($gallery->galleryPhotos as $photo) {
+                unlink('../public/storage/galleries/' . $photo->photos);
+                $photo->delete();
+            }
 
             unlink('../public/storage/galleries/' . $gallery->photos);
+            $gallery->delete();
         }
     }
 }

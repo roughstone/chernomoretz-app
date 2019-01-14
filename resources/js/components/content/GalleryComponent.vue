@@ -56,7 +56,7 @@
                                 <div class="form-group">
                                     <label>Заглавие:</label>
                                     <input v-model="form.title" type="text" name="title"
-                                    class="form-control" :class="{ 'is-invalid': form.errors.has('title') }" placeholder="Заглавие" required>
+                                    class="form-control" :class="{ 'is-invalid': form.errors.has('title') }" placeholder="Заглавие">
                                     <has-error :form="form" field="title"></has-error>
                                 </div>
                                 <div class="form-group">

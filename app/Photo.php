@@ -11,4 +11,8 @@ class Photo extends Model
     protected $fillable = [
         'title', 'gallery_id', 'photos'
     ];
+
+    public function gallery() {
+        return $this->belongsTo(Gallery::class);
+    }
 }

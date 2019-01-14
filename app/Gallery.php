@@ -11,4 +11,9 @@ class Gallery extends Model
     protected $fillable = [
         'category', 'date', 'photos', 'title', 'description'
     ];
+
+    public function galleryPhotos()
+    {
+        return $this->hasMany(Photo::class);
+    }
 }

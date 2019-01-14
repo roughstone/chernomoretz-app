@@ -1754,6 +1754,111 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ContactsComponent.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ContactsComponent.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      contactsForm: null,
+      updateForm: setInterval(this.getModal, 100),
+      contactsMode: true,
+      form: new Form({
+        names: null,
+        email: null,
+        text: null
+      })
+    };
+  },
+  methods: {
+    getModal: function getModal() {
+      this.contactsForm = this.$route.params.contactsForm;
+
+      if (this.contactsForm) {
+        $("#contactsModal").modal("show");
+      }
+    },
+    closeModal: function closeModal() {
+      this.contactsForm = false;
+      this.contactsMode = true;
+      this.$route.params.contactsForm = false;
+    },
+    changeContacts: function changeContacts() {
+      if (this.contactsMode) {
+        this.contactsMode = false;
+      } else {
+        this.contactsMode = true;
+      }
+    }
+  },
+  mounted: function mounted() {
+    this.getModal();
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MasterFooterComponent.vue?vue&type=script&lang=js&":
 /*!********************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/MasterFooterComponent.vue?vue&type=script&lang=js& ***!
@@ -1868,7 +1973,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mounted: function mounted() {}
+  methods: {
+    openContactsModal: function openContactsModal() {
+      if (this.$route.params.contactsForm) {
+        this.$route.params.contactsForm = false;
+      } else {
+        this.$route.params.contactsForm = true;
+      }
+    }
+  },
+  mounted: function mounted() {
+    this.$route.params.contactsForm = false;
+  }
 });
 
 /***/ }),
@@ -59624,6 +59740,364 @@ var AlertSuccess_Component = normalizeComponent(
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ContactsComponent.vue?vue&type=template&id=3251520f&":
+/*!********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ContactsComponent.vue?vue&type=template&id=3251520f& ***!
+  \********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "row flex-xl-nowrap" }, [
+    _c("div", { staticClass: "col-12 col-md-9" }, [
+      _vm.contactsForm
+        ? _c(
+            "div",
+            {
+              staticClass: "modal",
+              attrs: {
+                id: "contactsModal",
+                tabindex: "-1",
+                role: "dialog",
+                "aria-labelledby": "contactsModalLabel",
+                "aria-hidden": "true"
+              }
+            },
+            [
+              _c(
+                "div",
+                {
+                  staticClass: "modal-dialog modal-xl",
+                  attrs: { role: "document" }
+                },
+                [
+                  _c("div", { staticClass: "modal-content for-user" }, [
+                    _c(
+                      "div",
+                      { staticClass: "modal-header mb-0 contactsList" },
+                      [
+                        _c(
+                          "h5",
+                          {
+                            staticClass: "modal-title dwhite w-100 text-center",
+                            attrs: { id: "contactsModalLabel" }
+                          },
+                          [_vm._v("Контакти с нас!!!")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "close",
+                            attrs: {
+                              type: "button",
+                              "data-dismiss": "modal",
+                              "aria-label": "Close"
+                            },
+                            on: {
+                              click: function($event) {
+                                _vm.closeModal()
+                              }
+                            }
+                          },
+                          [
+                            _c("span", { attrs: { "aria-hidden": "true" } }, [
+                              _vm._v("×")
+                            ])
+                          ]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    !_vm.contactsMode
+                      ? _c(
+                          "form",
+                          {
+                            attrs: {
+                              id: "newsForm",
+                              enctype: "multipart/form-data"
+                            },
+                            on: {
+                              submit: function($event) {
+                                $event.preventDefault()
+                                _vm.createNews()
+                              }
+                            }
+                          },
+                          [
+                            _c(
+                              "div",
+                              { staticClass: "modal-body contactsList" },
+                              [
+                                _c(
+                                  "div",
+                                  { staticClass: "form-group" },
+                                  [
+                                    _c("label", { staticClass: "dwhite" }, [
+                                      _vm._v("Имена:")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.form.names,
+                                          expression: "form.names"
+                                        }
+                                      ],
+                                      staticClass: "form-control",
+                                      class: {
+                                        "is-invalid": _vm.form.errors.has(
+                                          "names"
+                                        )
+                                      },
+                                      attrs: {
+                                        type: "text",
+                                        name: "names",
+                                        placeholder: "Вашите именна",
+                                        required: ""
+                                      },
+                                      domProps: { value: _vm.form.names },
+                                      on: {
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.$set(
+                                            _vm.form,
+                                            "names",
+                                            $event.target.value
+                                          )
+                                        }
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("has-error", {
+                                      attrs: { form: _vm.form, field: "names" }
+                                    })
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  { staticClass: "form-group" },
+                                  [
+                                    _c("label", { staticClass: "dwhite" }, [
+                                      _vm._v("Електронна поща:")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.form.email,
+                                          expression: "form.email"
+                                        }
+                                      ],
+                                      staticClass: "form-control",
+                                      class: {
+                                        "is-invalid": _vm.form.errors.has(
+                                          "email"
+                                        )
+                                      },
+                                      attrs: {
+                                        type: "text",
+                                        name: "email",
+                                        placeholder: "Електронна поща",
+                                        required: ""
+                                      },
+                                      domProps: { value: _vm.form.email },
+                                      on: {
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.$set(
+                                            _vm.form,
+                                            "email",
+                                            $event.target.value
+                                          )
+                                        }
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("has-error", {
+                                      attrs: { form: _vm.form, field: "email" }
+                                    })
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  { staticClass: "form-group" },
+                                  [
+                                    _c("label", { staticClass: "dwhite" }, [
+                                      _vm._v("Вашето съобщение")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("textarea", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.form.text,
+                                          expression: "form.text"
+                                        }
+                                      ],
+                                      staticClass: "form-control",
+                                      class: {
+                                        "is-invalid": _vm.form.errors.has(
+                                          "text"
+                                        )
+                                      },
+                                      attrs: {
+                                        rows: "4",
+                                        type: "text",
+                                        name: "text",
+                                        placeholder: "Текст към съобщението",
+                                        required: ""
+                                      },
+                                      domProps: { value: _vm.form.text },
+                                      on: {
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.$set(
+                                            _vm.form,
+                                            "text",
+                                            $event.target.value
+                                          )
+                                        }
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("has-error", {
+                                      attrs: { form: _vm.form, field: "text" }
+                                    })
+                                  ],
+                                  1
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "modal-footer contactsList" },
+                              [
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-success",
+                                    attrs: { type: "submit" }
+                                  },
+                                  [_vm._v("Добави")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-secondary",
+                                    attrs: { type: "button" },
+                                    on: {
+                                      click: function($event) {
+                                        _vm.changeContacts()
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("Затвори")]
+                                )
+                              ]
+                            )
+                          ]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.contactsMode
+                      ? _c("div", { staticClass: "contactsList" }, [
+                          _c("div", { staticClass: "ml-4 mt-3 dwhite" }, [
+                            _vm._v("Електронна поща: chernomoretz_gym@abv.bg")
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "ml-4 mt-3 dwhite" }, [
+                            _vm._v(
+                              "Телефони за връзка: +359888337777, +359896787919 "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "ml-4 mt-3 dwhite" }, [
+                            _vm._v(
+                              'Адрес: Гр.Бургас , к-с.Лазур , СЗ"Лукойл Нефтохимик"'
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _vm._m(0),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass: "text-center dwhite mb-3",
+                              on: {
+                                click: function($event) {
+                                  _vm.changeContacts()
+                                }
+                              }
+                            },
+                            [_c("span", [_vm._v("Изпрати съобщение")])]
+                          )
+                        ])
+                      : _vm._e()
+                  ])
+                ]
+              )
+            ]
+          )
+        : _vm._e()
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      {
+        attrs: {
+          target: "_blank",
+          href:
+            "https://www.google.com/maps/place/%D0%A1%D0%BF%D0%BE%D1%80%D1%82%D0%BD%D0%B0+%D0%B7%D0%B0%D0%BB%D0%B0+%D0%9D%D0%B5%D1%84%D1%82%D0%BE%D1%85%D0%B8%D0%BC%D0%B8%D0%BA/@42.5115427,27.4678248,17z/data=!4m5!3m4!1s0x40a694846848bdbf:0xc44b47b0330a47d6!8m2!3d42.5122628!4d27.4684542"
+        }
+      },
+      [
+        _c("div", { staticClass: "ml-4 mr-4 mb-3" }, [
+          _c("img", {
+            staticClass: "img-fluid",
+            attrs: { src: "/images/google_maps.jpg" }
+          })
+        ])
+      ]
+    )
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MasterFooterComponent.vue?vue&type=template&id=105f3185&":
 /*!************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/MasterFooterComponent.vue?vue&type=template&id=105f3185& ***!
@@ -59750,7 +60224,7 @@ var render = function() {
               [
                 _c(
                   "router-link",
-                  { staticClass: "nav-link", attrs: { to: "/#" } },
+                  { staticClass: "nav-link", attrs: { to: "/" } },
                   [
                     _c("i", { staticClass: "fas fa-home purple" }),
                     _vm._v(" Начало")
@@ -59855,21 +60329,25 @@ var render = function() {
               )
             ]),
             _vm._v(" "),
-            _c(
-              "li",
-              { staticClass: "nav-item" },
-              [
-                _c(
-                  "router-link",
-                  { staticClass: "nav-link", attrs: { to: "/Контакти" } },
-                  [
-                    _c("i", { staticClass: "fas fa-phone-square purple" }),
-                    _vm._v(" Контакти с нас!")
-                  ]
-                )
-              ],
-              1
-            )
+            _c("li", { staticClass: "nav-item" }, [
+              _c(
+                "a",
+                {
+                  staticClass: "nav-link",
+                  attrs: { href: "", to: "/Контакти" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      _vm.openContactsModal()
+                    }
+                  }
+                },
+                [
+                  _c("i", { staticClass: "fas fa-phone-square purple" }),
+                  _vm._v(" Контакти с нас!")
+                ]
+              )
+            ])
           ])
         ]
       )
@@ -59906,7 +60384,7 @@ var staticRenderFns = [
       {
         staticClass: "nav-link dropdown-toggle",
         attrs: {
-          href: "#",
+          href: "",
           id: "navbarDropdown",
           role: "button",
           "data-toggle": "dropdown",
@@ -62831,8 +63309,7 @@ var render = function() {
                                 attrs: {
                                   type: "text",
                                   name: "title",
-                                  placeholder: "Заглавие",
-                                  required: ""
+                                  placeholder: "Заглавие"
                                 },
                                 domProps: { value: _vm.form.title },
                                 on: {
@@ -78594,6 +79071,7 @@ Vue.component('master-navigation', __webpack_require__(/*! ./components/MasterNa
 Vue.component('master-header', __webpack_require__(/*! ./components/MasterHeaderComponent.vue */ "./resources/js/components/MasterHeaderComponent.vue").default);
 Vue.component('master-footer', __webpack_require__(/*! ./components/MasterFooterComponent.vue */ "./resources/js/components/MasterFooterComponent.vue").default);
 Vue.component('authentication-component', __webpack_require__(/*! ./components/auth/AuthenticationComponent.vue */ "./resources/js/components/auth/AuthenticationComponent.vue").default);
+Vue.component('contacts-component', __webpack_require__(/*! ./components/ContactsComponent.vue */ "./resources/js/components/ContactsComponent.vue").default);
 /**
  * Vue-Routers
  */
@@ -78662,9 +79140,15 @@ Vue.filter('myDate', function (created) {
   return moment__WEBPACK_IMPORTED_MODULE_4___default()(created).format('MMM DD YYYY');
 });
 Vue.filter('getAge', function (birthday) {
-  birthday = new Date(birthday);
   var today = new Date();
-  var age = moment__WEBPACK_IMPORTED_MODULE_4___default()(today).format('YYYY') - moment__WEBPACK_IMPORTED_MODULE_4___default()(birthday).format('YYYY');
+  birthday = new Date(birthday);
+  var age = today.getFullYear() - birthday.getFullYear();
+  var m = today.getMonth() - birthday.getMonth();
+
+  if (m < 0 || m === 0 && today.getDate() < birthday.getDate()) {
+    age--;
+  }
+
   return age;
 });
 /**
@@ -78733,6 +79217,75 @@ if (token) {
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/components/ContactsComponent.vue":
+/*!*******************************************************!*\
+  !*** ./resources/js/components/ContactsComponent.vue ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ContactsComponent_vue_vue_type_template_id_3251520f___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ContactsComponent.vue?vue&type=template&id=3251520f& */ "./resources/js/components/ContactsComponent.vue?vue&type=template&id=3251520f&");
+/* harmony import */ var _ContactsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ContactsComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/ContactsComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _ContactsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ContactsComponent_vue_vue_type_template_id_3251520f___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ContactsComponent_vue_vue_type_template_id_3251520f___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/ContactsComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/ContactsComponent.vue?vue&type=script&lang=js&":
+/*!********************************************************************************!*\
+  !*** ./resources/js/components/ContactsComponent.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ContactsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./ContactsComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ContactsComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ContactsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/ContactsComponent.vue?vue&type=template&id=3251520f&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/ContactsComponent.vue?vue&type=template&id=3251520f& ***!
+  \**************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ContactsComponent_vue_vue_type_template_id_3251520f___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./ContactsComponent.vue?vue&type=template&id=3251520f& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ContactsComponent.vue?vue&type=template&id=3251520f&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ContactsComponent_vue_vue_type_template_id_3251520f___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ContactsComponent_vue_vue_type_template_id_3251520f___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
 
 /***/ }),
 

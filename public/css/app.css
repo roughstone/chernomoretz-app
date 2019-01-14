@@ -27063,6 +27063,27 @@ body {
   text-decoration: none !important;
 }
 
+.contactsList {
+  background-color: rgba(41, 41, 41, 0.5);
+}
+
+.contactsList div {
+  font-size: 1.5vw;
+}
+
+.contactsList span {
+  background-color: #1f1f1f;
+  border-radius: 5px;
+  padding: 5px;
+  border: 1px solid #292929;
+  box-shadow: 3px 3px 35px 0px rgba(41, 41, 41, 0.75);
+}
+
+.contactsList span:hover {
+  background-color: #363636;
+  cursor: pointer;
+}
+
 .for-user {
   background-image: url(/images/gymnastic-low-poly-artwork.jpg?ed1e0ee7ad4872727e567d5bcd15b998);
   background-size: 100% 100%;

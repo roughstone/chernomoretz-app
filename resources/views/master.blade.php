@@ -43,9 +43,9 @@
             @endif
             <authentication-component></authentication-component>
             <master-header></master-header>
-
             <master-navigation></master-navigation>
             <div class="container-fluid">
+            <contacts-component></contacts-component>
                 <router-view></router-view>
             </div>
         </div>
