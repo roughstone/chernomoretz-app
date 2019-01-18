@@ -52,3 +52,5 @@ Route::delete('/galleries/{gallery}', 'API\GalleriesController@destroy')->middle
 Route::get('/gallery/{id}', 'API\PhotosController@index');
 Route::post('/gallery/{id}', 'API\PhotosController@store')->middleware('auth:api');
 Route::delete('/gallery/{photo}', 'API\PhotosController@destroy')->middleware('auth:api');
+
+Route::post('/editImg', 'API\EditorController@store')->middleware('auth:api');

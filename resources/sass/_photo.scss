@@ -1,0 +1,27 @@
+.resizer-container {
+    position: relative;
+    display: inline-block;
+    img {
+        position: relative;
+        top: 0;
+        left: 0;
+    }
+    #croper {
+        z-index: 500;
+        resize: both;
+        top: 0;
+        left: 0;
+        overflow: auto;
+        position: absolute;
+        width: 160px;
+        height: 90px;
+        box-shadow: 0px 0px 0px 5px rgba(129, 0, 0, 0.5);
+    }
+    #cropercursor {
+        position: absolute;
+        cursor: move;
+        top: 49%;
+        left: 49%;
+        color: greenyellow;
+    }
+}

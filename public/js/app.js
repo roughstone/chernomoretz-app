@@ -1859,10 +1859,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MasterFooterComponent.vue?vue&type=script&lang=js&":
-/*!********************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/MasterFooterComponent.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ImagerComponent.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ImagerComponent.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1884,10 +1884,241 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mounted: function mounted() {
-    console.log('Component mounted.');
-  }
+  data: function data() {
+    return {
+      photo: null,
+      // the photo title
+      croper: false,
+      // croper condition
+      resizer: false,
+      // resizer condition
+      keepHeight: null,
+      // the real hight of the photo
+      keepWidth: null,
+      // the real width of the photo
+      photoHeight: null,
+      // the view height of the photo
+      photoWidth: null,
+      // the view width of the photo
+      photoSize: '100',
+      // the size of the photo in %
+      croperTop: null,
+      // the top position on the croper against the image
+      croperLeft: null,
+      // the left position on the croper against the image
+      croperHeight: null,
+      // the croper height
+      croperWidth: null,
+      // the croper width
+      croperMethod: 'free',
+      // the croper aspect ratio
+      form: new Form({
+        // //instantiate a new Form object
+        photo: this.$route.params.photo,
+        // the photo title to be send to the backend
+        method: null // the method to to be send to the backend
+
+      })
+    };
+  },
+  methods: {
+    getSize: function getSize() {
+      // get the size of the photo
+      this.keepHeight = $('#output').height();
+      this.keepWidth = $('#output').width();
+      this.photoHeight = $('#output').height();
+      this.photoWidth = $('#output').width();
+      this.dragElement(document.getElementById("croper"));
+    },
+    setCroper: function setCroper() {
+      // croper logic
+      var croper = document.getElementById("croper"); //get croper element by id
+
+      this.form.croperTop = parseInt(croper.style.top, 10); //get croper top from style and conver from string to integer
+
+      this.croperTop = this.form.croperTop;
+      this.form.croperLeft = parseInt(croper.style.left, 10); //get croper left from style and conver from string to integer
+
+      this.croperLeft = this.form.croperLeft;
+      this.form.croperWidth = parseInt(croper.style.width, 10); //get croper width from style and conver from string to integer
+
+      this.croperWidth = this.form.croperWidth;
+
+      if (this.croperMethod == "4:3") {
+        // logic to set the cropper height to 4:3 aspect ratio
+        this.form.croperHeight = this.form.croperWidth / 4 * 3;
+        this.croperHeight = this.form.croperHeight;
+      } else if (this.croperMethod == "16:9") {
+        // logic to set the cropper height to 16:9 aspect ratio
+        this.form.croperHeight = this.form.croperWidth / 16 * 9;
+        this.croperHeight = this.form.croperHeight;
+      } else {
+        this.form.croperHeight = parseInt(croper.style.height, 10); //get croper height from style and conver from string to integer
+
+        this.croperHeight = this.form.croperHeight;
+      }
+
+      if (this.photoSize != '100') {
+        // if the user change the view size of the photo performs the logic
+        this.form.croperTop = this.croperTop / 100 * (200 - parseInt(this.photoSize));
+        this.form.croperLeft = this.croperLeft / 100 * (200 - parseInt(this.photoSize));
+        this.form.croperHeight = this.croperHeight / 100 * (200 - parseInt(this.photoSize));
+        this.form.croperWidth = this.croperWidth / 100 * (200 - parseInt(this.photoSize));
+      }
+    },
+    setViewSize: function setViewSize() {
+      // logic to correctly set the view size of the image
+      var photo = parseInt(this.photoSize);
+      var text = '';
+
+      if (photo < 10) {
+        text = '0.0' + photo;
+      } else if (photo >= 10 && photo <= 99) {
+        text = '0.' + photo;
+      } else {
+        text = '1';
+      }
+
+      this.photoHeight = this.keepHeight * parseFloat(text);
+      this.photoWidth = this.keepWidth * parseFloat(text);
+    },
+    dragElement: function dragElement(elmnt) {
+      // logic to set the croper position
+      var pos1 = 0,
+          pos2 = 0,
+          pos3 = 0,
+          pos4 = 0;
+      document.getElementById(elmnt.id + "cursor").onmousedown = dragMouseDown;
+
+      function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault(); // get the mouse cursor position at startup
+
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement; // call a function whenever the cursor moves
+
+        document.onmousemove = elementDrag;
+      }
+
+      function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault(); // calculate the new cursor position
+
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY; // set the element's new position:
+
+        elmnt.style.top = elmnt.offsetTop - pos2 + "px";
+        elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
+      }
+
+      function closeDragElement() {
+        // stop moving when mouse button is released
+        document.onmouseup = null;
+        document.onmousemove = null;
+      }
+    },
+    rotateImg: function rotateImg() {
+      // send data to backend to rotate the image
+      this.form.method = 'rotate';
+
+      if (this.$gate.isAdmin()) {
+        this.form.post('/api/editImg').then(location.reload());
+      }
+    },
+    cropImg: function cropImg() {
+      // send data to backend to crop the image
+      this.form.method = 'crop';
+
+      if (this.$gate.isAdmin()) {
+        this.form.post('/api/editImg').then(location.reload());
+      }
+    },
+    mirrorImgX: function mirrorImgX() {
+      // send data to backend to flip the image horizontally
+      this.form.method = 'flipX';
+
+      if (this.$gate.isAdmin()) {
+        this.form.post('/api/editImg').then(location.reload());
+      }
+    },
+    mirrorImgY: function mirrorImgY() {
+      // send data to backend to flip the image vertically
+      this.form.method = 'flipY';
+
+      if (this.$gate.isAdmin()) {
+        this.form.post('/api/editImg').then(location.reload());
+      }
+    },
+    closeMenus: function closeMenus() {
+      // reset all the data by reloading the page
+      location.reload();
+    }
+  },
+  mounted: function mounted() {}
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MasterFooterComponent.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/MasterFooterComponent.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  mounted: function mounted() {}
 });
 
 /***/ }),
@@ -1910,10 +2141,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mounted: function mounted() {
-    console.log('Component mounted.');
-  }
+  mounted: function mounted() {}
 });
 
 /***/ }),
@@ -1972,9 +2202,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   methods: {
     openContactsModal: function openContactsModal() {
+      // display contacts component based in route parameter contactsForm condition
       if (this.$route.params.contactsForm) {
         this.$route.params.contactsForm = false;
       } else {
@@ -1983,7 +2221,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    this.$route.params.contactsForm = false;
+    this.$route.params.contactsForm = false; //when component is mounted push contactsForm parameter to the router and set id to false.
   }
 });
 
@@ -2190,25 +2428,52 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      announcementAdminMode: false,
+      adminMode: false,
+      // swich to show administrator content
       editMode: false,
+      // swich the edit mode
       announcements: null,
-      announcement: null,
+      // holds the records from the DB
       form: new Form({
+        //instantiate a new Form object
         id: null,
+        // id of DB record
         title: null,
+        // title of DB record
         photos: null,
+        // photos of DB record
         description: null,
+        // description of DB record
         date: null,
-        category: 'announcement'
+        // date of DB record
+        category: 'announcement' // category of DB record set to 'announcement' because the DB holds 'news' category too.
+
       })
     };
   },
   methods: {
     clearForm: function clearForm() {
+      // clear the form based on editMode parameter condition keep data
       if (this.editMode) {
         this.form.originalData.id = this.form.id;
         this.form.originalData.photos = this.form.photos;
@@ -2220,27 +2485,30 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     changeAdminMode: function changeAdminMode() {
+      //check is the user administrator
       if (this.$gate.isAdmin()) {
-        this.announcementAdminMode = true;
+        this.adminMode = true;
       } else {
-        this.announcementAdminMode = false;
+        this.adminMode = false;
       }
     },
     getAnnouncements: function getAnnouncements() {
       var _this = this;
 
-      axios.get("/api/news").then(function (_ref) {
-        var data = _ref.data;
+      //request to the backend to get the records
+      axios.get("/api/news").then(function (data) {
         _this.announcements = data.data;
       }).catch(function () {});
     },
     showModal: function showModal() {
+      // display the form to insert DB records
       this.editMode = false;
       $("#announcementModal").modal("show");
     },
     createAnnouncement: function createAnnouncement() {
       var _this2 = this;
 
+      //request to the backend to create a new record
       if (this.$gate.isAdmin()) {
         this.form.post('/api/news').then(function () {
           toast({
@@ -2256,6 +2524,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     editAnnouncement: function editAnnouncement(announcement) {
+      // display the form to edit DB records
       this.editMode = true;
       $("#announcementModal").modal("show");
       this.form.fill(announcement);
@@ -2263,6 +2532,7 @@ __webpack_require__.r(__webpack_exports__);
     updateAnnouncement: function updateAnnouncement() {
       var _this3 = this;
 
+      // request to the backend to edit a specific record
       this.form.patch('/api/news/' + this.form.id).then(function () {
         $('#announcementModal').modal('hide');
 
@@ -2272,6 +2542,7 @@ __webpack_require__.r(__webpack_exports__);
     deleteAnnouncement: function deleteAnnouncement(id) {
       var _this4 = this;
 
+      // request to the backend to delete a record
       axios.delete('/api/news/' + id).then(function () {
         _this4.getAnnouncements();
       }).catch(function () {});
@@ -2279,6 +2550,7 @@ __webpack_require__.r(__webpack_exports__);
     onFileSelect: function onFileSelect(event) {
       var _this5 = this;
 
+      //instantiate new FileReader object for the selected file
       var file = event.target.files[0];
       this.form.photos = event.target.files[0];
       var reader = new FileReader();
@@ -2417,25 +2689,49 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       adminMode: false,
+      // swich to show administrator content
       editMode: false,
+      // swich the edit mode
       coachs: null,
+      // holds the records from the DB
       form: new Form({
+        //instantiate a new Form object
         id: null,
+        // id of DB record
         firstName: null,
+        // firstName of DB record
         lastName: null,
+        // lastName of DB record
         birthday: null,
+        // birthday of DB record
         photos: null,
+        // photos of DB record
         position: null,
-        description: null
+        // position of DB record
+        description: null // description of DB record
+
       })
     };
   },
   methods: {
     clearForm: function clearForm() {
+      // clear the form based on editMode parameter condition keep data
       if (this.editMode) {
         this.form.originalData.id = this.form.id;
         this.form.originalData.photos = this.form.photos;
@@ -2447,12 +2743,14 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     showModal: function showModal() {
+      // display the form to insert DB records
       this.editMode = false;
       $("#coachsModal").modal("show");
     },
     getCoachs: function getCoachs() {
       var _this = this;
 
+      //request to the backend to get the records
       axios.get("/api/coachs").then(function (_ref) {
         var data = _ref.data;
         _this.coachs = data.data;
@@ -2461,6 +2759,7 @@ __webpack_require__.r(__webpack_exports__);
     createCoach: function createCoach() {
       var _this2 = this;
 
+      //request to the backend to create a new record
       if (this.$gate.isAdmin()) {
         this.form.post('/api/coachs').then(function () {
           toast({
@@ -2476,6 +2775,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     editCoach: function editCoach(data) {
+      // display the form to edit DB records
       this.editMode = true;
       $("#coachsModal").modal("show");
       this.form.fill(data);
@@ -2483,6 +2783,7 @@ __webpack_require__.r(__webpack_exports__);
     updateCoach: function updateCoach() {
       var _this3 = this;
 
+      // request to the backend to edit a specific record
       this.form.patch('/api/coachs/' + this.form.id).then(function () {
         $('#coachsModal').modal('hide');
 
@@ -2492,11 +2793,13 @@ __webpack_require__.r(__webpack_exports__);
     deleteCoach: function deleteCoach(id) {
       var _this4 = this;
 
+      // request to the backend to delete a record
       axios.delete('/api/coachs/' + id).then(function () {
         _this4.getCoachs();
       }).catch(function () {});
     },
     changeAdminMode: function changeAdminMode() {
+      //check is the user administrator
       if (this.$gate.isAdmin()) {
         this.adminMode = true;
       } else {
@@ -2506,6 +2809,7 @@ __webpack_require__.r(__webpack_exports__);
     onFileSelect: function onFileSelect(event) {
       var _this5 = this;
 
+      //instantiate new FileReader object for the selected file
       var file = event.target.files[0];
       this.form.photos = event.target.files[0];
       var reader = new FileReader();
@@ -2663,27 +2967,59 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       adminMode: false,
+      // swich to show administrator content
       competitors: null,
+      // holds the records from the DB
       editMode: false,
-      form: new Form({
-        id: null,
-        firstName: null,
-        lastName: null,
-        birthday: null,
-        photos: null,
-        sport: null,
-        description: null
-      }),
+      // swich the edit mode
       page: 1,
-      pages: null
+      //current page
+      pages: null,
+      //numer of pages
+      form: new Form({
+        //instantiate a new Form object
+        id: null,
+        // id of DB record
+        firstName: null,
+        // firstName of DB record
+        lastName: null,
+        // lastName of DB record
+        birthday: null,
+        // birthday of DB record
+        photos: null,
+        // photos of DB record
+        sport: null,
+        // sport of DB record
+        description: null // description of DB record
+
+      })
     };
   },
   methods: {
     clearForm: function clearForm() {
+      // clear the form based on editMode parameter condition keep data
       if (this.editMode) {
         this.form.originalData.id = this.form.id;
         this.form.originalData.photos = this.form.photos;
@@ -2695,12 +3031,14 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     showModal: function showModal() {
+      // display the form to insert DB records
       this.editMode = false;
       $("#competitorsModal").modal("show");
     },
     getCompetitors: function getCompetitors() {
       var _this = this;
 
+      //request to the backend to get the records
       axios.get("/api/competitors?page=" + this.$route.params.page).then(function (_ref) {
         var data = _ref.data;
         _this.competitors = data.data;
@@ -2708,18 +3046,21 @@ __webpack_require__.r(__webpack_exports__);
       }).catch(function () {});
     },
     nextPage: function nextPage() {
+      // call getPage method for next page
       if (this.page < this.pages) {
         this.page++;
         this.getPage();
       }
     },
     prevPage: function prevPage() {
+      //call getPage method for previous page
       if (this.page > 1) {
         this.page--;
         this.getPage();
       }
     },
     getPage: function getPage() {
+      //based on user nextPage, prevPage methods or user input calls getCompetitors method to send request to backend with the page number
       this.$route.params.page = this.page;
 
       if (history.pushState) {
@@ -2729,12 +3070,13 @@ __webpack_require__.r(__webpack_exports__);
         window.history.pushState({
           path: newUrl
         }, '', newUrl);
-        this.getCompetitors();
+        this.createCompetitor();
       }
     },
     createCompetitor: function createCompetitor() {
       var _this2 = this;
 
+      //request to the backend to create a new record
       if (this.$gate.isAdmin()) {
         this.form.post('/api/competitors').then(function () {
           toast({
@@ -2750,6 +3092,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     editCompetitor: function editCompetitor(data) {
+      // display the form to edit DB records
       this.editMode = true;
       $("#competitorsModal").modal("show");
       this.form.fill(data);
@@ -2757,6 +3100,7 @@ __webpack_require__.r(__webpack_exports__);
     updateCompetitor: function updateCompetitor() {
       var _this3 = this;
 
+      // request to the backend to edit a specific record
       this.form.patch('/api/competitors/' + this.form.id).then(function () {
         $('#competitorsModal').modal('hide');
 
@@ -2766,11 +3110,13 @@ __webpack_require__.r(__webpack_exports__);
     deleteCompetitor: function deleteCompetitor(id) {
       var _this4 = this;
 
+      // request to the backend to delete a record
       axios.delete('/api/competitors/' + id).then(function () {
         _this4.getCompetitors();
       }).catch(function () {});
     },
     changeAdminMode: function changeAdminMode() {
+      //check is the user administrator
       if (this.$gate.isAdmin()) {
         this.adminMode = true;
       } else {
@@ -2780,6 +3126,7 @@ __webpack_require__.r(__webpack_exports__);
     onFileSelect: function onFileSelect(event) {
       var _this5 = this;
 
+      //instantiate new FileReader object for the selected file
       var file = event.target.files[0];
       this.form.photos = event.target.files[0];
       var reader = new FileReader();
@@ -2892,26 +3239,59 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       adminMode: false,
+      // swich to show administrator content
       galleries: null,
+      // holds the records from the DB
       editMode: false,
-      form: new Form({
-        id: null,
-        title: null,
-        date: null,
-        photos: null,
-        category: this.$route.params.type,
-        description: null
-      }),
+      // swich the edit mode
       page: 1,
-      pages: null
+      pages: null,
+      form: new Form({
+        //instantiate a new Form object
+        id: null,
+        // id of DB record
+        title: null,
+        // title of DB record
+        date: null,
+        // date of DB record
+        photos: null,
+        // photos of DB record
+        category: this.$route.params.type,
+        // category of DB record will be equal to the route parameter type
+        description: null // description of DB record
+
+      })
     };
   },
   methods: {
     clearForm: function clearForm() {
+      // clear the form based on editMode parameter condition keep data
       if (this.editMode) {
         this.form.originalData.id = this.form.id;
         this.form.originalData.photos = this.form.photos;
@@ -2923,20 +3303,51 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     showModal: function showModal() {
+      // display the form to insert DB records
       this.editMode = false;
       $("#galleriesModal").modal("show");
     },
     changeAdminMode: function changeAdminMode() {
+      //check is the user administrator
       if (this.$gate.isAdmin()) {
         this.adminMode = true;
       } else {
         this.adminMode = false;
       }
     },
+    nextPage: function nextPage() {
+      // call getPage method for next page
+      if (this.page < this.pages) {
+        this.page++;
+        this.getPage();
+      }
+    },
+    prevPage: function prevPage() {
+      //call getPage method for previous page
+      if (this.page > 1) {
+        this.page--;
+        this.getPage();
+      }
+    },
+    getPage: function getPage() {
+      //based on user nextPage, prevPage methods or user input calls getGalleries method to send request to backend with the page number
+      this.$route.params.page = this.page;
+
+      if (history.pushState) {
+        var url = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        var slicedUrl = url.slice(0, url.lastIndexOf('/'));
+        var newUrl = slicedUrl + '/' + this.$route.params.page;
+        window.history.pushState({
+          path: newUrl
+        }, '', newUrl);
+        this.getGalleries();
+      }
+    },
     getGalleries: function getGalleries() {
       var _this = this;
 
-      axios.get("/api/galleries/" + this.$route.params.type).then(function (_ref) {
+      //request to the backend to get the records
+      axios.get("/api/galleries/" + this.$route.params.type + "?page=" + this.$route.params.page).then(function (_ref) {
         var data = _ref.data;
         _this.galleries = data.data;
         _this.pages = data.last_page;
@@ -2945,6 +3356,7 @@ __webpack_require__.r(__webpack_exports__);
     createGalleries: function createGalleries() {
       var _this2 = this;
 
+      //request to the backend to create a new record
       if (this.$gate.isAdmin()) {
         this.form.post('/api/galleries').then(function () {
           toast({
@@ -2960,6 +3372,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     editGalleries: function editGalleries(data) {
+      // display the form to edit DB records
       this.editMode = true;
       $("#galleriesModal").modal("show");
       this.form.fill(data);
@@ -2967,6 +3380,7 @@ __webpack_require__.r(__webpack_exports__);
     updateGalleries: function updateGalleries() {
       var _this3 = this;
 
+      // request to the backend to edit a specific record
       this.form.patch('/api/galleries/' + this.form.id).then(function () {
         $('#galleriesModal').modal('hide');
 
@@ -2976,6 +3390,7 @@ __webpack_require__.r(__webpack_exports__);
     deleteGalleries: function deleteGalleries(id) {
       var _this4 = this;
 
+      // request to the backend to delete a record
       if (this.$gate.isAdmin()) {
         axios.delete('/api/galleries/' + id).then(function () {
           _this4.getGalleries();
@@ -2985,6 +3400,7 @@ __webpack_require__.r(__webpack_exports__);
     onFileSelect: function onFileSelect(event) {
       var _this5 = this;
 
+      //instantiate new FileReader object for the selected file
       var file = event.target.files[0];
       this.form.photos = event.target.files[0];
       var reader = new FileReader();
@@ -2997,6 +3413,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   beforeRouteUpdate: function beforeRouteUpdate(to, from, next) {
+    //change the form category when the vue router update
     next();
     this.form.category = this.$route.params.type;
     this.getGalleries();
@@ -3096,31 +3513,65 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       adminMode: false,
-      editMode: false,
+      // swich to show administrator content
       photoMethod: false,
+      // swich to show a single photo container
       gallery: null,
+      // holds the records from the DB
       displayedGallery: null,
-      photoModal: null,
+      //holds the records to display
       photoIndex: null,
+      //holds the index of a single record
       thePhoto: null,
+      //holds the signle record
       allPhotos: null,
+      // holds the number of all the photos get from the DB
       loadedPhoto: 16,
+      // the numer of photos to display
       form: new Form({
+        // instantiate a new Form object
         title: null,
-        photos: null
+        // title of/for the DB record
+        photos: null // image of/for the DB record
+
       })
     };
   },
   methods: {
     showModal: function showModal() {
-      this.editMode = false;
+      // show the form modal
       $("#photosModal").modal("show");
     },
     changeAdminMode: function changeAdminMode() {
+      //check is the user administrator
       if (this.$gate.isAdmin()) {
         this.adminMode = true;
       } else {
@@ -3130,9 +3581,9 @@ __webpack_require__.r(__webpack_exports__);
     getPhotos: function getPhotos() {
       var _this = this;
 
+      //request to the backend to get the records
       axios.get("/api/gallery/" + this.$route.params.id).then(function (_ref) {
         var data = _ref.data;
-        console.log(data);
         _this.gallery = data;
         _this.allPhotos = data.length;
 
@@ -3142,6 +3593,7 @@ __webpack_require__.r(__webpack_exports__);
     createPhoto: function createPhoto() {
       var _this2 = this;
 
+      //request to the backend to create a new record
       if (this.$gate.isAdmin()) {
         this.form.post('/api/gallery/' + this.$route.params.id).then(function () {
           toast({
@@ -3159,6 +3611,7 @@ __webpack_require__.r(__webpack_exports__);
     deletePhoto: function deletePhoto(id) {
       var _this3 = this;
 
+      // request to the backend to delete a record
       if (this.$gate.isAdmin()) {
         axios.delete('/api/gallery/' + id).then(function () {
           _this3.getPhotos();
@@ -3168,6 +3621,7 @@ __webpack_require__.r(__webpack_exports__);
     onFileSelect: function onFileSelect(event) {
       var _this4 = this;
 
+      //instantiate new FileReader object for the selected file
       var file = event.target.files[0];
       this.form.photos = event.target.files[0];
       var reader = new FileReader();
@@ -3179,9 +3633,11 @@ __webpack_require__.r(__webpack_exports__);
       reader.readAsDataURL(file);
     },
     displayGallery: function displayGallery() {
+      // slice the gallery array to display the desired results
       this.displayedGallery = this.gallery.slice(0, this.loadedPhoto);
     },
     singlePhotoModal: function singlePhotoModal(index) {
+      // set the parameters to display a single record
       if (!this.photoMethod) {
         this.photoIndex = index;
         this.photoMethod = true;
@@ -3193,6 +3649,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     nextPhoto: function nextPhoto() {
+      // set the parameters to display next single record
       if (this.photoIndex < this.gallery.length - 1) {
         this.photoIndex += 1;
         this.thePhoto = this.gallery[this.photoIndex];
@@ -3202,6 +3659,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     prevPhoto: function prevPhoto() {
+      // set the parameters to display previous single record
       if (this.photoIndex >= 1) {
         this.photoIndex -= 1;
         this.thePhoto = this.gallery[this.photoIndex];
@@ -3211,12 +3669,12 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     loadMorePhoto: function loadMorePhoto() {
+      // set the number of recors to display
       this.loadedPhoto += 16;
       this.displayGallery();
     }
   },
   mounted: function mounted() {
-    console.log(this.$route.params);
     this.getPhotos();
     this.changeAdminMode();
   }
@@ -3322,24 +3780,82 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      newsAdminMode: false,
+      adminMode: false,
+      // swich to show administrator content
       editMode: false,
+      // swich the edit mode
       allNews: null,
+      // holds the records from the DB
+      page: 1,
+      //current page
+      pages: null,
+      //numer of pages
       form: new Form({
+        //instantiate a new Form object
         id: null,
+        // id of DB record
         title: null,
+        // title of DB record
         photos: null,
+        // photos of DB record
         description: null,
+        // description of DB record
         date: null,
-        category: 'news'
+        // date of DB record
+        category: 'news' // category of DB record set to 'news' because the DB holds 'announcement' category too.
+
       })
     };
   },
   methods: {
     clearForm: function clearForm() {
+      // clear the form based on editMode parameter condition keep data
       if (this.editMode) {
         this.form.originalData.id = this.form.id;
         this.form.originalData.photos = this.form.photos;
@@ -3351,23 +3867,55 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     changeAdminMode: function changeAdminMode() {
+      //check is the user administrator
       if (this.$gate.isAdmin()) {
-        this.newsAdminMode = true;
+        this.adminMode = true;
       } else {
-        this.newsAdminMode = false;
+        this.adminMode = false;
+      }
+    },
+    nextPage: function nextPage() {
+      // call getPage method for next page
+      if (this.page < this.pages) {
+        this.page++;
+        this.getPage();
+      }
+    },
+    prevPage: function prevPage() {
+      //call getPage method for previous page
+      if (this.page > 1) {
+        this.page--;
+        this.getPage();
+      }
+    },
+    getPage: function getPage() {
+      //based on user nextPage, prevPage methods or user input calls getAllNews method to send request to backend with the page number
+      this.$route.params.page = this.page;
+
+      if (history.pushState) {
+        var url = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        var slicedUrl = url.slice(0, url.lastIndexOf('/'));
+        var newUrl = slicedUrl + '/' + this.$route.params.page;
+        window.history.pushState({
+          path: newUrl
+        }, '', newUrl);
+        this.getAllNews();
       }
     },
     getAllNews: function getAllNews() {
       var _this = this;
 
-      axios.get("/api/moreNews").then(function (_ref) {
+      //request to the backend to get the records
+      axios.get("/api/moreNews?page=" + this.$route.params.page).then(function (_ref) {
         var data = _ref.data;
         _this.allNews = data.data;
+        _this.pages = data.last_page;
       }).catch(function () {});
     },
     createNews: function createNews() {
       var _this2 = this;
 
+      //request to the backend to create a new record
       if (this.$gate.isAdmin()) {
         this.form.post('/api/news').then(function () {
           toast({
@@ -3383,6 +3931,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     editNews: function editNews(data) {
+      // display the form to edit DB records
       this.editMode = true;
       $("#newsModal").modal("show");
       this.form.fill(data);
@@ -3390,6 +3939,7 @@ __webpack_require__.r(__webpack_exports__);
     updateNews: function updateNews() {
       var _this3 = this;
 
+      // request to the backend to edit a specific record
       this.form.patch('/api/news/' + this.form.id).then(function () {
         $('#newsModal').modal('hide');
 
@@ -3399,17 +3949,20 @@ __webpack_require__.r(__webpack_exports__);
     deleteNews: function deleteNews(id) {
       var _this4 = this;
 
+      // request to the backend to delete a record
       axios.delete('/api/news/' + id).then(function () {
         _this4.getAllNews();
       }).catch(function () {});
     },
     showModal: function showModal() {
+      // display the form to insert DB records
       this.editMode = false;
       $("#newsModal").modal("show");
     },
     onFileSelect: function onFileSelect(event) {
       var _this5 = this;
 
+      //instantiate new FileReader object for the selected file
       var file = event.target.files[0];
       this.form.photos = event.target.files[0];
       var reader = new FileReader();
@@ -3543,28 +4096,58 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       adminMode: false,
+      // swich to show administrator content
       editMode: false,
+      // swich the edit mode
       schedules: null,
+      // holds the records from the DB
       form: new Form({
+        //instantiate a new Form object
         id: null,
+        // id of DB record
         title: null,
+        // title of DB record
         comment: null,
+        // comment of DB record
         mon: null,
+        // data of DB record
         tue: null,
+        // data of DB record
         wen: null,
+        // data of DB record
         thr: null,
+        // data of DB record
         fri: null,
+        // data of DB record
         sat: null,
-        sun: null
+        // data of DB record
+        sun: null // data of DB record
+
       })
     };
   },
   methods: {
     clearForm: function clearForm() {
+      // clear the form based on editMode parameter condition keep data
       if (this.editMode) {
         this.form.originalData.id = this.form.id;
         this.form.reset();
@@ -3574,6 +4157,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     changeAdminMode: function changeAdminMode() {
+      //check is the user administrator
       if (this.$gate.isAdmin()) {
         this.adminMode = true;
       } else {
@@ -3583,17 +4167,20 @@ __webpack_require__.r(__webpack_exports__);
     getSchedules: function getSchedules() {
       var _this = this;
 
+      //request to the backend to get the records
       axios.get("/api/schedules").then(function (data) {
         _this.schedules = data.data;
       }).catch(function () {});
     },
     showModal: function showModal() {
+      // display the form to insert DB records
       this.editMode = false;
       $("#scheduleModal").modal("show");
     },
     createSchedule: function createSchedule() {
       var _this2 = this;
 
+      //request to the backend to create a new record
       if (this.$gate.isAdmin()) {
         this.form.post('/api/schedules').then(function () {
           toast({
@@ -3609,6 +4196,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     editSchedule: function editSchedule(data) {
+      // display the form to edit DB records
       this.editMode = true;
       $("#scheduleModal").modal("show");
       this.form.fill(data);
@@ -3616,6 +4204,7 @@ __webpack_require__.r(__webpack_exports__);
     updateSchedule: function updateSchedule() {
       var _this3 = this;
 
+      // request to the backend to update specific record
       this.form.patch('/api/schedules/' + this.form.id).then(function () {
         $('#scheduleModal').modal('hide');
 
@@ -3625,6 +4214,7 @@ __webpack_require__.r(__webpack_exports__);
     deleteSchedule: function deleteSchedule(id) {
       var _this4 = this;
 
+      // request to the backend to delete specific record
       axios.delete('/api/schedules/' + id).then(function () {
         _this4.getSchedules();
       }).catch(function () {});
@@ -3725,24 +4315,54 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      sliderAdminMode: false,
+      adminMode: false,
+      // swich to show administrator content
       sliders: null,
+      // holds the records from the DB
       sliderInterval: setInterval(this.runInterval, 6000),
+      // display different slider every 6 seconds
       sliderMode: true,
+      // swich the slider mode
       editMode: false,
+      // swich the edit mode
       form: new Form({
+        //instantiate a new Form object
         id: null,
+        // id of DB record
         title: null,
+        // title of DB record
         photos: null,
-        description: null
+        // image of/for the DB record
+        description: null // description of/for the DB record
+
       })
     };
   },
   methods: {
     clearForm: function clearForm() {
+      // clear the form based on editMode parameter condition keep data
       if (this.editMode) {
         this.form.originalData.id = this.form.id;
         this.form.originalData.photos = this.form.photos;
@@ -3756,11 +4376,13 @@ __webpack_require__.r(__webpack_exports__);
     getSliders: function getSliders() {
       var _this = this;
 
+      //request to the backend to get the records
       axios.get("/api/Sliders").then(function (data) {
         _this.sliders = data.data;
       });
     },
     choiseSlider: function choiseSlider() {
+      // change the way that shows the content
       if (this.sliderMode) {
         this.sliderMode = false;
         clearInterval(this.sliderInterval);
@@ -3770,12 +4392,14 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     showModal: function showModal() {
+      // display the form to insert DB records
       this.editMode = false;
       $("#sliderModal").modal("show");
     },
     onFileSelect: function onFileSelect(event) {
       var _this2 = this;
 
+      //instantiate new FileReader object for the selected file
       var file = event.target.files[0];
       this.form.photos = event.target.files[0];
       var reader = new FileReader();
@@ -3789,6 +4413,7 @@ __webpack_require__.r(__webpack_exports__);
     createSlider: function createSlider() {
       var _this3 = this;
 
+      //request to the backend to create a new record
       if (this.$gate.isAdmin()) {
         this.form.post('/api/Sliders').then(function () {
           toast({
@@ -3804,6 +4429,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     editSlider: function editSlider(data) {
+      // display the form to edit DB records
       this.editMode = true;
       $("#sliderModal").modal("show");
       this.form.fill(data);
@@ -3811,6 +4437,7 @@ __webpack_require__.r(__webpack_exports__);
     updateSlider: function updateSlider() {
       var _this4 = this;
 
+      // request to the backend to update specific record
       this.form.patch('/api/Sliders/' + this.form.id).then(function () {
         $('#sliderModal').modal('hide');
 
@@ -3820,18 +4447,21 @@ __webpack_require__.r(__webpack_exports__);
     deleteSlider: function deleteSlider(id) {
       var _this5 = this;
 
+      // request to the backend to delete specific record
       axios.delete('/api/Sliders/' + id).then(function () {
         _this5.getSliders();
       }).catch(function () {});
     },
-    changeMode: function changeMode() {
+    changeAdminMode: function changeAdminMode() {
+      //check is the user administrator
       if (this.$gate.isAdmin()) {
-        this.sliderAdminMode = true;
+        this.adminMode = true;
       } else {
-        this.sliderAdminMode = false;
+        this.adminMode = false;
       }
     },
     runInterval: function runInterval() {
+      // change the slider when called
       var currentSlide = $(".active");
       var nextSlide = currentSlide.next();
       currentSlide.fadeOut(0).removeClass("active");
@@ -3844,6 +4474,7 @@ __webpack_require__.r(__webpack_exports__);
       ;
     },
     leftArrow: function leftArrow() {
+      // display previous slider and clear the interval if needed
       if (this.sliderMode) {
         clearInterval(this.sliderInterval);
       }
@@ -3862,12 +4493,15 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     leftArrowHover: function leftArrowHover() {
+      // change the arrow color
       $('.fa-caret-left').toggleClass('green').toggleClass('orange');
     },
     rightArrowHover: function rightArrowHover() {
+      // change the arrow color
       $('.fa-caret-right').toggleClass('green').toggleClass('orange');
     },
     rightArrow: function rightArrow() {
+      // display next slider and clear the interval if needed
       if (this.sliderMode) {
         clearInterval(this.sliderInterval);
       }
@@ -3888,7 +4522,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.getSliders();
-    this.changeMode();
+    this.changeAdminMode();
   }
 });
 
@@ -60098,6 +60732,299 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ImagerComponent.vue?vue&type=template&id=a7a9ecaa&":
+/*!******************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ImagerComponent.vue?vue&type=template&id=a7a9ecaa& ***!
+  \******************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "row flex-xl-nowrap" }, [
+    _c("div", { staticClass: "col-2" }, [
+      !_vm.croper && !_vm.resizer
+        ? _c(
+            "button",
+            {
+              staticClass: "w-100 btn btn-secondary",
+              on: {
+                click: function($event) {
+                  _vm.croper = true
+                }
+              }
+            },
+            [_vm._v("Изрежи")]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.croper
+        ? _c("div", { staticClass: "input-group-text" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.croperMethod,
+                  expression: "croperMethod"
+                }
+              ],
+              attrs: { type: "radio", name: "resolution", value: "free" },
+              domProps: { checked: _vm._q(_vm.croperMethod, "free") },
+              on: {
+                change: function($event) {
+                  _vm.croperMethod = "free"
+                }
+              }
+            }),
+            _vm._v("\n             Свободно")
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.croper
+        ? _c("div", { staticClass: "input-group-text" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.croperMethod,
+                  expression: "croperMethod"
+                }
+              ],
+              attrs: { type: "radio", name: "resolution", value: "16:9" },
+              domProps: { checked: _vm._q(_vm.croperMethod, "16:9") },
+              on: {
+                change: function($event) {
+                  _vm.croperMethod = "16:9"
+                }
+              }
+            }),
+            _vm._v("\n             16:9")
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.croper
+        ? _c("div", { staticClass: "input-group-text" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.croperMethod,
+                  expression: "croperMethod"
+                }
+              ],
+              attrs: { type: "radio", name: "resolution", value: "4:3" },
+              domProps: { checked: _vm._q(_vm.croperMethod, "4:3") },
+              on: {
+                change: function($event) {
+                  _vm.croperMethod = "4:3"
+                }
+              }
+            }),
+            _vm._v("\n             4:3")
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.croper
+        ? _c(
+            "button",
+            {
+              staticClass: "w-100 btn btn-secondary mt-1",
+              on: {
+                click: function($event) {
+                  _vm.cropImg()
+                }
+              }
+            },
+            [_vm._v("Изрежи")]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm._v(" -->\n            "),
+      !_vm.croper && !_vm.resizer
+        ? _c(
+            "button",
+            {
+              staticClass: "w-100 btn btn-secondary mt-1",
+              on: {
+                click: function($event) {
+                  _vm.resizer = true
+                }
+              }
+            },
+            [_vm._v("Смали")]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.resizer
+        ? _c("p", { staticClass: "dwhite" }, [
+            _vm._v("Дължина - " + _vm._s(this.photoWidth) + "px.")
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.resizer
+        ? _c("p", { staticClass: "dwhite" }, [
+            _vm._v("Височина - " + _vm._s(this.photoHeight) + "px.")
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      !_vm.croper && !_vm.resizer
+        ? _c(
+            "button",
+            {
+              staticClass: "w-100 btn btn-secondary mt-1",
+              on: {
+                click: function($event) {
+                  _vm.rotateImg()
+                }
+              }
+            },
+            [_vm._v("Завърти")]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      !_vm.croper && !_vm.resizer
+        ? _c(
+            "button",
+            {
+              staticClass: "w-100 btn btn-secondary mt-1",
+              on: {
+                click: function($event) {
+                  _vm.mirrorImgX()
+                }
+              }
+            },
+            [
+              _vm._v("Огледало "),
+              _c("i", { staticClass: "fas fa-arrows-alt-h" })
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      !_vm.croper && !_vm.resizer
+        ? _c(
+            "button",
+            {
+              staticClass: "w-100 btn btn-secondary mt-1",
+              on: {
+                click: function($event) {
+                  _vm.mirrorImgY()
+                }
+              }
+            },
+            [
+              _vm._v("Огледало "),
+              _c("i", { staticClass: "fas fa-arrows-alt-v" })
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.croper || _vm.resizer
+        ? _c(
+            "button",
+            {
+              attrs: { button: "w-100 btn btn-secondary mt-1" },
+              on: {
+                click: function($event) {
+                  _vm.closeMenus()
+                }
+              }
+            },
+            [_vm._v("Затвори")]
+          )
+        : _vm._e()
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "col-10 pl-0 pr-0" }, [
+      _c("span", { staticClass: "col-10 dwhite pl-4 bg-secondary" }, [
+        _vm._v("размер на изгледа : "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.photoSize,
+              expression: "photoSize"
+            }
+          ],
+          staticClass: "col-8",
+          attrs: { type: "range", min: "1", max: "100", id: "myRange" },
+          domProps: { value: _vm.photoSize },
+          on: {
+            mousemove: function($event) {
+              _vm.setViewSize()
+            },
+            __r: function($event) {
+              _vm.photoSize = $event.target.value
+            }
+          }
+        }),
+        _vm._v("\n            " + _vm._s(this.photoSize) + "%")
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "resizer-container col-10 pl-0 pr-0" }, [
+        _c("img", {
+          style:
+            "height:" +
+            this.photoHeight +
+            "px;" +
+            " width:" +
+            this.photoWidth +
+            "px;",
+          attrs: {
+            id: "output",
+            src: "/storage/images/" + this.$route.params.photo,
+            alt: "your image"
+          },
+          on: { load: _vm.getSize }
+        }),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: this.croper,
+                expression: "this.croper"
+              }
+            ],
+            style:
+              "height:" +
+              this.croperHeight +
+              "px; width:" +
+              this.croperWidth +
+              "px",
+            attrs: { id: "croper", draggable: "true" },
+            on: { mouseup: _vm.setCroper }
+          },
+          [
+            _c("i", {
+              staticClass: "fas fa-arrows-alt",
+              attrs: { id: "cropercursor" }
+            })
+          ]
+        )
+      ])
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MasterFooterComponent.vue?vue&type=template&id=105f3185&":
 /*!************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/MasterFooterComponent.vue?vue&type=template&id=105f3185& ***!
@@ -60113,32 +61040,9 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "container-fluid" })
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "col-md-8" }, [
-          _c("div", { staticClass: "card card-default" }, [
-            _c("div", { staticClass: "card-header" }, [
-              _vm._v("test Component")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _vm._v(
-                "\n                    I'm an example component.\n                "
-              )
-            ])
-          ])
-        ])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -60240,7 +61144,7 @@ var render = function() {
               [
                 _c(
                   "router-link",
-                  { staticClass: "nav-link", attrs: { to: "/Новини" } },
+                  { staticClass: "nav-link", attrs: { to: "/Новини/1" } },
                   [
                     _c("i", { staticClass: "far fa-newspaper purple" }),
                     _vm._v(" Новини")
@@ -60302,7 +61206,7 @@ var render = function() {
                     "router-link",
                     {
                       staticClass: "dropdown-item",
-                      attrs: { to: "/Галерии/Състезания" }
+                      attrs: { to: "/Галерии/Състезания/Страница/1" }
                     },
                     [_vm._v("Стстезания")]
                   ),
@@ -60311,7 +61215,7 @@ var render = function() {
                     "router-link",
                     {
                       staticClass: "dropdown-item",
-                      attrs: { to: "/Галерии/Събития" }
+                      attrs: { to: "/Галерии/Събития/Страница/1" }
                     },
                     [_vm._v("Събития")]
                   ),
@@ -60320,7 +61224,7 @@ var render = function() {
                     "router-link",
                     {
                       staticClass: "dropdown-item",
-                      attrs: { to: "/Галерии/Тренировки" }
+                      attrs: { to: "/Галерии/Тренировки/Страница/1" }
                     },
                     [_vm._v("Тренировки")]
                   )
@@ -60347,7 +61251,23 @@ var render = function() {
                   _vm._v(" Контакти с нас!")
                 ]
               )
-            ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "li",
+              { staticClass: "nav-item" },
+              [
+                _c(
+                  "router-link",
+                  { staticClass: "nav-link", attrs: { to: "/Снимки" } },
+                  [
+                    _c("i", { staticClass: "far fa-image purple" }),
+                    _vm._v("Снимка")
+                  ]
+                )
+              ],
+              1
+            )
           ])
         ]
       )
@@ -60767,20 +61687,22 @@ var render = function() {
     "div",
     { staticClass: "col-12 col-md-3" },
     [
-      _vm.announcementAdminMode
-        ? _c(
-            "a",
-            {
-              attrs: { href: "#" },
-              on: {
-                click: function($event) {
-                  $event.preventDefault()
-                  _vm.showModal()
+      _vm.adminMode
+        ? _c("div", { staticClass: "col-12" }, [
+            _c(
+              "a",
+              {
+                attrs: { href: "#" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.showModal()
+                  }
                 }
-              }
-            },
-            [_c("i", { staticClass: "fas fa-file-import fa-3x green" })]
-          )
+              },
+              [_c("i", { staticClass: "fas fa-file-import fa-3x green" })]
+            )
+          ])
         : _vm._e(),
       _vm._v(" "),
       _c("h5", { staticClass: "text-center dwhite" }, [_vm._v("Обявления:")]),
@@ -60804,14 +61726,14 @@ var render = function() {
                   _c("img", {
                     class: "img-fluid w-50 p-1 float-left",
                     attrs: {
-                      src: "/storage/news/" + announcement.photos,
+                      src: "/storage/images/" + announcement.photos,
                       alt: announcement.title
                     }
                   }),
                   _vm._v(_vm._s(announcement.title))
                 ]),
                 _vm._v(" "),
-                !_vm.announcementAdminMode
+                !_vm.adminMode
                   ? _c("div", { staticClass: "p-1 d-inline-block w-100" }, [
                       _c("hr", { staticClass: "mb-0 mt-0" }),
                       _vm._v(" "),
@@ -60831,7 +61753,7 @@ var render = function() {
               ]
             ),
             _vm._v(" "),
-            _vm.announcementAdminMode
+            _vm.adminMode
               ? _c("div", { staticClass: "p-1 d-inline-block w-100" }, [
                   _c("hr", { staticClass: "mb-0 mt-0" }),
                   _vm._v(" "),
@@ -60872,6 +61794,12 @@ var render = function() {
                     "h5",
                     { staticClass: "mb-0 mt-0 mr-1 float-right dwhite" },
                     [_vm._v("Дата: " + _vm._s(announcement.date))]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "a",
+                    { attrs: { href: "/Снимки/" + announcement.photos } },
+                    [_c("i", { staticClass: "fas fa-cut blue" }), _vm._v(" ")]
                   )
                 ])
               : _vm._e()
@@ -60899,7 +61827,7 @@ var render = function() {
               attrs: { role: "document" }
             },
             [
-              _vm.announcementAdminMode
+              _vm.adminMode
                 ? _c("div", { staticClass: "modal-content" }, [
                     _c("div", { staticClass: "modal-header" }, [
                       !_vm.editMode
@@ -61166,7 +62094,7 @@ var render = function() {
                   ])
                 : _vm._e(),
               _vm._v(" "),
-              !_vm.announcementAdminMode
+              !_vm.adminMode
                 ? _c("div", { staticClass: "modal-content for-user" }, [
                     _c("div", { staticClass: "modal-header" }, [
                       _c(
@@ -61187,7 +62115,7 @@ var render = function() {
                           class:
                             "img-fluid img-fluid col-6 p-1 float-left mt-1",
                           attrs: {
-                            src: "/storage/news/" + this.form.photos,
+                            src: "/storage/images/" + this.form.photos,
                             alt: this.form.title
                           }
                         }),
@@ -61306,7 +62234,7 @@ var render = function() {
                     _c("img", {
                       class: "img-fluid float-left",
                       attrs: {
-                        src: "/storage/coachs/" + coach.photos,
+                        src: "/storage/images/" + coach.photos,
                         alt: coach.title
                       }
                     }),
@@ -61372,9 +62300,16 @@ var render = function() {
                               }
                             },
                             [
-                              _c("i", {
-                                staticClass: "fas fa-trash red float-right"
-                              }),
+                              _c("i", { staticClass: "fas fa-trash red" }),
+                              _vm._v(" ")
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            { attrs: { href: "/Снимки/" + coach.photos } },
+                            [
+                              _c("i", { staticClass: "fas fa-cut blue" }),
                               _vm._v(" ")
                             ]
                           )
@@ -61780,7 +62715,7 @@ var render = function() {
                       _c("img", {
                         class: "img-fluid img-fluid col-6 p-1 float-left mt-1",
                         attrs: {
-                          src: "/storage/coachs/" + this.form.photos,
+                          src: "/storage/images/" + this.form.photos,
                           alt: this.form.firstName + " " + this.form.lastName
                         }
                       }),
@@ -62008,7 +62943,7 @@ var render = function() {
                         _c("img", {
                           class: "img-fluid",
                           attrs: {
-                            src: "/storage/competitors/" + competitor.photos,
+                            src: "/storage/images/" + competitor.photos,
                             alt: competitor.title
                           }
                         })
@@ -62065,9 +63000,7 @@ var render = function() {
                           }
                         },
                         [
-                          _c("i", {
-                            staticClass: "fas fa-edit yellow float-left"
-                          }),
+                          _c("i", { staticClass: "fas fa-edit yellow" }),
                           _vm._v(" ")
                         ]
                       ),
@@ -62084,9 +63017,16 @@ var render = function() {
                           }
                         },
                         [
-                          _c("i", {
-                            staticClass: "fas fa-trash red float-right"
-                          }),
+                          _c("i", { staticClass: "fas fa-trash red" }),
+                          _vm._v(" ")
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        { attrs: { href: "/Снимки/" + competitor.photos } },
+                        [
+                          _c("i", { staticClass: "fas fa-cut blue" }),
                           _vm._v(" ")
                         ]
                       )
@@ -62496,7 +63436,7 @@ var render = function() {
                       _c("img", {
                         class: "img-fluid img-fluid col-6 p-1 float-left mt-1",
                         attrs: {
-                          src: "/storage/competitors/" + this.form.photos,
+                          src: "/storage/images/" + this.form.photos,
                           alt: this.form.firstName + " " + this.form.lastName
                         }
                       }),
@@ -62589,27 +63529,120 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row flex-xl-nowrap" }, [
-    _c("div", { staticClass: "col-12 pl-0 pr-0" }, [
-      _vm.adminMode
-        ? _c("div", { staticClass: "col-12" }, [
-            _c(
-              "a",
-              {
-                attrs: { href: "" },
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    _vm.showModal()
+    _c(
+      "div",
+      { staticClass: "col-12 pl-0 pr-0" },
+      [
+        _vm.adminMode
+          ? _c("div", { staticClass: "col-12" }, [
+              _c(
+                "a",
+                {
+                  attrs: { href: "" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      _vm.showModal()
+                    }
                   }
-                }
-              },
-              [_c("i", { staticClass: "fas fa-file-import fa-3x green" })]
-            )
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _c(
-        "div",
+                },
+                [_c("i", { staticClass: "fas fa-file-import fa-3x green" })]
+              )
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        this.pages > 1
+          ? _c("div", { staticClass: "page-navigation d-inline-block" }, [
+              _c(
+                "div",
+                { staticClass: "page-button float-left d-inline-block" },
+                [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "page-link",
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          _vm.prevPage()
+                        }
+                      }
+                    },
+                    [_c("i", { staticClass: "fas fa-chevron-left" })]
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _vm._m(0),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "page-input float-left d-inline-block" },
+                [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.page,
+                        expression: "page"
+                      }
+                    ],
+                    staticClass: "page-link",
+                    attrs: {
+                      maxlength: "2",
+                      size: "2",
+                      type: "text",
+                      name: "page"
+                    },
+                    domProps: { value: _vm.page },
+                    on: {
+                      keyup: function($event) {
+                        _vm.getPage()
+                      },
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.page = $event.target.value
+                      }
+                    }
+                  })
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "page-input float-left d-inline-block" },
+                [
+                  _c("p", { staticClass: "page-text" }, [
+                    _vm._v("от: " + _vm._s(this.pages))
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "page-button float-left d-inline-block" },
+                [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "page-link",
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          _vm.nextPage()
+                        }
+                      }
+                    },
+                    [_c("i", { staticClass: "fas fa-chevron-right" })]
+                  )
+                ]
+              )
+            ])
+          : _vm._e(),
+        _vm._v(" "),
         _vm._l(_vm.galleries, function(gallery) {
           return _c(
             "div",
@@ -62620,6 +63653,7 @@ var render = function() {
                 {
                   attrs: {
                     to:
+                      "/Галерии/" +
                       gallery.category +
                       "/Галерия/" +
                       gallery.title +
@@ -62634,7 +63668,7 @@ var render = function() {
                       staticClass: "gallery float-left",
                       style: {
                         "background-image":
-                          "url(/storage/galleries/" + gallery.photos + ")"
+                          "url(/storage/images/" + gallery.photos + ")"
                       }
                     },
                     [
@@ -62688,6 +63722,17 @@ var render = function() {
                                 }),
                                 _vm._v(" ")
                               ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              { attrs: { href: "/Снимки/" + gallery.photos } },
+                              [
+                                _c("i", {
+                                  staticClass: "fas fa-cut blue fa-2x"
+                                }),
+                                _vm._v(" ")
+                              ]
                             )
                           ])
                         : _vm._e()
@@ -62698,10 +63743,10 @@ var render = function() {
             ],
             1
           )
-        }),
-        0
-      )
-    ]),
+        })
+      ],
+      2
+    ),
     _vm._v(" "),
     _c(
       "div",
@@ -62720,296 +63765,249 @@ var render = function() {
           "div",
           { staticClass: "modal-dialog modal-xl", attrs: { role: "document" } },
           [
-            _vm.adminMode
-              ? _c("div", { staticClass: "modal-content" }, [
-                  _c("div", { staticClass: "modal-header" }, [
-                    !_vm.editMode
-                      ? _c(
-                          "h5",
-                          {
-                            staticClass: "modal-title",
-                            attrs: { id: "newsModalLabel" }
-                          },
-                          [_vm._v("Добавяне на галерия")]
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.editMode
-                      ? _c(
-                          "h5",
-                          {
-                            staticClass: "modal-title",
-                            attrs: { id: "newsModalLabel" }
-                          },
-                          [_vm._v("Промяна на галерия " + _vm._s(this.form.id))]
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm._m(0)
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "form",
-                    {
-                      attrs: { id: "newsForm", enctype: "multipart/form-data" },
-                      on: {
-                        submit: function($event) {
-                          $event.preventDefault()
-                          _vm.editMode
-                            ? _vm.updateGalleries()
-                            : _vm.createGalleries()
-                        }
-                      }
-                    },
-                    [
-                      _c("div", { staticClass: "modal-body" }, [
-                        _c(
-                          "div",
-                          { staticClass: "form-group" },
-                          [
-                            _c("label", [_vm._v("Заглавие:")]),
-                            _vm._v(" "),
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.form.title,
-                                  expression: "form.title"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              class: {
-                                "is-invalid": _vm.form.errors.has("title")
-                              },
-                              attrs: {
-                                type: "text",
-                                name: "title",
-                                placeholder: "Заглавие",
-                                required: ""
-                              },
-                              domProps: { value: _vm.form.title },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    _vm.form,
-                                    "title",
-                                    $event.target.value
-                                  )
-                                }
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c("has-error", {
-                              attrs: { form: _vm.form, field: "title" }
-                            })
-                          ],
-                          1
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          { staticClass: "form-group" },
-                          [
-                            _c("label", [_vm._v("Дата:")]),
-                            _vm._v(" "),
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.form.date,
-                                  expression: "form.date"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              class: {
-                                "is-invalid": _vm.form.errors.has("date")
-                              },
-                              attrs: {
-                                type: "date",
-                                name: "date",
-                                placeholder: "Дата",
-                                required: ""
-                              },
-                              domProps: { value: _vm.form.date },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    _vm.form,
-                                    "date",
-                                    $event.target.value
-                                  )
-                                }
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c("has-error", {
-                              attrs: { form: _vm.form, field: "date" }
-                            })
-                          ],
-                          1
-                        ),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "form-group" }, [
-                          _c("label", [_vm._v("Снимка:")]),
-                          _vm._v(" "),
-                          _c("input", {
-                            staticClass: "form-control",
-                            attrs: { type: "file", name: "photos" },
-                            on: { change: _vm.onFileSelect }
-                          })
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          { staticClass: "form-group" },
-                          [
-                            _c("label", [_vm._v("Описание:")]),
-                            _vm._v(" "),
-                            _c("textarea", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.form.description,
-                                  expression: "form.description"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              class: {
-                                "is-invalid": _vm.form.errors.has("description")
-                              },
-                              attrs: {
-                                type: "text",
-                                name: "description",
-                                placeholder: "Описание",
-                                required: ""
-                              },
-                              domProps: { value: _vm.form.description },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    _vm.form,
-                                    "description",
-                                    $event.target.value
-                                  )
-                                }
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c("has-error", {
-                              attrs: { form: _vm.form, field: "description" }
-                            })
-                          ],
-                          1
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "modal-footer" }, [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-danger",
-                            attrs: { type: "button" },
-                            on: {
-                              click: function($event) {
-                                _vm.clearForm()
-                              }
-                            }
-                          },
-                          [_vm._v("Изчисти")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: !_vm.editMode,
-                                expression: "!editMode"
-                              }
-                            ],
-                            staticClass: "btn btn-success",
-                            attrs: { type: "submit" }
-                          },
-                          [_vm._v("Добави")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: _vm.editMode,
-                                expression: "editMode"
-                              }
-                            ],
-                            staticClass: "btn btn-primary",
-                            attrs: { type: "submit" }
-                          },
-                          [_vm._v("Промени")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-secondary",
-                            attrs: { type: "button", "data-dismiss": "modal" }
-                          },
-                          [_vm._v("Затвори")]
-                        )
-                      ])
-                    ]
-                  )
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            !_vm.adminMode
-              ? _c("div", { staticClass: "modal-content for-user" }, [
-                  _c("div", { staticClass: "modal-header" }, [
-                    _c(
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                !_vm.editMode
+                  ? _c(
                       "h5",
-                      { staticClass: "modal-title w-100 dwhite text-center" },
+                      {
+                        staticClass: "modal-title",
+                        attrs: { id: "newsModalLabel" }
+                      },
+                      [_vm._v("Добавяне на галерия")]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.editMode
+                  ? _c(
+                      "h5",
+                      {
+                        staticClass: "modal-title",
+                        attrs: { id: "newsModalLabel" }
+                      },
+                      [_vm._v("Промяна на галерия " + _vm._s(this.form.id))]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm._m(1)
+              ]),
+              _vm._v(" "),
+              _c(
+                "form",
+                {
+                  attrs: { id: "newsForm", enctype: "multipart/form-data" },
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      _vm.editMode
+                        ? _vm.updateGalleries()
+                        : _vm.createGalleries()
+                    }
+                  }
+                },
+                [
+                  _c("div", { staticClass: "modal-body" }, [
+                    _c(
+                      "div",
+                      { staticClass: "form-group" },
                       [
-                        _vm._v(
-                          _vm._s(this.form.firstName) +
-                            " " +
-                            _vm._s(this.form.lastName)
-                        )
-                      ]
+                        _c("label", [_vm._v("Заглавие:")]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.title,
+                              expression: "form.title"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: { "is-invalid": _vm.form.errors.has("title") },
+                          attrs: {
+                            type: "text",
+                            name: "title",
+                            placeholder: "Заглавие",
+                            required: ""
+                          },
+                          domProps: { value: _vm.form.title },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.form, "title", $event.target.value)
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("has-error", {
+                          attrs: { form: _vm.form, field: "title" }
+                        })
+                      ],
+                      1
                     ),
                     _vm._v(" "),
-                    _vm._m(1)
+                    _c(
+                      "div",
+                      { staticClass: "form-group" },
+                      [
+                        _c("label", [_vm._v("Дата:")]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.date,
+                              expression: "form.date"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: { "is-invalid": _vm.form.errors.has("date") },
+                          attrs: {
+                            type: "date",
+                            name: "date",
+                            placeholder: "Дата",
+                            required: ""
+                          },
+                          domProps: { value: _vm.form.date },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.form, "date", $event.target.value)
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("has-error", {
+                          attrs: { form: _vm.form, field: "date" }
+                        })
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", [_vm._v("Снимка:")]),
+                      _vm._v(" "),
+                      _c("input", {
+                        staticClass: "form-control",
+                        attrs: { type: "file", name: "photos" },
+                        on: { change: _vm.onFileSelect }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "form-group" },
+                      [
+                        _c("label", [_vm._v("Описание:")]),
+                        _vm._v(" "),
+                        _c("textarea", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.description,
+                              expression: "form.description"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: {
+                            "is-invalid": _vm.form.errors.has("description")
+                          },
+                          attrs: {
+                            type: "text",
+                            name: "description",
+                            placeholder: "Описание",
+                            required: ""
+                          },
+                          domProps: { value: _vm.form.description },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.form,
+                                "description",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("has-error", {
+                          attrs: { form: _vm.form, field: "description" }
+                        })
+                      ],
+                      1
+                    )
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "modal-body" }, [
-                    _c("p", { staticClass: "dwhite" }, [
-                      _c("img", {
-                        class: "img-fluid img-fluid col-6 p-1 float-left mt-1",
-                        attrs: {
-                          src: "/storage/galleries/" + this.form.photos,
-                          alt: this.form.firstName + " " + this.form.lastName
+                  _c("div", { staticClass: "modal-footer" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-danger",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            _vm.clearForm()
+                          }
                         }
-                      }),
-                      _vm._v(_vm._s(this.form.description))
-                    ])
+                      },
+                      [_vm._v("Изчисти")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: !_vm.editMode,
+                            expression: "!editMode"
+                          }
+                        ],
+                        staticClass: "btn btn-success",
+                        attrs: { type: "submit" }
+                      },
+                      [_vm._v("Добави")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.editMode,
+                            expression: "editMode"
+                          }
+                        ],
+                        staticClass: "btn btn-primary",
+                        attrs: { type: "submit" }
+                      },
+                      [_vm._v("Промени")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-secondary",
+                        attrs: { type: "button", "data-dismiss": "modal" }
+                      },
+                      [_vm._v("Затвори")]
+                    )
                   ])
-                ])
-              : _vm._e()
+                ]
+              )
+            ])
           ]
         )
       ]
@@ -63021,18 +64019,9 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      {
-        staticClass: "close",
-        attrs: {
-          type: "button",
-          "data-dismiss": "modal",
-          "aria-label": "Close"
-        }
-      },
-      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-    )
+    return _c("div", { staticClass: "page-input float-left d-inline-block" }, [
+      _c("p", { staticClass: "page-text" }, [_vm._v("Страница")])
+    ])
   },
   function() {
     var _vm = this
@@ -63074,312 +64063,301 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row flex-xl-nowrap" }, [
-    _c("div", { staticClass: "col-12 pl-0 pr-0" }, [
-      _vm.adminMode
-        ? _c("div", { staticClass: "col-12" }, [
-            _c(
-              "a",
-              {
-                attrs: { href: "" },
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    _vm.showModal()
+    _c(
+      "div",
+      { staticClass: "col-12 pl-0 pr-0" },
+      [
+        _vm.adminMode
+          ? _c("div", { staticClass: "col-12" }, [
+              _c(
+                "a",
+                {
+                  attrs: { href: "" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      _vm.showModal()
+                    }
                   }
-                }
-              },
-              [_c("i", { staticClass: "fas fa-file-import fa-3x green" })]
-            )
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _c("h2", { staticClass: "text-center dwhite" }, [
-        _vm._v("Галерия: " + _vm._s(this.$route.params.title))
-      ]),
-      _vm._v(" "),
-      _c(
-        "div",
+                },
+                [_c("i", { staticClass: "fas fa-file-import fa-3x green" })]
+              )
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _c("h2", { staticClass: "text-center dwhite" }, [
+          _vm._v("Галерия: " + _vm._s(this.$route.params.title))
+        ]),
+        _vm._v(" "),
         _vm._l(_vm.displayedGallery, function(photo, index) {
-          return _c("div", { key: photo.photo }, [
-            _c(
-              "div",
-              {
-                staticClass: "photoGallery float-left",
+          return _c(
+            "div",
+            { key: photo.photo, staticClass: "col-3 d-inline-block pl-0 pr-0" },
+            [
+              _c("div", {
+                staticClass: "photoGallery",
                 style: {
                   "background-image":
-                    "url(/storage/galleries/" + photo.photos + ")"
+                    "url(/storage/images/" + photo.photos + ")"
                 },
                 on: {
                   click: function($event) {
                     _vm.singlePhotoModal(index)
                   }
                 }
-              },
-              [
-                _vm.adminMode && index > 0
-                  ? _c(
-                      "a",
-                      {
-                        attrs: { href: "" },
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            _vm.deletePhoto(photo.id)
-                          }
+              }),
+              _vm._v(" "),
+              _vm.adminMode && index > 0
+                ? _c(
+                    "a",
+                    {
+                      attrs: { href: "" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          _vm.deletePhoto(photo.id)
                         }
-                      },
-                      [
-                        _c("i", {
-                          staticClass: "fas fa-trash red float-right fa-2x"
-                        }),
-                        _vm._v(" ")
-                      ]
-                    )
-                  : _vm._e()
-              ]
-            )
-          ])
-        }),
-        0
-      ),
-      _vm._v(" "),
-      _vm.allPhotos > _vm.loadedPhoto
-        ? _c("div", { class: "col-12 d-inline-block mt-3 dwhite " }, [
-            _c("p", { staticClass: "text-center galleryMenu" }, [
-              _c("span", [_vm._v("Общо снимки: " + _vm._s(_vm.allPhotos))]),
-              _c("span", [_vm._v("Показани: " + _vm._s(_vm.loadedPhoto))]),
-              _c(
-                "span",
-                {
-                  on: {
-                    click: function($event) {
-                      _vm.loadMorePhoto()
-                    }
-                  }
-                },
-                [_vm._v("Покажи още")]
-              )
-            ])
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.photoMethod
-        ? _c("div", { class: "pModal" }, [
-            _c(
-              "div",
-              {
-                staticClass: "text-center imgContainer row align-items-center"
-              },
-              [
-                _c("div", { staticClass: "col" }, [
-                  _c("img", {
-                    class: "img-fluid mt-5 imgContainer",
-                    attrs: {
-                      src: "/storage/galleries/" + _vm.thePhoto.photos,
-                      alt: _vm.thePhoto.photos
-                    }
-                  })
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "downloadButton" }, [
-              _c(
-                "a",
-                {
-                  staticClass: "dwhite",
-                  attrs: {
-                    href: "/storage/galleries/" + _vm.thePhoto.photos,
-                    download: ""
-                  }
-                },
-                [
-                  _vm._v("Изтегли "),
-                  _c("i", { staticClass: "fas fa-file-download" })
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "closeButton" }, [
-              _c(
-                "a",
-                {
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      _vm.singlePhotoModal()
-                    }
-                  }
-                },
-                [_c("i", { staticClass: "fas fa-times dwhite fa-3x" })]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "rightButton" }, [
-              _c(
-                "a",
-                {
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      _vm.nextPhoto()
-                    }
-                  }
-                },
-                [_c("i", { staticClass: "fas fa-chevron-right dwhite fa-3x" })]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "leftButton" }, [
-              _c(
-                "a",
-                {
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      _vm.prevPhoto()
-                    }
-                  }
-                },
-                [_c("i", { staticClass: "fas fa-chevron-left dwhite fa-3x" })]
-              )
-            ])
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "modal fade",
-          attrs: {
-            id: "photosModal",
-            tabindex: "-1",
-            role: "dialog",
-            "aria-labelledby": "photosModalLabel",
-            "aria-hidden": "true"
-          }
-        },
-        [
-          _c(
-            "div",
-            {
-              staticClass: "modal-dialog modal-xl",
-              attrs: { role: "document" }
-            },
-            [
+                      }
+                    },
+                    [
+                      _c("i", { staticClass: "fas fa-trash red fa-lg" }),
+                      _vm._v(" ")
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
               _vm.adminMode
-                ? _c("div", { staticClass: "modal-content" }, [
-                    _vm._m(0),
-                    _vm._v(" "),
-                    _c(
-                      "form",
-                      {
-                        attrs: {
-                          id: "photosForm",
-                          enctype: "multipart/form-data"
-                        },
-                        on: {
-                          submit: function($event) {
-                            $event.preventDefault()
-                            _vm.createPhoto("this")
-                          }
-                        }
-                      },
-                      [
-                        _c("div", { staticClass: "modal-body" }, [
-                          _c(
-                            "div",
-                            { staticClass: "form-group" },
-                            [
-                              _c("label", [_vm._v("Заглавие:")]),
-                              _vm._v(" "),
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.form.title,
-                                    expression: "form.title"
-                                  }
-                                ],
-                                staticClass: "form-control",
-                                class: {
-                                  "is-invalid": _vm.form.errors.has("title")
-                                },
-                                attrs: {
-                                  type: "text",
-                                  name: "title",
-                                  placeholder: "Заглавие"
-                                },
-                                domProps: { value: _vm.form.title },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.$set(
-                                      _vm.form,
-                                      "title",
-                                      $event.target.value
-                                    )
-                                  }
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("has-error", {
-                                attrs: { form: _vm.form, field: "title" }
-                              })
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "form-group" }, [
-                            _c("label", [_vm._v("Снимка:")]),
-                            _vm._v(" "),
-                            _c("input", {
-                              staticClass: "form-control",
-                              attrs: { type: "file", name: "photos" },
-                              on: { change: _vm.onFileSelect }
-                            })
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "modal-footer" }, [
-                          _c(
-                            "button",
-                            {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: !_vm.editMode,
-                                  expression: "!editMode"
-                                }
-                              ],
-                              staticClass: "btn btn-success",
-                              attrs: { type: "submit" }
-                            },
-                            [_vm._v("Добави")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-secondary",
-                              attrs: { type: "button", "data-dismiss": "modal" }
-                            },
-                            [_vm._v("Затвори")]
-                          )
-                        ])
-                      ]
-                    )
+                ? _c("a", { attrs: { href: "/Снимки/" + photo.photos } }, [
+                    _c("i", { staticClass: "fas fa-cut blue fa-lg" }),
+                    _vm._v(" ")
                   ])
                 : _vm._e()
             ]
           )
-        ]
-      )
-    ])
+        }),
+        _vm._v(" "),
+        _vm.allPhotos > _vm.loadedPhoto
+          ? _c("div", { staticClass: "col-12 d-inline-block mt-3 dwhite" }, [
+              _c("div", { staticClass: "text-center galleryMenu" }, [
+                _c("span", [_vm._v("Общо снимки: " + _vm._s(_vm.allPhotos))]),
+                _vm._v(" "),
+                _c("span", [_vm._v("Показани: " + _vm._s(_vm.loadedPhoto))]),
+                _vm._v(" "),
+                _c(
+                  "span",
+                  {
+                    on: {
+                      click: function($event) {
+                        _vm.loadMorePhoto()
+                      }
+                    }
+                  },
+                  [_vm._v("Покажи още")]
+                )
+              ])
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.photoMethod
+          ? _c("div", { class: "pModal" }, [
+              _c(
+                "div",
+                {
+                  staticClass: "text-center imgContainer row align-items-center"
+                },
+                [
+                  _c("div", { staticClass: "col" }, [
+                    _c("img", {
+                      staticClass: "img-fluid mt-5",
+                      attrs: {
+                        src: "/storage/images/" + _vm.thePhoto.photos,
+                        alt: _vm.thePhoto.photos
+                      }
+                    })
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "downloadButton" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "dwhite",
+                    attrs: {
+                      href: "/storage/galleries/" + _vm.thePhoto.photos,
+                      download: ""
+                    }
+                  },
+                  [
+                    _vm._v("Изтегли "),
+                    _c("i", { staticClass: "fas fa-file-download" })
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "closeButton" }, [
+                _c(
+                  "a",
+                  {
+                    attrs: { href: "" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        _vm.singlePhotoModal()
+                      }
+                    }
+                  },
+                  [_c("i", { staticClass: "fas fa-times dwhite fa-3x" })]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "rightButton" }, [
+                _c(
+                  "a",
+                  {
+                    attrs: { href: "" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        _vm.nextPhoto()
+                      }
+                    }
+                  },
+                  [
+                    _c("i", {
+                      staticClass: "fas fa-chevron-right dwhite fa-3x"
+                    })
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "leftButton" }, [
+                _c(
+                  "a",
+                  {
+                    attrs: { href: "" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        _vm.prevPhoto()
+                      }
+                    }
+                  },
+                  [_c("i", { staticClass: "fas fa-chevron-left dwhite fa-3x" })]
+                )
+              ])
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "modal fade",
+            attrs: {
+              id: "photosModal",
+              tabindex: "-1",
+              role: "dialog",
+              "aria-labelledby": "photosModalLabel",
+              "aria-hidden": "true"
+            }
+          },
+          [
+            _c(
+              "div",
+              {
+                staticClass: "modal-dialog modal-xl",
+                attrs: { role: "document" }
+              },
+              [
+                _vm.adminMode
+                  ? _c("div", { staticClass: "modal-content" }, [
+                      _vm._m(0),
+                      _vm._v(" "),
+                      _c(
+                        "form",
+                        {
+                          attrs: {
+                            id: "photosForm",
+                            enctype: "multipart/form-data"
+                          },
+                          on: {
+                            submit: function($event) {
+                              $event.preventDefault()
+                              _vm.createPhoto()
+                            }
+                          }
+                        },
+                        [
+                          _c("div", { staticClass: "modal-body" }, [
+                            _c(
+                              "div",
+                              { staticClass: "form-group" },
+                              [
+                                _c("label", [_vm._v("Заглавие:")]),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.form.title,
+                                      expression: "form.title"
+                                    }
+                                  ],
+                                  staticClass: "form-control",
+                                  class: {
+                                    "is-invalid": _vm.form.errors.has("title")
+                                  },
+                                  attrs: {
+                                    type: "text",
+                                    name: "title",
+                                    placeholder: "Заглавие"
+                                  },
+                                  domProps: { value: _vm.form.title },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.form,
+                                        "title",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("has-error", {
+                                  attrs: { form: _vm.form, field: "title" }
+                                })
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "form-group" }, [
+                              _c("label", [_vm._v("Снимка:")]),
+                              _vm._v(" "),
+                              _c("input", {
+                                staticClass: "form-control",
+                                attrs: { type: "file", name: "photos" },
+                                on: { change: _vm.onFileSelect }
+                              })
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _vm._m(1)
+                        ]
+                      )
+                    ])
+                  : _vm._e()
+              ]
+            )
+          ]
+        )
+      ],
+      2
+    )
   ])
 }
 var staticRenderFns = [
@@ -63405,6 +64383,27 @@ var staticRenderFns = [
           }
         },
         [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        { staticClass: "btn btn-success", attrs: { type: "submit" } },
+        [_vm._v("Добави")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-secondary",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("Затвори")]
       )
     ])
   }
@@ -63438,20 +64437,116 @@ var render = function() {
         "div",
         { staticClass: "col-12 col-md-9" },
         [
-          _vm.newsAdminMode
-            ? _c(
-                "a",
-                {
-                  attrs: { href: "#" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      _vm.showModal()
+          _vm.adminMode
+            ? _c("div", { staticClass: "col-12" }, [
+                _c(
+                  "a",
+                  {
+                    attrs: { href: "" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        _vm.showModal()
+                      }
                     }
-                  }
-                },
-                [_c("i", { staticClass: "fas fa-file-import fa-3x green" })]
-              )
+                  },
+                  [_c("i", { staticClass: "fas fa-file-import fa-3x green" })]
+                )
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          this.pages > 1
+            ? _c("div", { staticClass: "page-navigation d-inline-block" }, [
+                _c(
+                  "div",
+                  { staticClass: "page-button float-left d-inline-block" },
+                  [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "page-link",
+                        attrs: { href: "" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            _vm.prevPage()
+                          }
+                        }
+                      },
+                      [_c("i", { staticClass: "fas fa-chevron-left" })]
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _vm._m(0),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "page-input float-left d-inline-block" },
+                  [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.page,
+                          expression: "page"
+                        }
+                      ],
+                      staticClass: "page-link",
+                      attrs: {
+                        maxlength: "2",
+                        size: "2",
+                        type: "text",
+                        name: "page"
+                      },
+                      domProps: { value: _vm.page },
+                      on: {
+                        keyup: function($event) {
+                          _vm.getPage()
+                        },
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.page = $event.target.value
+                        }
+                      }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "page-input float-left d-inline-block" },
+                  [
+                    _c("p", { staticClass: "page-text" }, [
+                      _vm._v("от: " + _vm._s(this.pages))
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "page-button float-left d-inline-block" },
+                  [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "page-link",
+                        attrs: { href: "" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            _vm.nextPage()
+                          }
+                        }
+                      },
+                      [_c("i", { staticClass: "fas fa-chevron-right" })]
+                    )
+                  ]
+                )
+              ])
             : _vm._e(),
           _vm._v(" "),
           _vm._l(_vm.allNews, function(news) {
@@ -63477,14 +64572,14 @@ var render = function() {
                       _c("img", {
                         class: "col-6 col-md-3 p-1 float-left",
                         attrs: {
-                          src: "/storage/news/" + news.photos,
+                          src: "/storage/images/" + news.photos,
                           alt: news.title
                         }
                       }),
                       _vm._v(_vm._s(news.description))
                     ]),
                     _vm._v(" "),
-                    !_vm.newsAdminMode
+                    !_vm.adminMode
                       ? _c("div", { staticClass: "p-1 d-inline-block w-100" }, [
                           _c("hr", { staticClass: "mb-0 mt-0" }),
                           _vm._v(" "),
@@ -63506,7 +64601,7 @@ var render = function() {
                   ]
                 ),
                 _vm._v(" "),
-                _vm.newsAdminMode
+                _vm.adminMode
                   ? _c("div", { staticClass: "p-1 d-inline-block w-100" }, [
                       _c("hr", { staticClass: "mb-0 mt-0" }),
                       _vm._v(" "),
@@ -63514,7 +64609,7 @@ var render = function() {
                         "a",
                         {
                           staticClass: "float-left",
-                          attrs: { href: "#" },
+                          attrs: { href: "" },
                           on: {
                             click: function($event) {
                               $event.preventDefault()
@@ -63532,7 +64627,7 @@ var render = function() {
                         "a",
                         {
                           staticClass: "float-left",
-                          attrs: { href: "#" },
+                          attrs: { href: "" },
                           on: {
                             click: function($event) {
                               $event.preventDefault()
@@ -63542,6 +64637,18 @@ var render = function() {
                         },
                         [
                           _c("i", { staticClass: "fas fa-trash red" }),
+                          _vm._v(" ")
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          staticClass: "float-left",
+                          attrs: { href: "/Снимки/" + news.photos }
+                        },
+                        [
+                          _c("i", { staticClass: "fas fa-cut blue" }),
                           _vm._v(" ")
                         ]
                       ),
@@ -63580,7 +64687,7 @@ var render = function() {
               attrs: { role: "document" }
             },
             [
-              _vm.newsAdminMode
+              _vm.adminMode
                 ? _c("div", { staticClass: "modal-content" }, [
                     _c("div", { staticClass: "modal-header" }, [
                       !_vm.editMode
@@ -63609,7 +64716,7 @@ var render = function() {
                           )
                         : _vm._e(),
                       _vm._v(" "),
-                      _vm._m(0)
+                      _vm._m(1)
                     ]),
                     _vm._v(" "),
                     _c(
@@ -63845,7 +64952,7 @@ var render = function() {
                   ])
                 : _vm._e(),
               _vm._v(" "),
-              !_vm.newsAdminMode
+              !_vm.adminMode
                 ? _c("div", { staticClass: "modal-content for-user" }, [
                     _c("div", { staticClass: "modal-header" }, [
                       _c(
@@ -63857,7 +64964,7 @@ var render = function() {
                         [_vm._v(_vm._s(this.form.title))]
                       ),
                       _vm._v(" "),
-                      _vm._m(1)
+                      _vm._m(2)
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "modal-body" }, [
@@ -63866,7 +64973,7 @@ var render = function() {
                           class:
                             "img-fluid img-fluid col-6 p-1 float-left mt-1",
                           attrs: {
-                            src: "/storage/news/" + this.form.photos,
+                            src: "/storage/images/" + this.form.photos,
                             alt: this.form.title
                           }
                         }),
@@ -63889,6 +64996,14 @@ var render = function() {
   )
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "page-input float-left d-inline-block" }, [
+      _c("p", { staticClass: "page-text" }, [_vm._v("Страница")])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -63954,7 +65069,7 @@ var render = function() {
           ? _c(
               "a",
               {
-                attrs: { href: "#" },
+                attrs: { href: "" },
                 on: {
                   click: function($event) {
                     $event.preventDefault()
@@ -64024,7 +65139,7 @@ var render = function() {
                       "a",
                       {
                         staticClass: "float-left",
-                        attrs: { href: "#" },
+                        attrs: { href: "" },
                         on: {
                           click: function($event) {
                             $event.preventDefault()
@@ -64042,7 +65157,7 @@ var render = function() {
                       "a",
                       {
                         staticClass: "float-right",
-                        attrs: { href: "#" },
+                        attrs: { href: "" },
                         on: {
                           click: function($event) {
                             $event.preventDefault()
@@ -64627,7 +65742,7 @@ var render = function() {
     "div",
     { staticClass: "row flex-xl-nowrap" },
     [
-      _vm.sliderAdminMode
+      _vm.adminMode
         ? _c(
             "a",
             {
@@ -64668,7 +65783,7 @@ var render = function() {
                         _c(
                           "a",
                           {
-                            attrs: { href: "#" },
+                            attrs: { href: "" },
                             on: {
                               click: function($event) {
                                 $event.preventDefault()
@@ -64679,7 +65794,7 @@ var render = function() {
                           [
                             _c("img", {
                               attrs: {
-                                src: "/storage/sliders/" + slider.photos,
+                                src: "/storage/images/" + slider.photos,
                                 alt: slider.title
                               }
                             })
@@ -64713,7 +65828,7 @@ var render = function() {
                                 _c("img", {
                                   staticClass: "w-50 d-inline float-left",
                                   attrs: {
-                                    src: "/storage/sliders/" + slider.photos,
+                                    src: "/storage/images/" + slider.photos,
                                     alt: slider.title
                                   }
                                 })
@@ -64726,51 +65841,66 @@ var render = function() {
                           ]
                         ),
                         _vm._v(" "),
-                        _c("div", { staticClass: "p-1 d-inline-block w-100" }, [
-                          _vm.sliderAdminMode
-                            ? _c("hr", { staticClass: "mb-0 mt-0" })
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.sliderAdminMode
-                            ? _c(
-                                "a",
-                                {
-                                  attrs: { href: "" },
-                                  on: {
-                                    click: function($event) {
-                                      $event.preventDefault()
-                                      _vm.editSlider(slider)
+                        _vm.adminMode
+                          ? _c(
+                              "div",
+                              { staticClass: "p-1 d-inline-block w-100" },
+                              [
+                                _c("hr", { staticClass: "mb-0 mt-0" }),
+                                _vm._v(" "),
+                                _c(
+                                  "a",
+                                  {
+                                    attrs: { href: "" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        _vm.editSlider(slider)
+                                      }
                                     }
-                                  }
-                                },
-                                [
-                                  _c("i", {
-                                    staticClass: "fas fa-edit yellow"
-                                  }),
-                                  _vm._v(" ")
-                                ]
-                              )
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.sliderAdminMode
-                            ? _c(
-                                "a",
-                                {
-                                  attrs: { href: "" },
-                                  on: {
-                                    click: function($event) {
-                                      $event.preventDefault()
-                                      _vm.deleteSlider(slider.id)
-                                    }
-                                  }
-                                },
-                                [
-                                  _c("i", { staticClass: "fas fa-trash red" }),
-                                  _vm._v(" ")
-                                ]
-                              )
-                            : _vm._e()
-                        ])
+                                  },
+                                  [
+                                    _c("i", {
+                                      staticClass: "fas fa-edit yellow"
+                                    }),
+                                    _vm._v(" ")
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _vm.adminMode
+                                  ? _c(
+                                      "a",
+                                      {
+                                        attrs: { href: "" },
+                                        on: {
+                                          click: function($event) {
+                                            $event.preventDefault()
+                                            _vm.deleteSlider(slider.id)
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c("i", {
+                                          staticClass: "fas fa-trash red"
+                                        }),
+                                        _vm._v(" ")
+                                      ]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                _c(
+                                  "a",
+                                  {
+                                    attrs: { href: "/Снимки/" + slider.photos }
+                                  },
+                                  [
+                                    _c("i", { staticClass: "fas fa-cut blue" }),
+                                    _vm._v(" ")
+                                  ]
+                                )
+                              ]
+                            )
+                          : _vm._e()
                       ])
                     : _vm._e()
                 ]
@@ -79082,7 +80212,7 @@ var routes = [{
   path: '/',
   component: __webpack_require__(/*! ./components/content/SlidersComponent.vue */ "./resources/js/components/content/SlidersComponent.vue").default
 }, {
-  path: '/Новини',
+  path: '/Новини/:page',
   component: __webpack_require__(/*! ./components/content/NewsComponent.vue */ "./resources/js/components/content/NewsComponent.vue").default
 }, {
   path: '/Треньори',
@@ -79094,11 +80224,14 @@ var routes = [{
   path: '/График',
   component: __webpack_require__(/*! ./components/content/SchedulesComponent.vue */ "./resources/js/components/content/SchedulesComponent.vue").default
 }, {
-  path: '/Галерии/:type',
+  path: '/Галерии/:type/Страница/:page',
   component: __webpack_require__(/*! ./components/content/GalleriesComponent.vue */ "./resources/js/components/content/GalleriesComponent.vue").default
 }, {
   path: '/Галерии/:type/Галерия/:title/Id/:id',
   component: __webpack_require__(/*! ./components/content/GalleryComponent.vue */ "./resources/js/components/content/GalleryComponent.vue").default
+}, {
+  path: '/Снимки/:photo',
+  component: __webpack_require__(/*! ./components/ImagerComponent.vue */ "./resources/js/components/ImagerComponent.vue").default
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   mode: 'history',
@@ -79284,6 +80417,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ContactsComponent_vue_vue_type_template_id_3251520f___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ContactsComponent_vue_vue_type_template_id_3251520f___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/ImagerComponent.vue":
+/*!*****************************************************!*\
+  !*** ./resources/js/components/ImagerComponent.vue ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ImagerComponent_vue_vue_type_template_id_a7a9ecaa___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ImagerComponent.vue?vue&type=template&id=a7a9ecaa& */ "./resources/js/components/ImagerComponent.vue?vue&type=template&id=a7a9ecaa&");
+/* harmony import */ var _ImagerComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ImagerComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/ImagerComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _ImagerComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ImagerComponent_vue_vue_type_template_id_a7a9ecaa___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ImagerComponent_vue_vue_type_template_id_a7a9ecaa___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/ImagerComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/ImagerComponent.vue?vue&type=script&lang=js&":
+/*!******************************************************************************!*\
+  !*** ./resources/js/components/ImagerComponent.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ImagerComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./ImagerComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ImagerComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ImagerComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/ImagerComponent.vue?vue&type=template&id=a7a9ecaa&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/components/ImagerComponent.vue?vue&type=template&id=a7a9ecaa& ***!
+  \************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ImagerComponent_vue_vue_type_template_id_a7a9ecaa___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./ImagerComponent.vue?vue&type=template&id=a7a9ecaa& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ImagerComponent.vue?vue&type=template&id=a7a9ecaa&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ImagerComponent_vue_vue_type_template_id_a7a9ecaa___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ImagerComponent_vue_vue_type_template_id_a7a9ecaa___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

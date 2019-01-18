@@ -10,7 +10,7 @@ use Intervention\Image\ImageManagerStatic as Image;
 class CompetitorsController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing DB records table competitors and paginate the records.
      *
      * @return \Illuminate\Http\Response
      */
@@ -20,7 +20,8 @@ class CompetitorsController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created validated record in DB competitors table.
+     * Convert a base64 file to an image and store it.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -55,7 +56,8 @@ class CompetitorsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified DB record in competitors table.
+     * If there is a new base64 file delete the old one and store the new one
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Competitor  $competitor
@@ -95,7 +97,8 @@ class CompetitorsController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified record from DB competitors table.
+     * Delete the specified file.
      *
      * @param  \App\Competitor  $competitor
      * @return \Illuminate\Http\Response

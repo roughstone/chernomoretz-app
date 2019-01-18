@@ -11,17 +11,19 @@ use Intervention\Image\ImageManagerStatic as Image;
 class GalleriesController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing DB records table coachs based on category,
+     * reverse the records and paginate them.
      *
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        return Gallery::where('category', '=', $request->category)->latest()->paginate(10);
+        return Gallery::where('category', '=', $request->category)->latest()->paginate(9);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created validated record in DB galleries table.
+     * Convert a base64 file to an image and store it.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -54,7 +56,8 @@ class GalleriesController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified DB record in galleries table.
+     * If there is a new base64 file delete the old one and store the new one
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Gallery  $gallery
@@ -92,7 +95,8 @@ class GalleriesController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified record from DB galleries table.
+     * Delete the specified file.
      *
      * @param  \App\Gallery  $gallery
      * @return \Illuminate\Http\Response

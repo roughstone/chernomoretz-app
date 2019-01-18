@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 class SchedulesController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing DB records table schedules and reverse them.
      *
      * @return \Illuminate\Http\Response
      */
@@ -20,7 +20,7 @@ class SchedulesController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created validated record in DB schedules table.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -49,7 +49,7 @@ class SchedulesController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified DB record in schedules table.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Schedule  $schedule
@@ -79,7 +79,7 @@ class SchedulesController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified record from DB coachs table.
      *
      * @param  \App\Schedule  $schedule
      * @return \Illuminate\Http\Response

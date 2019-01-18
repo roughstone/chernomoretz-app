@@ -1,32 +1,73 @@
+<!--Displays the contents of each news. When the logged in user is administrator the content editing tools are shown. -->
 <template>
 <div class="row flex-xl-nowrap">
    <div class="col-12 col-md-9">
-        <a href="#" v-if="newsAdminMode" @click.prevent="showModal()"><i class="fas fa-file-import fa-3x green"></i></a>
+<!--The following <div> is shown only if "adminMode" parameter is set to true.
+    The click event that open the form to insert new records to the DB.
+    On the click event the prevent method was called to prevent the default behavior of the <a>
+    The href attribute is empty to keep the pointer:cursor behavior of the <a> -->
+        <div v-if="adminMode" class="col-12">
+            <a href="" @click.prevent="showModal()"><i class="fas fa-file-import fa-3x green"></i></a>
+        </div>
+<!--The following <div> holds the navigation of the news component content. -->
+        <div v-if="this.pages > 1" class="page-navigation d-inline-block">
+            <div class="page-button float-left d-inline-block">
+<!--The following <a> has click event with .prevent called to prevent the default behavior of the <a>
+    and wich calls "prevPage" method. The logic open the previous page of content. -->
+                <a href="" class="page-link" @click.prevent="prevPage()"><i class="fas fa-chevron-left"></i></a>
+            </div>
+            <div class="page-input float-left d-inline-block">
+                <p class="page-text">Страница</p>
+            </div>
+            <div class="page-input float-left d-inline-block">
+<!--The following <input> when changed calls "getPage" method. The logic open page based on user input. -->
+                <input class="page-link" maxlength="2" size="2" type="text" @keyup="getPage()" v-model="page" name="page">
+            </div>
+            <div class="page-input float-left d-inline-block">
+                <p class="page-text">от: {{ this.pages }}</p>
+            </div>
+            <div class="page-button float-left d-inline-block">
+<!--The following <a> has click event with .prevent called to prevent the default behavior of the <a>
+    and wich calls "nextPage" method. The logic open the next page of content. -->
+                <a href="" class="page-link" @click.prevent="nextPage()"><i class="fas fa-chevron-right"></i></a>
+            </div>
+        </div>
+<!--The following <div> is multiplied by Vuejs v-for directive for each record form "allNews" parameter.  -->
         <div v-for="news in allNews" :key="news.id">
             <div class="mt-3 news">
                 <a href="" @click.prevent="editNews(news)">
                     <h3 class="dwhite">{{ news.title }}</h3>
-                    <p class="mb-0 float-left w-100 dwhite"><img :class="'col-6 col-md-3 p-1 float-left'" :src="'/storage/news/' + news.photos" :alt="news.title">{{ news.description }}</p>
-                    <div v-if="!newsAdminMode" class="p-1 d-inline-block w-100">
+                    <p class="mb-0 float-left w-100 dwhite"><img :class="'col-6 col-md-3 p-1 float-left'" :src="'/storage/images/' + news.photos" :alt="news.title">{{ news.description }}</p>
+<!-- The following <div> is shown if adminMode parameter is false (the user is not administrator)-->
+                    <div v-if="!adminMode" class="p-1 d-inline-block w-100">
                         <hr class="mb-0 mt-0">
                         <p  class="mb-0 mt-0 ml-1 float-left dwhite">Виж още</p>
                         <h5 class="mb-0 mt-0 mr-1 float-right dwhite">Дата: {{ news.date }}</h5>
                     </div>
                 </a>
-                <div v-if="newsAdminMode" class="p-1 d-inline-block w-100">
+<!-- The following <div> is shown if adminMode parameter is true (the user is administrator)-->
+                <div v-if="adminMode" class="p-1 d-inline-block w-100">
                     <hr class="mb-0 mt-0">
-                    <a class="float-left" href="#" @click.prevent="editNews(news)">
+<!--The following <a> has click event with .prevent called to prevent the default behavior of the <a>
+    and wich calls "editNews" method passing the news object to it. -->
+                    <a class="float-left" href="" @click.prevent="editNews(news)">
                     <i class="fas fa-edit yellow"></i>&#160;</a>
-                    <a class="float-left" href="#" @click.prevent="deleteNews(news.id)">
+<!--The following <a> has click event with .prevent called to prevent the default behavior of the <a>
+    and wich calls "deleteNews" method passing the news id to it. -->
+                    <a class="float-left" href="" @click.prevent="deleteNews(news.id)">
                     <i class="fas fa-trash red"></i>&#160;</a>
+<!--The following <a> has binded href atribute to imagerComponent and passing the photo title to it.  -->
+                    <a class="float-left" :href="'/Снимки/' + news.photos"><i class="fas fa-cut blue"></i>&#160;</a>
                     <h5 class="mb-0 mt-0 mr-1 float-right dwhite">Дата: {{ news.date }}</h5>
                 </div>
             </div>
         </div>
     </div>
+<!--The following <div> is created based on "bootstrap" and "vForm" packages -->
      <div class="modal fade" id="newsModal" tabindex="-1" role="dialog" aria-labelledby="newsModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
-            <div v-if="newsAdminMode" class="modal-content">
+<!--The following <div> is shown if adminMode parameter is true (the user is administrator)-->
+            <div v-if="adminMode" class="modal-content">
                 <div class="modal-header">
                     <h5 v-if="!editMode" class="modal-title" id="newsModalLabel">Добавяне на новина</h5>
                     <h5 v-if="editMode" class="modal-title" id="newsModalLabel">Промяна на новина {{ this.form.id }}</h5>
@@ -34,6 +75,7 @@
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+<!-- The following <form> when submitted calls "updateNews" or "createNews" method based of the editMode parameter condition.-->
                 <form @submit.prevent="editMode ? updateNews() : createNews()" id="newsForm" enctype="multipart/form-data">
                     <div class="modal-body">
                         <div class="form-group">
@@ -59,6 +101,7 @@
                             <has-error :form="form" field="description"></has-error>
                         </div>
                     </div>
+<!-- The following <div> holds buttons based on editMode parameter condition and button to clear the form with that call clearForm method -->
                     <div class="modal-footer">
                         <button type="button" @click="clearForm()" class="btn btn-danger">Изчисти</button>
                         <button type="submit" v-show="!editMode" class="btn btn-success">Добави</button>
@@ -67,9 +110,8 @@
                     </div>
                 </form>
             </div>
-
-
-            <div v-if="!newsAdminMode" class="modal-content for-user">
+<!--The following <div> is shown if adminMode parameter is false (the user is not administrator)-->
+            <div v-if="!adminMode" class="modal-content for-user">
                 <div class="modal-header">
                     <h5 class="modal-title dwhite" id="exampleModalLabel">{{ this.form.title }}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -77,12 +119,13 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p class="dwhite"><img :class="'img-fluid img-fluid col-6 p-1 float-left mt-1'" :src="'/storage/news/' + this.form.photos" :alt="this.form.title">
+                    <p class="dwhite"><img :class="'img-fluid img-fluid col-6 p-1 float-left mt-1'" :src="'/storage/images/' + this.form.photos" :alt="this.form.title">
                     {{ this.form.description }}</p>
                 </div>
             </div>
         </div>
     </div>
+<!-- Display the globaly registrated vuejs announcement component. -->
     <announcement-component></announcement-component>
 </div>
 </template>
@@ -91,21 +134,23 @@
     export default {
         data() {
             return {
-                newsAdminMode : false,
-                editMode : false,
-                allNews : null,
-                form : new Form({
-                    id: null,
-                    title : null,
-                    photos : null,
-                    description : null,
-                    date : null,
-                    category: 'news'
+                adminMode : false, // swich to show administrator content
+                editMode : false, // swich the edit mode
+                allNews : null, // holds the records from the DB
+                page: 1, //current page
+                pages: null, //numer of pages
+                form : new Form({ //instantiate a new Form object
+                    id: null, // id of DB record
+                    title : null, // title of DB record
+                    photos : null, // photos of DB record
+                    description : null, // description of DB record
+                    date : null, // date of DB record
+                    category: 'news' // category of DB record set to 'news' because the DB holds 'announcement' category too.
                 }),
             }
         },
         methods :{
-             clearForm() {
+             clearForm() { // clear the form based on editMode parameter condition keep data
                 if (this.editMode) {
                     this.form.originalData.id = this.form.id
                     this.form.originalData.photos = this.form.photos
@@ -116,21 +161,46 @@
                     this.form.reset();
                 }
             },
-            changeAdminMode() {
+            changeAdminMode() { //check is the user administrator
                 if(this.$gate.isAdmin()) {
-                    this.newsAdminMode = true
+                    this.adminMode = true
                 } else {
-                    this.newsAdminMode = false
+                    this.adminMode = false
                 }
             },
-            getAllNews() {
-                axios.get("/api/moreNews")
-                .then(({ data }) => {this.allNews = data.data})
+            nextPage() { // call getPage method for next page
+                if (this.page < this.pages) {
+                this.page++
+                this.getPage()
+                }
+            },
+            prevPage() { //call getPage method for previous page
+                if (this.page > 1) {
+                    this.page--
+                    this.getPage()
+                }
+            },
+            getPage() { //based on user nextPage, prevPage methods or user input calls getAllNews method to send request to backend with the page number
+                this.$route.params.page = this.page
+                 if (history.pushState) {
+                        let url = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                        let slicedUrl = url.slice(0, url.lastIndexOf('/'))
+                        let newUrl = slicedUrl + '/' + this.$route.params.page
+                        window.history.pushState({path:newUrl},'',newUrl);
+                        this.getAllNews()
+                    }
+            },
+            getAllNews() { //request to the backend to get the records
+                axios.get("/api/moreNews?page="+ this.$route.params.page)
+                .then(({ data }) => {
+                    this.allNews = data.data
+                    this.pages = data.last_page
+                })
                 .catch(() => {
 
                 });
             },
-            createNews(){
+            createNews(){ //request to the backend to create a new record
                 if(this.$gate.isAdmin()) {
                     this.form.post('/api/news')
                     .then(() => {
@@ -144,12 +214,12 @@
                     })
                 }
             },
-            editNews(data){
+            editNews(data){ // display the form to edit DB records
                 this.editMode = true;
                 $("#newsModal").modal("show");
                 this.form.fill( data );
             },
-            updateNews() {
+            updateNews() { // request to the backend to edit a specific record
                 this.form.patch('/api/news/' + this.form.id)
                 .then(() => {
                     $('#newsModal').modal('hide');
@@ -158,7 +228,7 @@
                 .catch(() => {
                 })
             },
-            deleteNews(id){
+            deleteNews(id){ // request to the backend to delete a record
                axios.delete('/api/news/' + id)
                .then(() => {
                     this.getAllNews();
@@ -167,11 +237,11 @@
 
                 })
             },
-            showModal(){
+            showModal(){ // display the form to insert DB records
                 this.editMode = false
                 $("#newsModal").modal("show");
             },
-            onFileSelect(event) {
+            onFileSelect(event) { //instantiate new FileReader object for the selected file
                 let file = event.target.files[0];
                 this.form.photos = event.target.files[0];
                 let reader = new FileReader();

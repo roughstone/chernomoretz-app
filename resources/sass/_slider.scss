@@ -73,8 +73,7 @@
     background-position: center;
     background-size: 100%;
     position: relative;
-    width: 25%;
-    padding-top: 14.05%;
+    padding-top: 56.25%;
     border: 1px solid #00294e;
     a {
         position: absolute;
@@ -98,8 +97,10 @@
 .imgContainer {
     position: relative;
     height: 100%;
-    img {
-        max-height: 45vw;
+    div{
+        img {
+            max-height: 45vw;
+        }
     }
 }
 .closeButton {

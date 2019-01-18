@@ -11,7 +11,7 @@ use Intervention\Image\ImageManagerStatic as Image;
 class PhotosController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Return the request gallery by id and all photos with the same gallery_id
      *
      * @param  \App\Gallery  $photo
      * @param  \App\Photo  $photo
@@ -27,7 +27,8 @@ class PhotosController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created validated record in DB photos table.
+     * Convert a base64 file to an image and store it.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -41,7 +42,7 @@ class PhotosController extends Controller
 
             $fileName = time().'.'.explode('/', explode(':', substr($request->photos, 0, strpos($request->photos, ';')))[1])[1];
 
-            Image::make($request->photos)->save(public_path('/storage/galleries/'.$fileName));
+            Image::make($request->photos)->save(public_path('/storage/images/'.$fileName));
 
             $object = new Photo();
 
@@ -54,7 +55,8 @@ class PhotosController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified record from DB photos table.
+     * Delete the specified file.
      *
      * @param  \App\Photo  $photo
      * @return \Illuminate\Http\Response

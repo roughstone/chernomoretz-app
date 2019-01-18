@@ -1,5 +1,7 @@
+<!-- Navigation of the app vuejs router and bootstrap packages used. -->
 <template>
 <nav id="navBar" class="navbar navbar-expand-lg navbar-dark">
+
 
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -11,7 +13,7 @@
         <router-link class="nav-link" to="/"><i class="fas fa-home purple"></i> Начало</router-link>
     </li>
     <li class="nav-item">
-        <router-link class="nav-link" to="/Новини"><i class="far fa-newspaper purple"></i> Новини</router-link>
+        <router-link class="nav-link" to="/Новини/1"><i class="far fa-newspaper purple"></i> Новини</router-link>
     </li>
 
     <li class="nav-item dropdown">
@@ -30,13 +32,18 @@
             <i class="far fa-images purple"></i> Галерия
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <router-link class="dropdown-item" to="/Галерии/Състезания">Стстезания</router-link>
-            <router-link class="dropdown-item" to="/Галерии/Събития">Събития</router-link>
-            <router-link class="dropdown-item" to="/Галерии/Тренировки">Тренировки</router-link>
+            <router-link class="dropdown-item" to="/Галерии/Състезания/Страница/1">Стстезания</router-link>
+            <router-link class="dropdown-item" to="/Галерии/Събития/Страница/1">Събития</router-link>
+            <router-link class="dropdown-item" to="/Галерии/Тренировки/Страница/1">Тренировки</router-link>
         </div>
     </li>
     <li class="nav-item">
+<!--The following <a> has click event with .prevent called to prevent the default behavior of the <a>
+    and wich calls "openContactsModal" method. -->
         <a href="" @click.prevent="openContactsModal()" class="nav-link" to="/Контакти"><i class="fas fa-phone-square purple"></i> Контакти с нас!</a>
+    </li>
+    <li class="nav-item">
+        <router-link class="nav-link" to="/Снимки"><i class="far fa-image purple"></i>Снимка</router-link>
     </li>
     </ul>
 </div>
@@ -46,7 +53,7 @@
 <script>
     export default {
         methods: {
-            openContactsModal() {
+            openContactsModal() { // display contacts component based in route parameter contactsForm condition
                 if(this.$route.params.contactsForm) {
                     this.$route.params.contactsForm = false
                 } else {
@@ -55,7 +62,7 @@
             }
         },
         mounted() {
-            this.$route.params.contactsForm = false;
+            this.$route.params.contactsForm = false; //when component is mounted push contactsForm parameter to the router and set id to false.
         }
     }
 </script>

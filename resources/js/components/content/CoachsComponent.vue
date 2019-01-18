@@ -1,13 +1,19 @@
+<!--Displays the contents of each coachs. When the logged in user is administrator the content editing tools are shown. -->
 <template>
 <div class="row flex-xl-nowrap">
    <div class="col-12">
+<!--The following <div> is shown only if "adminMode" parameter is set to true.
+    The click event that open the form to insert new records to the DB.
+    On the click event the prevent method was called to prevent the default behavior of the <a>
+    The href attribute is empty to keep the pointer:cursor behavior of the <a> -->
         <div v-if="adminMode" class="col-12">
-        <a href="" @click.prevent="showModal()"><i class="fas fa-file-import fa-3x green"></i></a>
+            <a href="" @click.prevent="showModal()"><i class="fas fa-file-import fa-3x green"></i></a>
         </div>
+<!--The following <div> is multiplied by Vuejs v-for directive for each record form "coachs" parameter.  -->
         <div v-for="coach in coachs" :key="coach.id" :class="'col-12 col-md-4 float-left coachs'">
             <div class="coach">
                 <a href="#" @click.prevent="editCoach(coach)" class="dwhite">
-                    <img :class="'img-fluid float-left'" :src="'/storage/coachs/' + coach.photos" :alt="coach.title">
+                    <img :class="'img-fluid float-left'" :src="'/storage/images/' + coach.photos" :alt="coach.title">
                     <div class="col-6 pr-0 float-left mt-3">
                         <p class="text-right h4">Име:&#160;</p>
                         <p class="text-right h4">Презиме:&#160;</p>
@@ -22,20 +28,26 @@
                         <p class="text-center h6 mb-0 underline">треньор по</p>
                         <p class="text-center h4">{{ coach.position }}</p>
                     </div>
+<!-- The following <div> is shown if adminMode parameter is true (the user is administrator)-->
                     <div v-if="adminMode" class="p-1 d-inline-block w-100">
                         <hr class="mb-0 mt-0">
+<!--The following <a> has click event with .prevent called to prevent the default behavior of the <a>
+    and wich calls "editCoach" method passing the coach object to it. -->
                         <a href="" @click.prevent="editCoach(coach)"><i class="fas fa-edit yellow"></i>&#160;</a>
-                        <a href="" @click.prevent="deleteCoach(coach.id)"><i class="fas fa-trash red float-right"></i>&#160;</a>
+<!--The following <a> has click event with .prevent called to prevent the default behavior of the <a>
+    and wich calls "deleteCoach" method passing the coach id to it. -->
+                        <a href="" @click.prevent="deleteCoach(coach.id)"><i class="fas fa-trash red"></i>&#160;</a>
+<!--The following <a> has binded href atribute to imagerComponent and passing the photo title to it.  -->
+                        <a :href="'/Снимки/' + coach.photos"><i class="fas fa-cut blue"></i>&#160;</a>
                     </div>
                 </a>
             </div>
         </div>
    </div>
-
-
-
+<!--The following <div> is created based on "bootstrap" and "vForm" packages -->
    <div class="modal fade" id="coachsModal" tabindex="-1" role="dialog" aria-labelledby="newsModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
+<!--The following <div> is shown if adminMode parameter is true (the user is administrator)-->
             <div v-if="adminMode" class="modal-content">
                 <div class="modal-header">
                     <h5 v-if="!editMode" class="modal-title" id="newsModalLabel">Добавяне на треньор</h5>
@@ -44,6 +56,7 @@
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+<!-- The following <form> when submitted calls "updateCoach" or "createCoach" method based of the editMode parameter condition.-->
                 <form @submit.prevent="editMode ? updateCoach() : createCoach()" id="newsForm" enctype="multipart/form-data">
                     <div class="modal-body">
                         <div class="form-group">
@@ -81,6 +94,7 @@
                             <has-error :form="form" field="description"></has-error>
                         </div>
                     </div>
+<!-- The following <div> holds buttons based on editMode parameter condition and button to clear the form with that call clearForm method -->
                     <div class="modal-footer">
                         <button type="button" @click="clearForm()" class="btn btn-danger">Изчисти</button>
                         <button type="submit" v-show="!editMode" class="btn btn-success">Добави</button>
@@ -89,9 +103,7 @@
                     </div>
                 </form>
             </div>
-
-
-
+<!--The following <div> is shown if adminMode parameter is false (the user is not administrator)-->
             <div v-if="!adminMode" class="modal-content for-user">
                 <div class="modal-header">
                     <h5 class="modal-title w-100 dwhite text-center">{{ this.form.firstName }} {{ this.form.lastName}}</h5>
@@ -100,7 +112,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p class="dwhite"><img :class="'img-fluid img-fluid col-6 p-1 float-left mt-1'" :src="'/storage/coachs/' + this.form.photos" :alt="this.form.firstName +' '+ this.form.lastName">{{ this.form.description }}</p>
+                    <p class="dwhite"><img :class="'img-fluid img-fluid col-6 p-1 float-left mt-1'" :src="'/storage/images/' + this.form.photos" :alt="this.form.firstName +' '+ this.form.lastName">{{ this.form.description }}</p>
                 </div>
             </div>
         </div>
@@ -112,22 +124,22 @@
     export default {
         data() {
             return {
-                adminMode : false,
-                editMode : false,
-                coachs : null,
-                form : new Form ({
-                    id : null,
-                    firstName : null,
-                    lastName : null,
-                    birthday : null,
-                    photos : null,
-                    position: null,
-                    description : null,
+                adminMode : false, // swich to show administrator content
+                editMode : false, // swich the edit mode
+                coachs : null, // holds the records from the DB
+                form : new Form ({ //instantiate a new Form object
+                    id : null, // id of DB record
+                    firstName : null, // firstName of DB record
+                    lastName : null, // lastName of DB record
+                    birthday : null, // birthday of DB record
+                    photos : null, // photos of DB record
+                    position: null, // position of DB record
+                    description : null, // description of DB record
                 })
             }
         },
         methods: {
-            clearForm() {
+            clearForm() { // clear the form based on editMode parameter condition keep data
                 if (this.editMode) {
                     this.form.originalData.id = this.form.id
                     this.form.originalData.photos = this.form.photos
@@ -138,18 +150,18 @@
                     this.form.reset();
                 }
             },
-            showModal(){
+            showModal(){ // display the form to insert DB records
                 this.editMode = false
                 $("#coachsModal").modal("show");
             },
-            getCoachs() {
+            getCoachs() { //request to the backend to get the records
                 axios.get("/api/coachs")
                 .then(({ data }) => {this.coachs = data.data})
                 .catch(() => {
 
                 });
             },
-            createCoach(){
+            createCoach(){ //request to the backend to create a new record
                 if(this.$gate.isAdmin()) {
                     this.form.post('/api/coachs')
                     .then(() => {
@@ -163,12 +175,12 @@
                     })
                 }
             },
-            editCoach(data){
+            editCoach(data){ // display the form to edit DB records
                 this.editMode = true;
                 $("#coachsModal").modal("show");
                 this.form.fill( data );
             },
-            updateCoach() {
+            updateCoach() { // request to the backend to edit a specific record
                 this.form.patch('/api/coachs/' + this.form.id)
                 .then(() => {
                     $('#coachsModal').modal('hide');
@@ -177,7 +189,7 @@
                 .catch(() => {
                 })
             },
-            deleteCoach (id) {
+            deleteCoach (id) { // request to the backend to delete a record
                 axios.delete('/api/coachs/' + id)
                 .then(() => {
                     this.getCoachs();
@@ -186,14 +198,14 @@
 
                 })
             },
-            changeAdminMode() {
+            changeAdminMode() { //check is the user administrator
                     if(this.$gate.isAdmin()) {
                         this.adminMode = true
                     } else {
                         this.adminMode = false
                     }
             },
-            onFileSelect(event) {
+            onFileSelect(event) { //instantiate new FileReader object for the selected file
                 let file = event.target.files[0];
                 this.form.photos = event.target.files[0];
                 let reader = new FileReader();

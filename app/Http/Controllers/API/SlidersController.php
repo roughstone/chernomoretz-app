@@ -13,7 +13,7 @@ class SlidersController extends Controller
 {
 
     /**
-     * Display a listing of the resource.
+    * Display a listing DB records table sliders.
      *
      * @return \Illuminate\Http\Response
      */
@@ -23,7 +23,8 @@ class SlidersController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created validated record in DB sliders table.
+     * Convert a base64 file to an image and store it.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -40,7 +41,7 @@ class SlidersController extends Controller
             if ($request->photos) {
                 $fileName = time().'.'.explode('/', explode(':', substr($request->photos, 0, strpos($request->photos, ';')))[1])[1];
 
-                Image::make($request->photos)->save(public_path('/storage/sliders/'.$fileName));
+                Image::make($request->photos)->save(public_path('/storage/images/'.$fileName));
             }
             $object = new Slider();
 
@@ -53,7 +54,8 @@ class SlidersController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified DB record in sliders table.
+     * If there is a new base64 file delete the old one and store the new one
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Slider  $sliders
@@ -73,8 +75,8 @@ class SlidersController extends Controller
             if (strlen($request->photos) > 20) {
                 $fileName = time().'.'.explode('/', explode(':', substr($request->photos, 0, strpos($request->photos, ';')))[1])[1];
 
-                Image::make($request->photos)->save(public_path('/storage/sliders/'.$fileName));
-                unlink('../public/storage/sliders/' . $object->photos);
+                Image::make($request->photos)->save(public_path('/storage/images/'.$fileName));
+                unlink('../public/storage/images/' . $object->photos);
             } else {
                 $fileName = $object->photos;
             }
@@ -88,7 +90,8 @@ class SlidersController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified record from DB sliders table.
+     * Delete the specified file.
      *
      * @param  \App\Slider  $sliders
      * @return \Illuminate\Http\Response
@@ -99,7 +102,7 @@ class SlidersController extends Controller
 
             $Slider->delete();
 
-            unlink('../public/storage/sliders/' . $Slider->photos);
+            unlink('../public/storage/images/' . $Slider->photos);
         }
     }
 }

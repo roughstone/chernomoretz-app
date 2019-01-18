@@ -10,13 +10,13 @@ use Intervention\Image\ImageManagerStatic as Image;
 class NewsController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing DB records table coachs based on category and paginate the records.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        return News::where('category', '=', 'announcement')->latest()->paginate(10);
+        return News::where('category', '=', 'announcement')->latest()->get();
     }
 
     public function moreNewsIndex()
@@ -25,7 +25,8 @@ class NewsController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created validated record in DB news table.
+     * Convert a base64 file to an image and store it.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -59,7 +60,8 @@ class NewsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified DB record in coachs table.
+     * If there is a new base64 file delete the old one and store the new one
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\News  $news
@@ -98,7 +100,8 @@ class NewsController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified record from DB coachs table.
+     * Delete the specified file.
      *
      * @param  \App\News  $news
      * @return \Illuminate\Http\Response

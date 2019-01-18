@@ -19,6 +19,7 @@
 //myCSS
 @import 'slider';
 @import 'team';
+@import 'photo';
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
@@ -34,6 +35,9 @@ body {
     background-image: url(../../storage/app/public/images/gymnastic-low-poly-artwork.jpg);
     background-attachment: fixed;
     background-size: 100% auto;
+    i {
+        z-index: 1000;
+    }
 }
 .title {
     background-image: url(../../storage/app/public/images/man.png), url(../../storage/app/public/images/woman.png);
@@ -166,5 +170,10 @@ html {
       font-size: 1.3rem;
     }
   }
+  @media only screen and (max-width:768px) {
+    .title {
+        display: none;
+    }
+}
 
 

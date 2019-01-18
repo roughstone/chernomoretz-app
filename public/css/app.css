@@ -10664,8 +10664,7 @@ a.text-dark:focus {
   background-position: center;
   background-size: 100%;
   position: relative;
-  width: 25%;
-  padding-top: 14.05%;
+  padding-top: 56.25%;
   border: 1px solid #00294e;
 }
 
@@ -10694,7 +10693,7 @@ a.text-dark:focus {
   height: 100%;
 }
 
-.imgContainer img {
+.imgContainer div img {
   max-height: 45vw;
 }
 
@@ -10857,6 +10856,37 @@ a.text-dark:focus {
   text-align: center;
   box-shadow: 3px 3px 5px 1px rgba(102, 162, 202, 0.6);
   margin-right: 0.5%;
+}
+
+.resizer-container {
+  position: relative;
+  display: inline-block;
+}
+
+.resizer-container img {
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+.resizer-container #croper {
+  z-index: 500;
+  resize: both;
+  top: 0;
+  left: 0;
+  overflow: auto;
+  position: absolute;
+  width: 160px;
+  height: 90px;
+  box-shadow: 0px 0px 0px 5px rgba(129, 0, 0, 0.5);
+}
+
+.resizer-container #cropercursor {
+  position: absolute;
+  cursor: move;
+  top: 49%;
+  left: 49%;
+  color: greenyellow;
 }
 
 /*!
@@ -26975,6 +27005,10 @@ body {
   background-size: 100% auto;
 }
 
+body i {
+  z-index: 1000;
+}
+
 .title {
   background-image: url(/images/man.png?85840f1e44716ffaa798ef7d39401ee2), url(/images/woman.png?4313cb6c41cf121f38ec3e12b07d642c);
   background-position: 85% 0, 15% 0;
@@ -27133,6 +27167,12 @@ html {
 @media (min-width: 992px) {
   html {
     font-size: 1.3rem;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .title {
+    display: none;
   }
 }
 
