@@ -220,22 +220,41 @@
                 this.form.fill( data );
             },
             updateNews() { // request to the backend to edit a specific record
-                this.form.patch('/api/news/' + this.form.id)
-                .then(() => {
-                    $('#newsModal').modal('hide');
-                    this.getAllNews();
-                })
-                .catch(() => {
-                })
+                if(this.$gate.isAdmin()) {
+                    this.form.patch('/api/news/' + this.form.id)
+                    .then(() => {
+                        $('#newsModal').modal('hide');
+                        toast({type: 'success', title: 'Промяната приложена успешно!'})
+                        this.getAllNews();
+                    })
+                    .catch(() => {
+
+                    })
+                }
             },
             deleteNews(id){ // request to the backend to delete a record
-               axios.delete('/api/news/' + id)
-               .then(() => {
-                    this.getAllNews();
-                })
-                .catch(() => {
+                if(this.$gate.isAdmin()) {
+                swal({
+                    title: 'Изтриване!',
+                    text: `Сигорни ли сте?`,
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'Не, недей!',
+                    confirmButtonText: 'Да, изтрий го!'
+                    }).then((result) => {
+                        if (result.value) {
+                            axios.delete('/api/news/' + id)
+                            .then(() => {
+                                this.getAllNews();
+                            })
+                            .catch(() => {
 
-                })
+                            })
+                        }
+                    })
+                }
             },
             showModal(){ // display the form to insert DB records
                 this.editMode = false

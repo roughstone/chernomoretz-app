@@ -187,22 +187,40 @@
                 this.form.fill( data );
             },
             updateSchedule() { // request to the backend to update specific record
-                this.form.patch('/api/schedules/' + this.form.id)
-                .then(() => {
-                    $('#scheduleModal').modal('hide');
-                    this.getSchedules();
-                })
-                .catch(() => {
-                })
+                if(this.$gate.isAdmin()) {
+                    this.form.patch('/api/schedules/' + this.form.id)
+                    .then(() => {
+                        $('#scheduleModal').modal('hide');
+                        toast({type: 'success', title: 'Промяната приложена успешно!'})
+                        this.getSchedules();
+                    })
+                    .catch(() => {
+                    })
+                }
             },
             deleteSchedule(id){ // request to the backend to delete specific record
-               axios.delete('/api/schedules/' + id)
-               .then(() => {
-                   this.getSchedules();
-                })
-                .catch(() => {
+                if(this.$gate.isAdmin()) {
+                swal({
+                    title: 'Изтриване!',
+                    text: `Сигорни ли сте?`,
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'Не, недей!',
+                    confirmButtonText: 'Да, изтрий го!'
+                    }).then((result) => {
+                        if (result.value) {
+                            axios.delete('/api/schedules/' + id)
+                            .then(() => {
+                                this.getSchedules();
+                                })
+                            .catch(() => {
 
-                })
+                            })
+                        }
+                    })
+                }
             },
 
         },

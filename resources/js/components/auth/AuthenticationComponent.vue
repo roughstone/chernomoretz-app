@@ -34,7 +34,8 @@
                         </div>
                         <div class="modal-footer">
                             <!--<button type="submit" class="btn btn-primary">Промени</button>-->
-                            <button type="submit" class="btn btn-success">Добави</button>
+                            <button v-if="!authenticateMode" type="submit" class="btn btn-success">Влез</button>
+                            <button v-if="authenticateMode" type="submit" class="btn btn-success">Регистрация</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Затвори</button>
                         </div>
                     </form>

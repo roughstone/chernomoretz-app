@@ -156,12 +156,25 @@ Size is set to "col-3" grid proportion with zero padding to show 4 records per r
             },
             deletePhoto (id) { // request to the backend to delete a record
                 if(this.$gate.isAdmin()) {
-                    axios.delete('/api/gallery/' + id)
-                    .then(() => {
-                        this.getPhotos();
-                    })
-                    .catch(() => {
+                swal({
+                    title: 'Изтриване!',
+                    text: `Сигорни ли сте?`,
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'Не, недей!',
+                    confirmButtonText: 'Да, изтрий го!'
+                    }).then((result) => {
+                        if (result.value) {
+                            axios.delete('/api/gallery/' + id)
+                            .then(() => {
+                                this.getPhotos();
+                            })
+                            .catch(() => {
 
+                            })
+                        }
                     })
                 }
             },

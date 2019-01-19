@@ -233,22 +233,40 @@
                 this.form.fill( data );
             },
             updateCompetitor() { // request to the backend to edit a specific record
-                this.form.patch('/api/competitors/' + this.form.id)
-                .then(() => {
-                    $('#competitorsModal').modal('hide');
-                    this.getCompetitors();
-                })
-                .catch(() => {
-                })
+                if(this.$gate.isAdmin()) {
+                    this.form.patch('/api/competitors/' + this.form.id)
+                    .then(() => {
+                        $('#competitorsModal').modal('hide');
+                        toast({type: 'success', title: 'Промяната приложена успешно!'})
+                        this.getCompetitors();
+                    })
+                    .catch(() => {
+                    })
+                }
             },
             deleteCompetitor (id) { // request to the backend to delete a record
-                axios.delete('/api/competitors/' + id)
-                .then(() => {
-                    this.getCompetitors();
-                })
-                .catch(() => {
+                if(this.$gate.isAdmin()) {
+                swal({
+                    title: 'Изтриване!',
+                    text: `Сигорни ли сте?`,
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'Не, недей!',
+                    confirmButtonText: 'Да, изтрий го!'
+                    }).then((result) => {
+                        if (result.value) {
+                            axios.delete('/api/competitors/' + id)
+                            .then(() => {
+                                this.getCompetitors();
+                            })
+                            .catch(() => {
 
-                })
+                            })
+                        }
+                    })
+                }
             },
             changeAdminMode() { //check is the user administrator
                     if(this.$gate.isAdmin()) {

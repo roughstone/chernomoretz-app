@@ -42,9 +42,6 @@
     and wich calls "openContactsModal" method. -->
         <a href="" @click.prevent="openContactsModal()" class="nav-link" to="/Контакти"><i class="fas fa-phone-square purple"></i> Контакти с нас!</a>
     </li>
-    <li class="nav-item">
-        <router-link class="nav-link" to="/Снимки"><i class="far fa-image purple"></i>Снимка</router-link>
-    </li>
     </ul>
 </div>
 </nav>

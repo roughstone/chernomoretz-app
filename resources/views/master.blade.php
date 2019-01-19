@@ -35,9 +35,9 @@
                         @csrf
                     </form>
                 @else
-                    <button type="button" class="btn btn-outline-secondary btn-sm fixed-top-right" data-toggle="modal" data-target="#userModal">
+                    <a href="" class="fixed-top-right" data-toggle="modal" data-target="#userModal">
                         <i class="fas fa-sign-in-alt green"></i></i>&#160Вход
-                    </button>
+                    </a>
                 @endauth
             </div>
             @endif

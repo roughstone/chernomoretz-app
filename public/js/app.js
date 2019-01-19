@@ -2206,9 +2206,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   methods: {
     openContactsModal: function openContactsModal() {
@@ -2236,6 +2233,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -2533,19 +2531,40 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       // request to the backend to edit a specific record
-      this.form.patch('/api/news/' + this.form.id).then(function () {
-        $('#announcementModal').modal('hide');
+      if (this.$gate.isAdmin()) {
+        this.form.patch('/api/news/' + this.form.id).then(function () {
+          $('#announcementModal').modal('hide');
+          toast({
+            type: 'success',
+            title: 'Промяната приложена успешно!'
+          });
 
-        _this3.getAnnouncements();
-      }).catch(function () {});
+          _this3.getAnnouncements();
+        }).catch(function () {});
+      }
     },
     deleteAnnouncement: function deleteAnnouncement(id) {
       var _this4 = this;
 
       // request to the backend to delete a record
-      axios.delete('/api/news/' + id).then(function () {
-        _this4.getAnnouncements();
-      }).catch(function () {});
+      if (this.$gate.isAdmin()) {
+        swal({
+          title: 'Изтриване!',
+          text: "\u0421\u0438\u0433\u043E\u0440\u043D\u0438 \u043B\u0438 \u0441\u0442\u0435?",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'Не, недей!',
+          confirmButtonText: 'Да, изтрий го!'
+        }).then(function (result) {
+          if (result.value) {
+            axios.delete('/api/news/' + id).then(function () {
+              _this4.getAnnouncements();
+            }).catch(function () {});
+          }
+        });
+      }
     },
     onFileSelect: function onFileSelect(event) {
       var _this5 = this;
@@ -2784,19 +2803,40 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       // request to the backend to edit a specific record
-      this.form.patch('/api/coachs/' + this.form.id).then(function () {
-        $('#coachsModal').modal('hide');
+      if (this.$gate.isAdmin()) {
+        this.form.patch('/api/coachs/' + this.form.id).then(function () {
+          $('#coachsModal').modal('hide');
+          toast({
+            type: 'success',
+            title: 'Промяната приложена успешно!'
+          });
 
-        _this3.getCoachs();
-      }).catch(function () {});
+          _this3.getCoachs();
+        }).catch(function () {});
+      }
     },
     deleteCoach: function deleteCoach(id) {
       var _this4 = this;
 
       // request to the backend to delete a record
-      axios.delete('/api/coachs/' + id).then(function () {
-        _this4.getCoachs();
-      }).catch(function () {});
+      if (this.$gate.isAdmin()) {
+        swal({
+          title: 'Изтриване!',
+          text: "\u0421\u0438\u0433\u043E\u0440\u043D\u0438 \u043B\u0438 \u0441\u0442\u0435?",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'Не, недей!',
+          confirmButtonText: 'Да, изтрий го!'
+        }).then(function (result) {
+          if (result.value) {
+            axios.delete('/api/coachs/' + id).then(function () {
+              _this4.getCoachs();
+            }).catch(function () {});
+          }
+        });
+      }
     },
     changeAdminMode: function changeAdminMode() {
       //check is the user administrator
@@ -3101,19 +3141,40 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       // request to the backend to edit a specific record
-      this.form.patch('/api/competitors/' + this.form.id).then(function () {
-        $('#competitorsModal').modal('hide');
+      if (this.$gate.isAdmin()) {
+        this.form.patch('/api/competitors/' + this.form.id).then(function () {
+          $('#competitorsModal').modal('hide');
+          toast({
+            type: 'success',
+            title: 'Промяната приложена успешно!'
+          });
 
-        _this3.getCompetitors();
-      }).catch(function () {});
+          _this3.getCompetitors();
+        }).catch(function () {});
+      }
     },
     deleteCompetitor: function deleteCompetitor(id) {
       var _this4 = this;
 
       // request to the backend to delete a record
-      axios.delete('/api/competitors/' + id).then(function () {
-        _this4.getCompetitors();
-      }).catch(function () {});
+      if (this.$gate.isAdmin()) {
+        swal({
+          title: 'Изтриване!',
+          text: "\u0421\u0438\u0433\u043E\u0440\u043D\u0438 \u043B\u0438 \u0441\u0442\u0435?",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'Не, недей!',
+          confirmButtonText: 'Да, изтрий го!'
+        }).then(function (result) {
+          if (result.value) {
+            axios.delete('/api/competitors/' + id).then(function () {
+              _this4.getCompetitors();
+            }).catch(function () {});
+          }
+        });
+      }
     },
     changeAdminMode: function changeAdminMode() {
       //check is the user administrator
@@ -3381,20 +3442,39 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       // request to the backend to edit a specific record
-      this.form.patch('/api/galleries/' + this.form.id).then(function () {
-        $('#galleriesModal').modal('hide');
+      if (this.$gate.isAdmin()) {
+        this.form.patch('/api/galleries/' + this.form.id).then(function () {
+          $('#galleriesModal').modal('hide');
+          toast({
+            type: 'success',
+            title: 'Промяната приложена успешно!'
+          });
 
-        _this3.getGalleries();
-      }).catch(function () {});
+          _this3.getGalleries();
+        }).catch(function () {});
+      }
     },
     deleteGalleries: function deleteGalleries(id) {
       var _this4 = this;
 
       // request to the backend to delete a record
       if (this.$gate.isAdmin()) {
-        axios.delete('/api/galleries/' + id).then(function () {
-          _this4.getGalleries();
-        }).catch(function () {});
+        swal({
+          title: 'Изтриване!',
+          text: "\u0421\u0438\u0433\u043E\u0440\u043D\u0438 \u043B\u0438 \u0441\u0442\u0435? \u0429\u0435 \u0431\u044A\u0434\u0430\u0442 \u0438\u0437\u0442\u0440\u0438\u0442\u0438 \u0438 \u0432\u0441\u0438\u0447\u043A\u0438 \u0441\u043D\u0438\u043C\u043A\u0438 \u0432 \u0433\u0430\u043B\u0435\u0440\u0438\u044F\u0442\u0430!",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'Не, недей!',
+          confirmButtonText: 'Да, изтрий го!'
+        }).then(function (result) {
+          if (result.value) {
+            axios.delete('/api/galleries/' + id).then(function () {
+              _this4.getGalleries();
+            }).catch(function () {});
+          }
+        });
       }
     },
     onFileSelect: function onFileSelect(event) {
@@ -3613,9 +3693,22 @@ __webpack_require__.r(__webpack_exports__);
 
       // request to the backend to delete a record
       if (this.$gate.isAdmin()) {
-        axios.delete('/api/gallery/' + id).then(function () {
-          _this3.getPhotos();
-        }).catch(function () {});
+        swal({
+          title: 'Изтриване!',
+          text: "\u0421\u0438\u0433\u043E\u0440\u043D\u0438 \u043B\u0438 \u0441\u0442\u0435?",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'Не, недей!',
+          confirmButtonText: 'Да, изтрий го!'
+        }).then(function (result) {
+          if (result.value) {
+            axios.delete('/api/gallery/' + id).then(function () {
+              _this3.getPhotos();
+            }).catch(function () {});
+          }
+        });
       }
     },
     onFileSelect: function onFileSelect(event) {
@@ -3940,19 +4033,40 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       // request to the backend to edit a specific record
-      this.form.patch('/api/news/' + this.form.id).then(function () {
-        $('#newsModal').modal('hide');
+      if (this.$gate.isAdmin()) {
+        this.form.patch('/api/news/' + this.form.id).then(function () {
+          $('#newsModal').modal('hide');
+          toast({
+            type: 'success',
+            title: 'Промяната приложена успешно!'
+          });
 
-        _this3.getAllNews();
-      }).catch(function () {});
+          _this3.getAllNews();
+        }).catch(function () {});
+      }
     },
     deleteNews: function deleteNews(id) {
       var _this4 = this;
 
       // request to the backend to delete a record
-      axios.delete('/api/news/' + id).then(function () {
-        _this4.getAllNews();
-      }).catch(function () {});
+      if (this.$gate.isAdmin()) {
+        swal({
+          title: 'Изтриване!',
+          text: "\u0421\u0438\u0433\u043E\u0440\u043D\u0438 \u043B\u0438 \u0441\u0442\u0435?",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'Не, недей!',
+          confirmButtonText: 'Да, изтрий го!'
+        }).then(function (result) {
+          if (result.value) {
+            axios.delete('/api/news/' + id).then(function () {
+              _this4.getAllNews();
+            }).catch(function () {});
+          }
+        });
+      }
     },
     showModal: function showModal() {
       // display the form to insert DB records
@@ -4205,19 +4319,40 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       // request to the backend to update specific record
-      this.form.patch('/api/schedules/' + this.form.id).then(function () {
-        $('#scheduleModal').modal('hide');
+      if (this.$gate.isAdmin()) {
+        this.form.patch('/api/schedules/' + this.form.id).then(function () {
+          $('#scheduleModal').modal('hide');
+          toast({
+            type: 'success',
+            title: 'Промяната приложена успешно!'
+          });
 
-        _this3.getSchedules();
-      }).catch(function () {});
+          _this3.getSchedules();
+        }).catch(function () {});
+      }
     },
     deleteSchedule: function deleteSchedule(id) {
       var _this4 = this;
 
       // request to the backend to delete specific record
-      axios.delete('/api/schedules/' + id).then(function () {
-        _this4.getSchedules();
-      }).catch(function () {});
+      if (this.$gate.isAdmin()) {
+        swal({
+          title: 'Изтриване!',
+          text: "\u0421\u0438\u0433\u043E\u0440\u043D\u0438 \u043B\u0438 \u0441\u0442\u0435?",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'Не, недей!',
+          confirmButtonText: 'Да, изтрий го!'
+        }).then(function (result) {
+          if (result.value) {
+            axios.delete('/api/schedules/' + id).then(function () {
+              _this4.getSchedules();
+            }).catch(function () {});
+          }
+        });
+      }
     }
   },
   mounted: function mounted() {
@@ -4438,19 +4573,45 @@ __webpack_require__.r(__webpack_exports__);
       var _this4 = this;
 
       // request to the backend to update specific record
-      this.form.patch('/api/Sliders/' + this.form.id).then(function () {
-        $('#sliderModal').modal('hide');
+      if (this.$gate.isAdmin()) {
+        this.form.patch('/api/Sliders/' + this.form.id).then(function () {
+          $('#sliderModal').modal('hide');
+          toast({
+            type: 'success',
+            title: 'Промяната приложена успешно!'
+          });
 
-        _this4.getSliders();
-      }).catch(function () {});
+          _this4.getSliders();
+        }).catch(function () {});
+      }
     },
     deleteSlider: function deleteSlider(id) {
       var _this5 = this;
 
       // request to the backend to delete specific record
-      axios.delete('/api/Sliders/' + id).then(function () {
-        _this5.getSliders();
-      }).catch(function () {});
+      if (this.$gate.isAdmin()) {
+        swal({
+          title: 'Изтриване!',
+          text: "\u0421\u0438\u0433\u043E\u0440\u043D\u0438 \u043B\u0438 \u0441\u0442\u0435?",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'Не, недей!',
+          confirmButtonText: 'Да, изтрий го!'
+        }).then(function (result) {
+          if (result.value) {
+            axios.delete('/api/Sliders/' + id).then(function () {
+              _this5.getSliders();
+
+              toast({
+                type: 'success',
+                title: 'Записът е успешно изтрит!'
+              });
+            }).catch(function () {});
+          }
+        });
+      }
     },
     changeAdminMode: function changeAdminMode() {
       //check is the user administrator
@@ -60848,7 +61009,6 @@ var render = function() {
           )
         : _vm._e(),
       _vm._v(" "),
-      _vm._v(" -->\n            "),
       !_vm.croper && !_vm.resizer
         ? _c(
             "button",
@@ -61251,23 +61411,7 @@ var render = function() {
                   _vm._v(" Контакти с нас!")
                 ]
               )
-            ]),
-            _vm._v(" "),
-            _c(
-              "li",
-              { staticClass: "nav-item" },
-              [
-                _c(
-                  "router-link",
-                  { staticClass: "nav-link", attrs: { to: "/Снимки" } },
-                  [
-                    _c("i", { staticClass: "far fa-image purple" }),
-                    _vm._v("Снимка")
-                  ]
-                )
-              ],
-              1
-            )
+            ])
           ])
         ]
       )
@@ -61614,7 +61758,38 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _vm._m(1)
+              _c("div", { staticClass: "modal-footer" }, [
+                !_vm.authenticateMode
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-success",
+                        attrs: { type: "submit" }
+                      },
+                      [_vm._v("Влез")]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.authenticateMode
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-success",
+                        attrs: { type: "submit" }
+                      },
+                      [_vm._v("Регистрация")]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: { type: "button", "data-dismiss": "modal" }
+                  },
+                  [_vm._v("Затвори")]
+                )
+              ])
             ]
           )
         ])
@@ -61639,27 +61814,6 @@ var staticRenderFns = [
       },
       [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-footer" }, [
-      _c(
-        "button",
-        { staticClass: "btn btn-success", attrs: { type: "submit" } },
-        [_vm._v("Добави")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-secondary",
-          attrs: { type: "button", "data-dismiss": "modal" }
-        },
-        [_vm._v("Затвори")]
-      )
-    ])
   }
 ]
 render._withStripped = true
@@ -62265,58 +62419,54 @@ var render = function() {
                       _c("p", { staticClass: "text-center h4" }, [
                         _vm._v(_vm._s(coach.position))
                       ])
-                    ]),
-                    _vm._v(" "),
-                    _vm.adminMode
-                      ? _c("div", { staticClass: "p-1 d-inline-block w-100" }, [
-                          _c("hr", { staticClass: "mb-0 mt-0" }),
-                          _vm._v(" "),
-                          _c(
-                            "a",
-                            {
-                              attrs: { href: "" },
-                              on: {
-                                click: function($event) {
-                                  $event.preventDefault()
-                                  _vm.editCoach(coach)
-                                }
-                              }
-                            },
-                            [
-                              _c("i", { staticClass: "fas fa-edit yellow" }),
-                              _vm._v(" ")
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "a",
-                            {
-                              attrs: { href: "" },
-                              on: {
-                                click: function($event) {
-                                  $event.preventDefault()
-                                  _vm.deleteCoach(coach.id)
-                                }
-                              }
-                            },
-                            [
-                              _c("i", { staticClass: "fas fa-trash red" }),
-                              _vm._v(" ")
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "a",
-                            { attrs: { href: "/Снимки/" + coach.photos } },
-                            [
-                              _c("i", { staticClass: "fas fa-cut blue" }),
-                              _vm._v(" ")
-                            ]
-                          )
-                        ])
-                      : _vm._e()
+                    ])
                   ]
-                )
+                ),
+                _vm._v(" "),
+                _vm.adminMode
+                  ? _c("div", { staticClass: "p-1 d-inline-block w-100" }, [
+                      _c("hr", { staticClass: "mb-0 mt-0" }),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          attrs: { href: "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              _vm.editCoach(coach)
+                            }
+                          }
+                        },
+                        [
+                          _c("i", { staticClass: "fas fa-edit yellow" }),
+                          _vm._v(" ")
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          attrs: { href: "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              _vm.deleteCoach(coach.id)
+                            }
+                          }
+                        },
+                        [
+                          _c("i", { staticClass: "fas fa-trash red" }),
+                          _vm._v(" ")
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("a", { attrs: { href: "/Снимки/" + coach.photos } }, [
+                        _c("i", { staticClass: "fas fa-cut blue" }),
+                        _vm._v(" ")
+                      ])
+                    ])
+                  : _vm._e()
               ])
             ]
           )

@@ -19,7 +19,7 @@
             &nbsp;4:3</div>
 <!-- The following <button> is shown if parameter croper is set to true. The click event calls the "cropImg" method-->
             <button class="w-100 btn btn-secondary mt-1" v-if="croper" @click="cropImg()">Изрежи</button>
-<!-- The following <button> is shown if parameters croper and resizer are set to false the click event set the parameter resizer to true--> -->
+<!-- The following <button> is shown if parameters croper and resizer are set to false the click event set the parameter resizer to true-->
             <button class="w-100 btn btn-secondary mt-1" v-if="!croper && !resizer" @click="resizer = true">Смали</button>
 <!-- The following <p> is shown if parameter resizer is set to true and  show real width of the photo.-->
             <p v-if="resizer" class="dwhite">Дължина - {{this.photoWidth}}px.</p>

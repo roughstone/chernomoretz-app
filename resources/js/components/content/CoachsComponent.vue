@@ -28,19 +28,19 @@
                         <p class="text-center h6 mb-0 underline">треньор по</p>
                         <p class="text-center h4">{{ coach.position }}</p>
                     </div>
-<!-- The following <div> is shown if adminMode parameter is true (the user is administrator)-->
-                    <div v-if="adminMode" class="p-1 d-inline-block w-100">
-                        <hr class="mb-0 mt-0">
-<!--The following <a> has click event with .prevent called to prevent the default behavior of the <a>
-    and wich calls "editCoach" method passing the coach object to it. -->
-                        <a href="" @click.prevent="editCoach(coach)"><i class="fas fa-edit yellow"></i>&#160;</a>
-<!--The following <a> has click event with .prevent called to prevent the default behavior of the <a>
-    and wich calls "deleteCoach" method passing the coach id to it. -->
-                        <a href="" @click.prevent="deleteCoach(coach.id)"><i class="fas fa-trash red"></i>&#160;</a>
-<!--The following <a> has binded href atribute to imagerComponent and passing the photo title to it.  -->
-                        <a :href="'/Снимки/' + coach.photos"><i class="fas fa-cut blue"></i>&#160;</a>
-                    </div>
                 </a>
+<!-- The following <div> is shown if adminMode parameter is true (the user is administrator)-->
+                <div v-if="adminMode" class="p-1 d-inline-block w-100">
+                    <hr class="mb-0 mt-0">
+<!--The following <a> has click event with .prevent called to prevent the default behavior of the <a>
+and wich calls "editCoach" method passing the coach object to it. -->
+                    <a href="" @click.prevent="editCoach(coach)"><i class="fas fa-edit yellow"></i>&#160;</a>
+<!--The following <a> has click event with .prevent called to prevent the default behavior of the <a>
+and wich calls "deleteCoach" method passing the coach id to it. -->
+                    <a href="" @click.prevent="deleteCoach(coach.id)"><i class="fas fa-trash red"></i>&#160;</a>
+<!--The following <a> has binded href atribute to imagerComponent and passing the photo title to it.  -->
+                    <a :href="'/Снимки/' + coach.photos"><i class="fas fa-cut blue"></i>&#160;</a>
+                </div>
             </div>
         </div>
    </div>
@@ -181,22 +181,40 @@
                 this.form.fill( data );
             },
             updateCoach() { // request to the backend to edit a specific record
-                this.form.patch('/api/coachs/' + this.form.id)
-                .then(() => {
-                    $('#coachsModal').modal('hide');
-                    this.getCoachs();
-                })
-                .catch(() => {
-                })
+                if(this.$gate.isAdmin()) {
+                    this.form.patch('/api/coachs/' + this.form.id)
+                    .then(() => {
+                        $('#coachsModal').modal('hide');
+                        toast({type: 'success', title: 'Промяната приложена успешно!'})
+                        this.getCoachs();
+                    })
+                    .catch(() => {
+                    })
+                }
             },
             deleteCoach (id) { // request to the backend to delete a record
-                axios.delete('/api/coachs/' + id)
-                .then(() => {
-                    this.getCoachs();
-                })
-                .catch(() => {
+                if(this.$gate.isAdmin()) {
+                swal({
+                    title: 'Изтриване!',
+                    text: `Сигорни ли сте?`,
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'Не, недей!',
+                    confirmButtonText: 'Да, изтрий го!'
+                    }).then((result) => {
+                        if (result.value) {
+                            axios.delete('/api/coachs/' + id)
+                            .then(() => {
+                                this.getCoachs();
+                            })
+                            .catch(() => {
 
-                })
+                            })
+                        }
+                    })
+                }
             },
             changeAdminMode() { //check is the user administrator
                     if(this.$gate.isAdmin()) {

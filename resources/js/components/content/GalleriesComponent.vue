@@ -198,22 +198,38 @@ and wich calls "deleteGalleries" method passing the gallery id to it. -->
                 this.form.fill( data );
             },
             updateGalleries() { // request to the backend to edit a specific record
-                this.form.patch('/api/galleries/' + this.form.id)
-                .then(() => {
-                    $('#galleriesModal').modal('hide');
-                    this.getGalleries();
-                })
-                .catch(() => {
-                })
-            },
-            deleteGalleries (id) { // request to the backend to delete a record
-            if(this.$gate.isAdmin()) {
-                    axios.delete('/api/galleries/' + id)
+                if(this.$gate.isAdmin()) {
+                    this.form.patch('/api/galleries/' + this.form.id)
                     .then(() => {
+                        $('#galleriesModal').modal('hide');
+                        toast({type: 'success', title: 'Промяната приложена успешно!'})
                         this.getGalleries();
                     })
                     .catch(() => {
+                    })
+                }
+            },
+            deleteGalleries (id) { // request to the backend to delete a record
+                if(this.$gate.isAdmin()) {
+                    swal({
+                    title: 'Изтриване!',
+                    text: `Сигорни ли сте? Ще бъдат изтрити и всички снимки в галерията!`,
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'Не, недей!',
+                    confirmButtonText: 'Да, изтрий го!'
+                    }).then((result) => {
+                        if (result.value) {
+                            axios.delete('/api/galleries/' + id)
+                            .then(() => {
+                                this.getGalleries();
+                            })
+                            .catch(() => {
 
+                            })
+                        }
                     })
                 }
             },

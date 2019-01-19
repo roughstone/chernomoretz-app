@@ -170,22 +170,41 @@
                 this.form.fill( data );
             },
             updateSlider() { // request to the backend to update specific record
-                this.form.patch('/api/Sliders/' + this.form.id)
-                .then(() => {
-                    $('#sliderModal').modal('hide');
-                    this.getSliders();
-                })
-                .catch(() => {
-                })
+                if(this.$gate.isAdmin()) {
+                    this.form.patch('/api/Sliders/' + this.form.id)
+                    .then(() => {
+                        $('#sliderModal').modal('hide');
+                        toast({type: 'success', title: 'Промяната приложена успешно!'})
+                        this.getSliders();
+                    })
+                    .catch(() => {
+                    })
+                }
             },
             deleteSlider (id) { // request to the backend to delete specific record
-                axios.delete('/api/Sliders/' + id)
-                .then(() => {
-                    this.getSliders();
-                })
-                .catch(() => {
+                if(this.$gate.isAdmin()) {
+                swal({
+                    title: 'Изтриване!',
+                    text: `Сигорни ли сте?`,
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'Не, недей!',
+                    confirmButtonText: 'Да, изтрий го!'
+                    }).then((result) => {
+                        if (result.value) {
+                            axios.delete('/api/Sliders/' + id)
+                            .then(() => {
+                                this.getSliders();
+                                toast({type: 'success', title: 'Записът е успешно изтрит!'})
+                            })
+                            .catch(() => {
 
-                })
+                            })
+                        }
+                    })
+                }
             },
             changeAdminMode() { //check is the user administrator
                 if(this.$gate.isAdmin()) {

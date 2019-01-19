@@ -168,22 +168,40 @@
                 this.form.fill( announcement );
             },
             updateAnnouncement() { // request to the backend to edit a specific record
-                this.form.patch('/api/news/' + this.form.id)
-                .then(() => {
-                    $('#announcementModal').modal('hide');
-                    this.getAnnouncements();
-                })
-                .catch(() => {
-                })
+                if(this.$gate.isAdmin()) {
+                    this.form.patch('/api/news/' + this.form.id)
+                    .then(() => {
+                        $('#announcementModal').modal('hide');
+                        toast({type: 'success', title: 'Промяната приложена успешно!'})
+                        this.getAnnouncements();
+                    })
+                    .catch(() => {
+                    })
+                }
             },
             deleteAnnouncement(id){ // request to the backend to delete a record
-               axios.delete('/api/news/' + id)
-               .then(() => {
-                    this.getAnnouncements();
-                })
-                .catch(() => {
+                if(this.$gate.isAdmin()) {
+                swal({
+                    title: 'Изтриване!',
+                    text: `Сигорни ли сте?`,
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'Не, недей!',
+                    confirmButtonText: 'Да, изтрий го!'
+                    }).then((result) => {
+                        if (result.value) {
+                            axios.delete('/api/news/' + id)
+                            .then(() => {
+                                this.getAnnouncements();
+                            })
+                            .catch(() => {
 
-                })
+                            })
+                        }
+                    })
+                }
             },
             onFileSelect(event) { //instantiate new FileReader object for the selected file
                 let file = event.target.files[0];
