@@ -27,7 +27,6 @@
     .competitor {
         background-color: rgba(0, 94, 128, 0.7);
         border-radius: 1vw;
-        box-shadow: inset 0px 0px 6px 4px #00294e;
     }
     img {
         border-radius: 1vw;
@@ -70,4 +69,18 @@
 	text-align: center;
 	box-shadow: 3px 3px 5px 1px rgba(102,162,202,0.6);
 	margin-right: 0.5%;
+}
+.text-right, .text-left {
+    font-size: 1.5vw;
+}
+
+@media only screen and (max-width:1140px) {
+    .text-right, .text-left {
+        font-size: 1.8vw;
+    }
+}
+@media only screen and (max-width:768px) {
+    .text-right, .text-left {
+        font-size: 2.1vw;
+    }
 }

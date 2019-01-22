@@ -37,10 +37,11 @@
 <!-- The following <div> contain logic to set the view size of the photo, the photo and the croper.-->
         <div class="col-10 pl-0 pr-0">
 <!-- The following <div> contain logic to set the view size of the photo. The input mousemove event calls the "setViewSize" method.-->
-            <span class="col-10 dwhite pl-4 bg-secondary">размер на изгледа : <input class="col-8" type="range" min="1" max="100" @mousemove="setViewSize()" v-model="photoSize" id="myRange">
-            {{this.photoSize}}%</span>
+            <span class="col-12 dwhite pl-4 bg-secondary">размер на изгледа : <input class="col-8" type="range" min="1" max="100" @mousemove="setViewSize()" v-model="photoSize" id="myRange">
+            {{this.photoSize}}%</span><br>
 <!-- The following <div> contain the photo to edit. -->
-            <div class="resizer-container col-10 pl-0 pr-0">
+            <div class="resizer-container col-12 pl-0 pr-0"
+            :style="'height:' + this.photoHeight + 'px; width:'+ this.photoWidth + 'px;'">
                 <img id="output" @load="getSize" :src="'/storage/images/'+this.$route.params.photo" alt="your image"
                 :style="'height:'+this.photoHeight +'px;' +
                 ' width:' + this.photoWidth + 'px;'"/>
@@ -66,8 +67,8 @@
                 photoSize : '100', // the size of the photo in %
                 croperTop : null, // the top position on the croper against the image
                 croperLeft : null, // the left position on the croper against the image
-                croperHeight : null, // the croper height
-                croperWidth : null, // the croper width
+                croperHeight : 90, // the croper height
+                croperWidth : 160, // the croper width
                 croperMethod : 'free', // the croper aspect ratio
                 form: new Form({ // //instantiate a new Form object
                     photo: this.$route.params.photo, // the photo title to be send to the backend
@@ -81,15 +82,16 @@
                 this.keepWidth = $('#output').width()
                 this.photoHeight = $('#output').height()
                 this.photoWidth = $('#output').width()
-                this.dragElement(document.getElementById("croper"));
+                let drager = new DragElement()
+                drager.dragElement(document.getElementById("croper"), document.getElementById("cropercursor"))
             },
             setCroper() { // croper logic
                 let croper = document.getElementById("croper"); //get croper element by id
-                this.form.croperTop = parseInt(croper.style.top, 10) //get croper top from style and conver from string to integer
+                this.form.croperTop = parseInt(croper.style.top) //get croper top from style and conver from string to integer
                 this.croperTop = this.form.croperTop
-                this.form.croperLeft = parseInt(croper.style.left, 10) //get croper left from style and conver from string to integer
+                this.form.croperLeft = parseInt(croper.style.left) //get croper left from style and conver from string to integer
                 this.croperLeft = this.form.croperLeft
-                this.form.croperWidth = parseInt(croper.style.width, 10) //get croper width from style and conver from string to integer
+                this.form.croperWidth = parseInt(croper.style.width) //get croper width from style and conver from string to integer
                 this.croperWidth = this.form.croperWidth
                 if(this.croperMethod == "4:3") { // logic to set the cropper height to 4:3 aspect ratio
                     this.form.croperHeight = this.form.croperWidth / 4 * 3;
@@ -120,39 +122,6 @@
                 }
                 this.photoHeight = this.keepHeight * parseFloat(text)
                 this.photoWidth = this.keepWidth * parseFloat(text)
-            },
-            dragElement(elmnt) { // logic to set the croper position
-                let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-                document.getElementById(elmnt.id + "cursor").onmousedown = dragMouseDown;
-
-                function dragMouseDown(e) {
-                    e = e || window.event;
-                    e.preventDefault();
-                    // get the mouse cursor position at startup
-                    pos3 = e.clientX;
-                    pos4 = e.clientY;
-                    document.onmouseup = closeDragElement;
-                    // call a function whenever the cursor moves
-                    document.onmousemove = elementDrag;
-                }
-
-                function elementDrag(e) {
-                    e = e || window.event;
-                    e.preventDefault();
-                    // calculate the new cursor position
-                    pos1 = pos3 - e.clientX;
-                    pos2 = pos4 - e.clientY;
-                    pos3 = e.clientX;
-                    pos4 = e.clientY;
-                    // set the element's new position:
-                    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-                    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-                }
-
-                function closeDragElement() { // stop moving when mouse button is released
-                    document.onmouseup = null;
-                    document.onmousemove = null;
-                }
             },
             rotateImg() { // send data to backend to rotate the image
                 this.form.method = 'rotate';

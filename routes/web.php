@@ -15,10 +15,11 @@ Route::get('/', function () {
     return view('master');
 });
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
-//Route::get('{path}', 'HomeController@index')->where('path', '([А-я\A-z\d-\/_.]+)?');
 Route::get('{path}', function () {
     return view('master');
 })->where( 'path', '([А-я\A-z\d-\/_.]+)?' );
+
+Route::post('/user-question', 'Mails\UserQuestionController@send');

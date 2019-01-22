@@ -1,6 +1,6 @@
 <!--Displays the contents of each announcements. When the logged in user is administrator the content editing tools are shown. -->
 <template>
-    <div class="col-12 col-md-3">
+    <div class="col-12 col-lg-3 col-md-4 pl-0">
 <!--The following <div> is shown only if "adminMode" parameter is set to true.
     The click event that open the form to insert new records to the DB.
     On the click event the prevent method was called to prevent the default behavior of the <a>
@@ -8,7 +8,7 @@
         <div v-if="adminMode" class="col-12">
             <a href="#" @click.prevent="showModal()"><i class="fas fa-file-import fa-3x green"></i></a>
         </div>
-        <h5 class="text-center dwhite">Обявления:</h5>
+        <h5 class="text-center announcement-title dwhite">Обявления:</h5>
 <!--The following <div> is multiplied by Vuejs v-for directive for each record form "announcements" parameter.  -->
         <div v-for="announcement in announcements" :key="announcement.id">
             <div class="mt-3 announcement">
@@ -17,7 +17,7 @@
                     <div v-if="!adminMode" class="p-1 d-inline-block w-100">
                         <hr class="mb-0 mt-0">
                         <p  class="mb-0 mt-0 ml-1 float-left dwhite">Виж още</p>
-                        <h5 class="mb-0 mt-0 mr-1 float-right dwhite">Дата: {{ announcement.date }}</h5>
+                        <p class="mb-0 mt-0 mr-1 float-right dwhite">Дата: {{ announcement.date }}</p>
                     </div>
                 </a>
 <!-- The following <div> is shown if adminMode parameter is true (the user is administrator)-->

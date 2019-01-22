@@ -52,7 +52,7 @@ Size is set to "col-3" grid proportion with zero padding to show 4 records per r
                     </div>
                     <div class="closeButton"><!-- Class "closeButton" added for styling.  -->
 <!--The following <a> has click event with .prevent called to prevent the default behavior of the <a> wich calls "singlePhotoModal" method. -->
-                        <a href="" @click.prevent="singlePhotoModal()"><i class="fas fa-times dwhite fa-3x"></i></a>
+                        <a href="" @click.prevent="singlePhotoModal()"><i class="fas fa-times dwhite fa-2x"></i></a>
                     </div>
                     <div class="rightButton"><!-- Class "rightButton" added for styling.  -->
 <!--The following <a> has click event with .prevent called to prevent the default behavior of the <a> wich calls "nextPhoto" method. -->

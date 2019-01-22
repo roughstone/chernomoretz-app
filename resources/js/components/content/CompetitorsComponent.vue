@@ -33,21 +33,21 @@
             </div>
         </div>
 <!--The following <div> is multiplied by Vuejs v-for directive for each record form "competitors" parameter.  -->
-        <div v-for="competitor in competitors" :key="competitor.id" :class="'pt-0 col-12 col-md-4 float-left competitors'">
+        <div v-for="competitor in competitors" :key="competitor.id" :class="'pt-0 col-12 col-md-6 col-lg-4 float-left competitors'">
             <div class="competitor d-inline-block">
                 <a href="#" @click.prevent="editCompetitor(competitor)" class="dwhite">
-                    <div class="col-md-6 mb-2 mt-2 float-left">
+                    <div class="col-6 mt-2 float-left">
                         <img :class="'img-fluid'" :src="'/storage/images/' + competitor.photos" :alt="competitor.title">
                     </div>
-                    <div class="col-6 col-md-3 pr-0 float-left mt-3">
-                        <p class="text-right h4">Име:&#160;</p>
-                        <p class="text-right h4">Презиме:&#160;</p>
-                        <p class="text-right h4">Години:&#160;</p>
+                    <div class="col-3 pr-0 pl-0 float-left mt-3">
+                        <p class="text-right">Име:&#160;</p>
+                        <p class="text-right">Презиме:&#160;</p>
+                        <p class="text-right">Години:&#160;</p>
                     </div>
-                    <div class="col-6 col-md-3 pl-0 float-left mt-3">
-                        <p class="text-left h4">{{ competitor.firstName }}</p>
-                        <p class="text-left h4">{{ competitor.lastName }}</p>
-                        <p class="text-left h4">{{ competitor.birthday | getAge }}</p>
+                    <div class="col-3 pr-0 pl-0 float-left mt-3">
+                        <p class="text-left">{{ competitor.firstName }}</p>
+                        <p class="text-left">{{ competitor.lastName }}</p>
+                        <p class="text-left">{{ competitor.birthday | getAge }}</p>
                     </div>
                     <div class="col-12">
                         <p class="text-center h6 mb-0 underline">Състезател по</p>
@@ -137,7 +137,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p class="dwhite"><img :class="'img-fluid img-fluid col-6 p-1 float-left mt-1'" :src="'/storage/images/' + this.form.photos" :alt="this.form.firstName +' '+ this.form.lastName">{{ this.form.description }}</p>
+                    <p class="competitor-description dwhite"><img :class="'img-fluid img-fluid col-6 p-1 float-left mt-1'" :src="'/storage/images/' + this.form.photos" :alt="this.form.firstName +' '+ this.form.lastName">{{ this.form.description }}</p>
                 </div>
             </div>
         </div>

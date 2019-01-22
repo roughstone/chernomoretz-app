@@ -48,12 +48,19 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+        $messages = [
+            'required' => 'Полето е задължително!',
+            'confirmed' => 'Въведената парола не съвпада!',
+            'unique' => 'Електронната поща е вече използвана!',
+            'min' => 'Дължината трябва да е поне :min символа!',
+            'email' => 'Моля въведете валидна елекронна поща!'
+        ];
         return Validator::make($data, [
-            'firstName' => ['required', 'string', 'max:191'],
-            'lastName' => ['required', 'string', 'max:191'],
-            'email' => ['required', 'string', 'email', 'max:191', 'unique:users'],
-            'password' => ['required', 'string', 'min:6',],
-        ]);
+            'firstName' => ['required', 'string', 'max:15'],
+            'lastName' => ['required', 'string', 'max:15'],
+            'email' => ['required', 'string', 'email', 'max:30', 'unique:users'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
+        ], $messages);
     }
 
     /**

@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class UserQuestionMail extends Mailable
+class UserQuestions extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -30,6 +30,6 @@ class UserQuestionMail extends Mailable
      */
     public function build()
     {
-        return $this->from('monnioy@gmail.com')->subject('text')->view('user_dynamic_question');
+        return $this->markdown('email.user_questions', [$this->data]);
     }
 }

@@ -10,25 +10,27 @@
 <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
     <li class="nav-item">
-        <router-link class="nav-link" to="/"><i class="fas fa-home purple"></i> Начало</router-link>
+        <router-link class="nav-link pt-0 pb-0" to="/"><i class="fas fa-home purple"></i> Начало</router-link>
     </li>
     <li class="nav-item">
-        <router-link class="nav-link" to="/Новини/1"><i class="far fa-newspaper purple"></i> Новини</router-link>
+        <router-link class="nav-link pt-0 pb-0" to="/Новини/1"><i class="far fa-newspaper purple"></i> Новини</router-link>
     </li>
 
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link pt-0 pb-0 dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-users purple"></i> Отбор
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <router-link class="dropdown-item" to="/Треньори">Треньори</router-link>
             <router-link class="dropdown-item" to="/Състезатели/1">Състезатели</router-link>
-            <router-link class="dropdown-item" to="/График">График</router-link>
         </div>
+    </li>
+    <li class="nav-item">
+        <router-link class="nav-link pt-0 pb-0" to="/График"><i class="fas fa-clipboard-list purple"></i> График</router-link>
     </li>
 
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link pt-0 pb-0 dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="far fa-images purple"></i> Галерия
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -40,7 +42,7 @@
     <li class="nav-item">
 <!--The following <a> has click event with .prevent called to prevent the default behavior of the <a>
     and wich calls "openContactsModal" method. -->
-        <a href="" @click.prevent="openContactsModal()" class="nav-link" to="/Контакти"><i class="fas fa-phone-square purple"></i> Контакти с нас!</a>
+        <a href="" @click.prevent="openContactsModal()" class="nav-link pt-0 pb-0" to="/Контакти"><i class="fas fa-phone-square purple"></i> Контакти с нас!</a>
     </li>
     </ul>
 </div>

@@ -15,7 +15,7 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
-
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC|Bad+Script|Caveat|Cormorant+Infant|Kelly+Slab|Lobster|Seymour+One|Stalinist+One" rel="stylesheet">
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
@@ -24,7 +24,7 @@
             @if (Route::has('login'))
             <div class="loginPanel fixed-top">
                 @auth
-                    <a href="{{ url('/home') }}"><i class="far fa-user green"></i> Моят профил &#160</a>
+                    <a href="{{ url('/Профил') }}"><i class="far fa-user green"></i> Моят профил &#160</a>
                     <a href="{{ route('logout') }}"
                         onclick="event.preventDefault();
                                         document.getElementById('logout-form').submit();"><i class="fas fa-power-off red"></i>

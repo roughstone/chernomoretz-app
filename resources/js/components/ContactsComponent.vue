@@ -10,7 +10,7 @@
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form v-if="!contactsMode" @submit.prevent="createNews()" id="newsForm" enctype="multipart/form-data">
+            <form v-if="!contactsMode" @submit.prevent="sendQuestion()" id="newsForm" enctype="multipart/form-data">
                 <div class="modal-body contactsList">
                     <div class="form-group">
                         <label class="dwhite">Имена:</label>
@@ -32,7 +32,7 @@
                     </div>
                 </div>
                 <div class="modal-footer contactsList">
-                    <button type="submit" class="btn btn-success">Добави</button>
+                    <button type="submit" class="btn btn-success">Изпрати</button>
                     <button type="button" @click="changeContacts()" class="btn btn-secondary">Затвори</button>
                 </div>
             </form>
@@ -67,6 +67,9 @@
                 }
             )}
         },
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
         methods: {
             getModal() {
                 this.contactsForm = this.$route.params.contactsForm
@@ -78,6 +81,7 @@
                 this.contactsForm = false
                 this.contactsMode = true
                 this.$route.params.contactsForm = false
+                this.form.reset();
             },
             changeContacts() {
                 if(this.contactsMode) {
@@ -85,6 +89,17 @@
                 } else {
                     this.contactsMode = true
                 }
+            },
+            sendQuestion() {
+                this.form.post('/user-question')
+                .then(() => {
+                    toast({type: 'success', title: 'Вашето съобщение е изпратено успешно!'})
+                    $('#contactsModal').modal('hide');
+                    this.closeModal()
+                })
+                .catch(() => {
+
+                })
             }
         },
         mounted() {

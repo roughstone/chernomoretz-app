@@ -1,7 +1,7 @@
 <!--Displays the contents of each news. When the logged in user is administrator the content editing tools are shown. -->
 <template>
 <div class="row flex-xl-nowrap">
-   <div class="col-12 col-md-9">
+   <div class="col-12 col-lg-9 col-md-8">
 <!--The following <div> is shown only if "adminMode" parameter is set to true.
     The click event that open the form to insert new records to the DB.
     On the click event the prevent method was called to prevent the default behavior of the <a>
@@ -36,7 +36,7 @@
         <div v-for="news in allNews" :key="news.id">
             <div class="mt-3 news">
                 <a href="" @click.prevent="editNews(news)">
-                    <h3 class="dwhite">{{ news.title }}</h3>
+                    <h3 class=" pl-3 dwhite">{{ news.title }}</h3>
                     <p class="mb-0 float-left w-100 dwhite"><img :class="'col-6 col-md-3 p-1 float-left'" :src="'/storage/images/' + news.photos" :alt="news.title">{{ news.description }}</p>
 <!-- The following <div> is shown if adminMode parameter is false (the user is not administrator)-->
                     <div v-if="!adminMode" class="p-1 d-inline-block w-100">

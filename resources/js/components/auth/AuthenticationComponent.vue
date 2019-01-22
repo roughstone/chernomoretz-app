@@ -27,14 +27,24 @@
                                 <has-error :form="form" field="email"></has-error>
                             </div>
                             <div class="form-group">
-                                <input v-model="form.password" type="password" name="password"
+                                <input v-if="!forgotPassword" v-model="form.password" type="password" name="password" id="password"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('password') }" placeholder="Парола">
                                 <has-error :form="form" field="password"></has-error>
                             </div>
+                            <div class="form-group" v-if="authenticateMode">
+                                <input v-model="form.password_confirmation" type="password" name="password_confirmation" id="password-confirm"
+                                class="form-control" :class="{ 'is-invalid': form.errors.has('password_confirmation') }" placeholder="Повторете паролата">
+                                <has-error :form="form" field="password_confirmation"></has-error>
+                            </div>
+                            <div v-if="!authenticateMode && !forgotPassword">
+                            <input v-model="form.remember" type="checkbox" name="remember" id="remember"> Запомни ме!
+                            </div>
+                            <a v-if="!authenticateMode && !forgotPassword" href="" @click.prevent="forgotPassword = true">Забравихте паролата си?</a>
+                            <p v-if="forgotPassword">Въведете вашата електронна поща и ще ви изпратим емейл за възстановяване на паролата ви.</p>
                         </div>
                         <div class="modal-footer">
-                            <!--<button type="submit" class="btn btn-primary">Промени</button>-->
-                            <button v-if="!authenticateMode" type="submit" class="btn btn-success">Влез</button>
+                            <button v-if="forgotPassword" type="button" @click="passwordReset()" class="btn btn-success">Въведи</button>
+                            <button v-if="!authenticateMode && !forgotPassword" type="submit" class="btn btn-success">Влез</button>
                             <button v-if="authenticateMode" type="submit" class="btn btn-success">Регистрация</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Затвори</button>
                         </div>
@@ -48,14 +58,16 @@
     export default {
          data() {
             return {
-                authenticateMode: false,
-
+                authenticateMode : false,
+                forgotPassword : false,
                 form: new Form({
                     id : '',
+                    remember : false,
                     firstName : '',
                     lastName : '',
                     email : '',
-                    password : ''
+                    password : '',
+                    password_confirmation : ''
                 })
             }
         },
@@ -65,7 +77,6 @@
 
         methods : {
             createUser () {
-                // Submit the form via a POST request
                 this.form.post('/register')
                 .then(() => {
                     $('#userModal').modal('hide');
@@ -89,9 +100,19 @@
                 }).catch(() =>{
 
                 })
+            },
+            passwordReset() {
+                axios.post('/password/email', {
+                    'email' : this.form.email
+                })
+                .then(() => {
+                    $('#userModal').modal('hide');
+                    this.form.reset();
+                    location.reload();
+                }).catch(() =>{
+
+                })
             }
-
-
         },
         mounted() {
             console.log('Component mounted.')

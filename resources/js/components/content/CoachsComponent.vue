@@ -25,7 +25,7 @@
                         <p class="text-left h4">{{ coach.birthday | getAge }}</p>
                     </div>
                     <div class="col-12">
-                        <p class="text-center h6 mb-0 underline">треньор по</p>
+                        <p class="text-center h6 mb-0 underline">специалист по:</p>
                         <p class="text-center h4">{{ coach.position }}</p>
                     </div>
                 </a>
@@ -112,7 +112,7 @@ and wich calls "deleteCoach" method passing the coach id to it. -->
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p class="dwhite"><img :class="'img-fluid img-fluid col-6 p-1 float-left mt-1'" :src="'/storage/images/' + this.form.photos" :alt="this.form.firstName +' '+ this.form.lastName">{{ this.form.description }}</p>
+                    <p class="dwhite"><img :class="'img-fluid col-6 p-1 float-left mt-1'" :src="'/storage/images/' + this.form.photos" :alt="this.form.firstName +' '+ this.form.lastName">{{ this.form.description }}</p>
                 </div>
             </div>
         </div>

@@ -10681,7 +10681,7 @@ a.text-dark:focus {
 .pModal {
   position: fixed;
   z-index: 10000;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.9);
   top: 0;
   left: 0;
   bottom: 0;
@@ -10807,7 +10807,6 @@ a.text-dark:focus {
 .competitors .competitor {
   background-color: rgba(0, 94, 128, 0.7);
   border-radius: 1vw;
-  box-shadow: inset 0px 0px 6px 4px #00294e;
 }
 
 .competitors img {
@@ -10858,9 +10857,29 @@ a.text-dark:focus {
   margin-right: 0.5%;
 }
 
+.text-right,
+.text-left {
+  font-size: 1.5vw;
+}
+
+@media only screen and (max-width: 1140px) {
+  .text-right,
+  .text-left {
+    font-size: 1.8vw;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .text-right,
+  .text-left {
+    font-size: 2.1vw;
+  }
+}
+
 .resizer-container {
   position: relative;
   display: inline-block;
+  overflow: hidden;
 }
 
 .resizer-container img {
@@ -10876,12 +10895,34 @@ a.text-dark:focus {
   left: 0;
   overflow: auto;
   position: absolute;
-  width: 160px;
-  height: 90px;
-  box-shadow: 0px 0px 0px 5px rgba(129, 0, 0, 0.5);
+  box-shadow: 0px 0px 0px 2000px rgba(0, 0, 0, 0.7);
 }
 
 .resizer-container #cropercursor {
+  position: absolute;
+  cursor: move;
+  top: 49%;
+  left: 49%;
+  color: greenyellow;
+}
+
+#user-photo-croper {
+  z-index: 500;
+  top: 0;
+  left: 0;
+  overflow: auto;
+  position: absolute;
+  box-shadow: 0px 0px 0px 2000px rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+}
+
+#user-photo-update {
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+#user-photo-cropercursor {
   position: absolute;
   cursor: move;
   top: 49%;
@@ -27043,7 +27084,6 @@ body i {
 
 .loginPanel a {
   color: #e7dfdf;
-  font-family: "Kelly Slab", cursive;
 }
 
 .loginPanel a:hover {
@@ -27058,6 +27098,8 @@ body i {
 
 .navbar a {
   color: #d6d5d5 !important;
+  font-size: 1.3vw;
+  font-family: "Caveat", cursive;
 }
 
 .navbar a:hover {
@@ -27070,7 +27112,11 @@ body i {
 }
 
 .dropdown-menu {
-  background-color: rgba(0, 23, 255, 0.4);
+  background-color: rgba(0, 14, 152, 0.7);
+}
+
+.dropdown-menu .dropdown-item:hover {
+  background-color: #10172e !important;
 }
 
 .announcement,
@@ -27078,7 +27124,7 @@ body i {
   background-color: rgba(0, 0, 0, 0.25);
   box-shadow: inset 0px 0px 4px 2px #10172e;
   border-radius: 0.3vw;
-  margin-right: 2.5vw;
+  margin-right: 0.5vw;
 }
 
 .announcement hr,
@@ -27095,6 +27141,19 @@ body i {
 .announcement a:hover,
 .news a:hover {
   text-decoration: none !important;
+}
+
+.announcement-title {
+  color: #eeeeee;
+  box-shadow: inset 0px 0px 6px 3px rgba(93, 236, 255, 0.842);
+  text-align: center;
+  font-size: 1.8vw;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  text-shadow: 0px 0px 10px rgba(93, 236, 255, 0.842);
+  border-radius: 5px;
+  margin-top: 1px;
+  width: 98%;
 }
 
 .contactsList {
@@ -27140,8 +27199,17 @@ body i {
 }
 
 .for-user p {
-  font-size: 1.2vw;
+  font-size: 1.6vw;
   white-space: pre-wrap;
+  font-weight: bold;
+}
+
+.user-menu ul {
+  list-style-type: none;
+}
+
+.user-menu ul li:hover {
+  background-color: #10172e !important;
 }
 
 .underline {

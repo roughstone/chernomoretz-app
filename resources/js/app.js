@@ -5,7 +5,7 @@ window.Vue = require('vue');
 
 /*
  * MyGate
-*/
+ */
 import Gate from './Gate';
 if (window.user) {
 Vue.prototype.$gate = new Gate(window.user);
@@ -16,7 +16,11 @@ Vue.prototype.$gate = new Gate(window.user);
     Vue.prototype.$gate = new Gate(user)
 }
 
-
+/*
+ * Drag passed element
+ */
+import DragElement from './DragElement';
+window.DragElement = DragElement;
 
 /**
  * Vue Globally Registered Components
@@ -34,8 +38,6 @@ Vue.component('contacts-component', require('./components/ContactsComponent.vue'
  * Vue-Routers
  */
 
-
-
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
@@ -48,6 +50,7 @@ const routes = [
     { path: '/Галерии/:type/Страница/:page', component: require('./components/content/GalleriesComponent.vue').default},
     { path: '/Галерии/:type/Галерия/:title/Id/:id', component: require('./components/content/GalleryComponent.vue').default},
     { path: '/Снимки/:photo', component: require('./components/ImagerComponent.vue').default},
+    { path: '/Профил', component: require('./components/auth/UsersComponent.vue').default},
 ];
 
 let router = new VueRouter({

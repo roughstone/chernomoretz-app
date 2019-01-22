@@ -6,12 +6,12 @@
     On the click event the prevent method was called to prevent the default behavior of the <a>
     The href attribute is empty to keep the pointer:cursor behavior of the <a> -->
     <a href="" class="float-right" v-if="adminMode" @click.prevent="showModal()"><i class="fas fa-file-import fa-3x green"></i></a>
-    <div class="col-12 col-md-9">
+    <div class="col-12 col-lg-9 col-md-8">
         <div>
 <!-- The following <div> holds the navigation of the slider. The color of the <i> change by methods instead of CSS class:hover-->
             <div class="sliderNav d-flex justify-content-between" v-once>
-                <i @mouseout="leftArrowHover()" @mouseover="leftArrowHover()" class="fas fa-caret-left fa-4x green" @click="leftArrow()"></i>
-                <i @mouseout="rightArrowHover()" @mouseover="rightArrowHover()" class="fas fa-caret-right fa-4x green" @click="rightArrow()"></i>
+                <i @mouseout="leftArrowHover()" @mouseover="leftArrowHover()" class="fas fa-angle-double-left fa-3x green" @click="leftArrow()"></i>
+                <i @mouseout="rightArrowHover()" @mouseover="rightArrowHover()" class="fas fa-angle-double-right fa-3x green" @click="rightArrow()"></i>
             </div>
             <div class="sliderContiner">
 <!--The following <div> is multiplied by Vuejs v-for directive for each record form "sliders" parameter.  -->
@@ -26,10 +26,9 @@
 <!-- The following <div> is shown if sliderMode parameter is false -->
                     <div v-if="!sliderMode">
                         <h3 class="text-center dwhite">{{ slider.title }}</h3>
-                        <p class="dwhite pr-2 viewSliderDescription">
-                            <a href="" @click.prevent="choiseSlider()"> <!-- toggle sliderMode parameter -->
-                                <img class="w-50 d-inline float-left" :src="'/storage/images/' + slider.photos" :alt="slider.title">
-                            </a>{{ slider.description }}
+                        <p class="dwhite d-inline-block pr-2 viewSliderDescription">
+                            <img class="w-50 float-left" @click="choiseSlider()" :src="'/storage/images/' + slider.photos" :alt="slider.title">
+                            {{ slider.description }}
                         </p>
 <!-- The following <div> is shown if adminMode parameter is true (the user is administrator)-->
                         <div v-if="adminMode" class="p-1 d-inline-block w-100">

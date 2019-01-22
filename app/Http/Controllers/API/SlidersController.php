@@ -61,10 +61,10 @@ class SlidersController extends Controller
      * @param  \App\Slider  $sliders
      * @return \Illuminate\Http\Response
         */
-        public function update(Request $request, Slider $Slider)
+        public function update(Request $request, Slider $slider)
     {
         if (\Gate::allows('admin')) {
-            $object = Slider::all()->where('id','=',$Slider->id)->first();
+            $object = Slider::all()->where('id','=',$slider->id)->first();
 
             request()->validate([
                 'title' => ['required', 'min:3'],
@@ -96,13 +96,13 @@ class SlidersController extends Controller
      * @param  \App\Slider  $sliders
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Slider $Slider)
+    public function destroy(Slider $slider)
     {
         if (\Gate::allows('admin')) {
 
             $Slider->delete();
 
-            unlink('../public/storage/images/' . $Slider->photos);
+            unlink('../public/storage/images/' . $slider->photos);
         }
     }
 }

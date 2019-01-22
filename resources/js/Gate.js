@@ -13,6 +13,6 @@ export default class Gate{
     }
 
     isUser() {
-        return this.user.role === 'user';
+        return this.user;
     }
 }
