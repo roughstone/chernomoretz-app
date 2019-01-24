@@ -1858,6 +1858,7 @@ __webpack_require__.r(__webpack_exports__);
     sendQuestion: function sendQuestion() {
       var _this = this;
 
+      this.$loadStart();
       this.form.post('/user-question').then(function () {
         toast({
           type: 'success',
@@ -1866,6 +1867,8 @@ __webpack_require__.r(__webpack_exports__);
         $('#contactsModal').modal('hide');
 
         _this.closeModal();
+
+        _this.$loadEnd(500);
       }).catch(function () {});
     }
   },
@@ -2042,34 +2045,78 @@ __webpack_require__.r(__webpack_exports__);
     },
     rotateImg: function rotateImg() {
       // send data to backend to rotate the image
+      this.$loadStart();
       this.form.method = 'rotate';
 
       if (this.$gate.isAdmin()) {
-        this.form.post('/api/editImg').then(location.reload());
+        this.form.post('/api/editImg').then(location.reload()).catch(function () {
+          swal({
+            type: 'error',
+            title: 'Възникна грешка',
+            showConfirmButton: false,
+            timer: 2000,
+            reload: setTimeout(function () {
+              location.reload();
+            }, 2000)
+          });
+        });
       }
     },
     cropImg: function cropImg() {
       // send data to backend to crop the image
+      this.$loadStart();
       this.form.method = 'crop';
 
       if (this.$gate.isAdmin()) {
-        this.form.post('/api/editImg').then(location.reload());
+        this.form.post('/api/editImg').then(location.reload()).catch(function () {
+          swal({
+            type: 'error',
+            title: 'Възникна грешка',
+            showConfirmButton: false,
+            timer: 2000,
+            reload: setTimeout(function () {
+              location.reload();
+            }, 2000)
+          });
+        });
       }
     },
     mirrorImgX: function mirrorImgX() {
       // send data to backend to flip the image horizontally
+      this.$loadStart();
       this.form.method = 'flipX';
 
       if (this.$gate.isAdmin()) {
-        this.form.post('/api/editImg').then(location.reload());
+        this.form.post('/api/editImg').then(location.reload()).catch(function () {
+          swal({
+            type: 'error',
+            title: 'Възникна грешка',
+            showConfirmButton: false,
+            timer: 2000,
+            reload: setTimeout(function () {
+              location.reload();
+            }, 2000)
+          });
+        });
       }
     },
     mirrorImgY: function mirrorImgY() {
       // send data to backend to flip the image vertically
+      this.$loadStart();
       this.form.method = 'flipY';
 
       if (this.$gate.isAdmin()) {
-        this.form.post('/api/editImg').then(location.reload());
+        this.form.post('/api/editImg').then(location.reload()).catch(function () {
+          swal({
+            type: 'error',
+            title: 'Възникна грешка',
+            showConfirmButton: false,
+            timer: 2000,
+            reload: setTimeout(function () {
+              location.reload();
+            }, 2000)
+          });
+        });
       }
     },
     closeMenus: function closeMenus() {
@@ -2098,7 +2145,38 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {};
+  },
+  methods: {},
   mounted: function mounted() {}
 });
 
@@ -2348,6 +2426,13 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2753,9 +2838,22 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       //request to the backend to get the records
+      this.$loadStart();
       axios.get("/api/news").then(function (data) {
         _this.announcements = data.data;
-      }).catch(function () {});
+
+        _this.$loadEnd(500);
+      }).catch(function () {
+        swal({
+          type: 'error',
+          title: 'Възникна грешка',
+          showConfirmButton: false,
+          timer: 2000,
+          reload: setTimeout(function () {
+            location.reload();
+          }, 2000)
+        });
+      });
     },
     showModal: function showModal() {
       // display the form to insert DB records
@@ -2767,6 +2865,7 @@ __webpack_require__.r(__webpack_exports__);
 
       //request to the backend to create a new record
       if (this.$gate.isAdmin()) {
+        this.$loadStart();
         this.form.post('/api/news').then(function () {
           toast({
             type: 'success',
@@ -2777,7 +2876,19 @@ __webpack_require__.r(__webpack_exports__);
           _this2.getAnnouncements();
 
           _this2.form.reset();
-        }).catch(function () {});
+
+          _this2.$loadEnd(500);
+        }).catch(function () {
+          swal({
+            type: 'error',
+            title: 'Възникна грешка',
+            showConfirmButton: false,
+            timer: 2000,
+            reload: setTimeout(function () {
+              location.reload();
+            }, 2000)
+          });
+        });
       }
     },
     editAnnouncement: function editAnnouncement(announcement) {
@@ -2791,6 +2902,7 @@ __webpack_require__.r(__webpack_exports__);
 
       // request to the backend to edit a specific record
       if (this.$gate.isAdmin()) {
+        this.$loadStart();
         this.form.patch('/api/news/' + this.form.id).then(function () {
           $('#announcementModal').modal('hide');
           toast({
@@ -2799,7 +2911,19 @@ __webpack_require__.r(__webpack_exports__);
           });
 
           _this3.getAnnouncements();
-        }).catch(function () {});
+
+          _this3.$loadEnd(500);
+        }).catch(function () {
+          swal({
+            type: 'error',
+            title: 'Възникна грешка',
+            showConfirmButton: false,
+            timer: 2000,
+            reload: setTimeout(function () {
+              location.reload();
+            }, 2000)
+          });
+        });
       }
     },
     deleteAnnouncement: function deleteAnnouncement(id) {
@@ -2818,9 +2942,23 @@ __webpack_require__.r(__webpack_exports__);
           confirmButtonText: 'Да, изтрий го!'
         }).then(function (result) {
           if (result.value) {
+            _this4.$loadStart();
+
             axios.delete('/api/news/' + id).then(function () {
               _this4.getAnnouncements();
-            }).catch(function () {});
+
+              _this4.$loadEnd(500);
+            }).catch(function () {
+              swal({
+                type: 'error',
+                title: 'Възникна грешка',
+                showConfirmButton: false,
+                timer: 2000,
+                reload: setTimeout(function () {
+                  location.reload();
+                }, 2000)
+              });
+            });
           }
         });
       }
@@ -3029,16 +3167,30 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       //request to the backend to get the records
+      this.$loadStart();
       axios.get("/api/coachs").then(function (_ref) {
         var data = _ref.data;
         _this.coachs = data.data;
-      }).catch(function () {});
+
+        _this.$loadEnd(500);
+      }).catch(function () {
+        swal({
+          type: 'error',
+          title: 'Възникна грешка',
+          showConfirmButton: false,
+          timer: 2000,
+          reload: setTimeout(function () {
+            location.reload();
+          }, 2000)
+        });
+      });
     },
     createCoach: function createCoach() {
       var _this2 = this;
 
       //request to the backend to create a new record
       if (this.$gate.isAdmin()) {
+        this.$loadStart();
         this.form.post('/api/coachs').then(function () {
           toast({
             type: 'success',
@@ -3049,7 +3201,19 @@ __webpack_require__.r(__webpack_exports__);
           _this2.getCoachs();
 
           _this2.form.reset();
-        }).catch(function () {});
+
+          _this2.$loadEnd(500);
+        }).catch(function () {
+          swal({
+            type: 'error',
+            title: 'Възникна грешка',
+            showConfirmButton: false,
+            timer: 2000,
+            reload: setTimeout(function () {
+              location.reload();
+            }, 2000)
+          });
+        });
       }
     },
     editCoach: function editCoach(data) {
@@ -3063,6 +3227,7 @@ __webpack_require__.r(__webpack_exports__);
 
       // request to the backend to edit a specific record
       if (this.$gate.isAdmin()) {
+        this.$loadStart();
         this.form.patch('/api/coachs/' + this.form.id).then(function () {
           $('#coachsModal').modal('hide');
           toast({
@@ -3071,7 +3236,19 @@ __webpack_require__.r(__webpack_exports__);
           });
 
           _this3.getCoachs();
-        }).catch(function () {});
+
+          _this3.$loadEnd(500);
+        }).catch(function () {
+          swal({
+            type: 'error',
+            title: 'Възникна грешка',
+            showConfirmButton: false,
+            timer: 2000,
+            reload: setTimeout(function () {
+              location.reload();
+            }, 2000)
+          });
+        });
       }
     },
     deleteCoach: function deleteCoach(id) {
@@ -3090,9 +3267,23 @@ __webpack_require__.r(__webpack_exports__);
           confirmButtonText: 'Да, изтрий го!'
         }).then(function (result) {
           if (result.value) {
+            _this4.$loadStart();
+
             axios.delete('/api/coachs/' + id).then(function () {
               _this4.getCoachs();
-            }).catch(function () {});
+
+              _this4.$loadEnd(500);
+            }).catch(function () {
+              swal({
+                type: 'error',
+                title: 'Възникна грешка',
+                showConfirmButton: false,
+                timer: 2000,
+                reload: setTimeout(function () {
+                  location.reload();
+                }, 2000)
+              });
+            });
           }
         });
       }
@@ -3338,45 +3529,49 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       //request to the backend to get the records
+      this.$loadStart();
+      this.page = parseInt(this.$route.params.page);
       axios.get("/api/competitors?page=" + this.$route.params.page).then(function (_ref) {
         var data = _ref.data;
         _this.competitors = data.data;
         _this.pages = data.last_page;
-      }).catch(function () {});
-    },
-    nextPage: function nextPage() {
-      // call getPage method for next page
-      if (this.page < this.pages) {
-        this.page++;
-        this.getPage();
-      }
-    },
-    prevPage: function prevPage() {
-      //call getPage method for previous page
-      if (this.page > 1) {
-        this.page--;
-        this.getPage();
-      }
+
+        _this.$loadEnd(500);
+      }).catch(function () {
+        swal({
+          type: 'error',
+          title: 'Възникна грешка',
+          showConfirmButton: false,
+          timer: 2000,
+          reload: setTimeout(function () {
+            location.reload();
+          }, 2000)
+        });
+      });
     },
     getPage: function getPage() {
-      //based on user nextPage, prevPage methods or user input calls getCompetitors method to send request to backend with the page number
-      this.$route.params.page = this.page;
+      var _this2 = this;
 
-      if (history.pushState) {
+      //based on user nextPage, prevPage methods or user input calls getCompetitors method to send request to backend with the page number
+      if (this.page != "" && !isNaN(this.page)) {
+        this.$route.params.page = this.page;
         var url = window.location.protocol + "//" + window.location.host + window.location.pathname;
         var slicedUrl = url.slice(0, url.lastIndexOf('/'));
         var newUrl = slicedUrl + '/' + this.$route.params.page;
         window.history.pushState({
           path: newUrl
         }, '', newUrl);
-        this.createCompetitor();
+        setTimeout(function () {
+          _this2.getCompetitors();
+        }, 200);
       }
     },
     createCompetitor: function createCompetitor() {
-      var _this2 = this;
+      var _this3 = this;
 
       //request to the backend to create a new record
       if (this.$gate.isAdmin()) {
+        this.$loadStart();
         this.form.post('/api/competitors').then(function () {
           toast({
             type: 'success',
@@ -3384,10 +3579,22 @@ __webpack_require__.r(__webpack_exports__);
           });
           $('#competitorsModal').modal('hide');
 
-          _this2.getCompetitors();
+          _this3.getCompetitors();
 
-          _this2.form.reset();
-        }).catch(function () {});
+          _this3.form.reset();
+
+          _this3.$loadEnd(500);
+        }).catch(function () {
+          /*  swal({
+               type: 'error',
+               title: 'Възникна грешка',
+               showConfirmButton: false,
+               timer: 2000,
+               reload: setTimeout(() => {
+                   location.reload()
+               }, 2000)
+           }) */
+        });
       }
     },
     editCompetitor: function editCompetitor(data) {
@@ -3397,10 +3604,11 @@ __webpack_require__.r(__webpack_exports__);
       this.form.fill(data);
     },
     updateCompetitor: function updateCompetitor() {
-      var _this3 = this;
+      var _this4 = this;
 
       // request to the backend to edit a specific record
       if (this.$gate.isAdmin()) {
+        this.$loadStart();
         this.form.patch('/api/competitors/' + this.form.id).then(function () {
           $('#competitorsModal').modal('hide');
           toast({
@@ -3408,12 +3616,24 @@ __webpack_require__.r(__webpack_exports__);
             title: 'Промяната приложена успешно!'
           });
 
-          _this3.getCompetitors();
-        }).catch(function () {});
+          _this4.getCompetitors();
+
+          _this4.$loadEnd(500);
+        }).catch(function () {
+          swal({
+            type: 'error',
+            title: 'Възникна грешка',
+            showConfirmButton: false,
+            timer: 2000,
+            reload: setTimeout(function () {
+              location.reload();
+            }, 2000)
+          });
+        });
       }
     },
     deleteCompetitor: function deleteCompetitor(id) {
-      var _this4 = this;
+      var _this5 = this;
 
       // request to the backend to delete a record
       if (this.$gate.isAdmin()) {
@@ -3428,9 +3648,23 @@ __webpack_require__.r(__webpack_exports__);
           confirmButtonText: 'Да, изтрий го!'
         }).then(function (result) {
           if (result.value) {
+            _this5.$loadStart();
+
             axios.delete('/api/competitors/' + id).then(function () {
-              _this4.getCompetitors();
-            }).catch(function () {});
+              _this5.getCompetitors();
+
+              _this5.$loadEnd(500);
+            }).catch(function () {
+              swal({
+                type: 'error',
+                title: 'Възникна грешка',
+                showConfirmButton: false,
+                timer: 2000,
+                reload: setTimeout(function () {
+                  location.reload();
+                }, 2000)
+              });
+            });
           }
         });
       }
@@ -3444,7 +3678,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     onFileSelect: function onFileSelect(event) {
-      var _this5 = this;
+      var _this6 = this;
 
       //instantiate new FileReader object for the selected file
       var file = event.target.files[0];
@@ -3452,7 +3686,7 @@ __webpack_require__.r(__webpack_exports__);
       var reader = new FileReader();
 
       reader.onloadend = function () {
-        _this5.form.photos = reader.result;
+        _this6.form.photos = reader.result;
       };
 
       reader.readAsDataURL(file);
@@ -3635,49 +3869,53 @@ __webpack_require__.r(__webpack_exports__);
         this.adminMode = false;
       }
     },
-    nextPage: function nextPage() {
-      // call getPage method for next page
-      if (this.page < this.pages) {
-        this.page++;
-        this.getPage();
-      }
-    },
-    prevPage: function prevPage() {
-      //call getPage method for previous page
-      if (this.page > 1) {
-        this.page--;
-        this.getPage();
-      }
-    },
     getPage: function getPage() {
-      //based on user nextPage, prevPage methods or user input calls getGalleries method to send request to backend with the page number
-      this.$route.params.page = this.page;
+      var _this = this;
 
-      if (history.pushState) {
+      //based on user nextPage, prevPage methods or user input calls getCompetitors method to send request to backend with the page number
+      if (this.page != "" && !isNaN(this.page)) {
+        this.$route.params.page = this.page;
         var url = window.location.protocol + "//" + window.location.host + window.location.pathname;
         var slicedUrl = url.slice(0, url.lastIndexOf('/'));
         var newUrl = slicedUrl + '/' + this.$route.params.page;
         window.history.pushState({
           path: newUrl
         }, '', newUrl);
-        this.getGalleries();
+        setTimeout(function () {
+          _this.getGalleries();
+        }, 200);
       }
     },
     getGalleries: function getGalleries() {
-      var _this = this;
+      var _this2 = this;
 
       //request to the backend to get the records
+      this.$loadStart();
+      this.page = parseInt(this.$route.params.page);
       axios.get("/api/galleries/" + this.$route.params.type + "?page=" + this.$route.params.page).then(function (_ref) {
         var data = _ref.data;
-        _this.galleries = data.data;
-        _this.pages = data.last_page;
-      }).catch(function () {});
+        _this2.galleries = data.data;
+        _this2.pages = data.last_page;
+
+        _this2.$loadEnd(500);
+      }).catch(function () {
+        swal({
+          type: 'error',
+          title: 'Възникна грешка',
+          showConfirmButton: false,
+          timer: 2000,
+          reload: setTimeout(function () {
+            location.reload();
+          }, 2000)
+        });
+      });
     },
     createGalleries: function createGalleries() {
-      var _this2 = this;
+      var _this3 = this;
 
       //request to the backend to create a new record
       if (this.$gate.isAdmin()) {
+        this.$loadStart();
         this.form.post('/api/galleries').then(function () {
           toast({
             type: 'success',
@@ -3685,10 +3923,22 @@ __webpack_require__.r(__webpack_exports__);
           });
           $('#galleriesModal').modal('hide');
 
-          _this2.getGalleries();
+          _this3.getGalleries();
 
-          _this2.form.reset();
-        }).catch(function () {});
+          _this3.form.reset();
+
+          _this3.$loadEnd(500);
+        }).catch(function () {
+          swal({
+            type: 'error',
+            title: 'Възникна грешка',
+            showConfirmButton: false,
+            timer: 2000,
+            reload: setTimeout(function () {
+              location.reload();
+            }, 2000)
+          });
+        });
       }
     },
     editGalleries: function editGalleries(data) {
@@ -3698,10 +3948,11 @@ __webpack_require__.r(__webpack_exports__);
       this.form.fill(data);
     },
     updateGalleries: function updateGalleries() {
-      var _this3 = this;
+      var _this4 = this;
 
       // request to the backend to edit a specific record
       if (this.$gate.isAdmin()) {
+        this.$loadStart();
         this.form.patch('/api/galleries/' + this.form.id).then(function () {
           $('#galleriesModal').modal('hide');
           toast({
@@ -3709,12 +3960,24 @@ __webpack_require__.r(__webpack_exports__);
             title: 'Промяната приложена успешно!'
           });
 
-          _this3.getGalleries();
-        }).catch(function () {});
+          _this4.getGalleries();
+
+          _this4.$loadEnd(500);
+        }).catch(function () {
+          swal({
+            type: 'error',
+            title: 'Възникна грешка',
+            showConfirmButton: false,
+            timer: 2000,
+            reload: setTimeout(function () {
+              location.reload();
+            }, 2000)
+          });
+        });
       }
     },
     deleteGalleries: function deleteGalleries(id) {
-      var _this4 = this;
+      var _this5 = this;
 
       // request to the backend to delete a record
       if (this.$gate.isAdmin()) {
@@ -3729,15 +3992,29 @@ __webpack_require__.r(__webpack_exports__);
           confirmButtonText: 'Да, изтрий го!'
         }).then(function (result) {
           if (result.value) {
+            _this5.$loadStart();
+
             axios.delete('/api/galleries/' + id).then(function () {
-              _this4.getGalleries();
-            }).catch(function () {});
+              _this5.getGalleries();
+
+              _this5.$loadEnd(500);
+            }).catch(function () {
+              swal({
+                type: 'error',
+                title: 'Възникна грешка',
+                showConfirmButton: false,
+                timer: 2000,
+                reload: setTimeout(function () {
+                  location.reload();
+                }, 2000)
+              });
+            });
           }
         });
       }
     },
     onFileSelect: function onFileSelect(event) {
-      var _this5 = this;
+      var _this6 = this;
 
       //instantiate new FileReader object for the selected file
       var file = event.target.files[0];
@@ -3745,7 +4022,7 @@ __webpack_require__.r(__webpack_exports__);
       var reader = new FileReader();
 
       reader.onloadend = function () {
-        _this5.form.photos = reader.result;
+        _this6.form.photos = reader.result;
       };
 
       reader.readAsDataURL(file);
@@ -3921,19 +4198,33 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       //request to the backend to get the records
+      this.$loadStart();
       axios.get("/api/gallery/" + this.$route.params.id).then(function (_ref) {
         var data = _ref.data;
         _this.gallery = data;
         _this.allPhotos = data.length;
 
         _this.displayGallery();
-      }).catch(function () {});
+
+        _this.$loadEnd(500);
+      }).catch(function () {
+        swal({
+          type: 'error',
+          title: 'Възникна грешка',
+          showConfirmButton: false,
+          timer: 2000,
+          reload: setTimeout(function () {
+            location.reload();
+          }, 2000)
+        });
+      });
     },
     createPhoto: function createPhoto() {
       var _this2 = this;
 
       //request to the backend to create a new record
       if (this.$gate.isAdmin()) {
+        this.$loadStart();
         this.form.post('/api/gallery/' + this.$route.params.id).then(function () {
           toast({
             type: 'success',
@@ -3944,7 +4235,19 @@ __webpack_require__.r(__webpack_exports__);
           _this2.getPhotos();
 
           _this2.form.reset();
-        }).catch(function () {});
+
+          _this2.$loadEnd(500);
+        }).catch(function () {
+          swal({
+            type: 'error',
+            title: 'Възникна грешка',
+            showConfirmButton: false,
+            timer: 2000,
+            reload: setTimeout(function () {
+              location.reload();
+            }, 2000)
+          });
+        });
       }
     },
     deletePhoto: function deletePhoto(id) {
@@ -3963,9 +4266,23 @@ __webpack_require__.r(__webpack_exports__);
           confirmButtonText: 'Да, изтрий го!'
         }).then(function (result) {
           if (result.value) {
+            _this3.$loadStart();
+
             axios.delete('/api/gallery/' + id).then(function () {
               _this3.getPhotos();
-            }).catch(function () {});
+
+              _this3.$loadEnd(500);
+            }).catch(function () {
+              swal({
+                type: 'error',
+                title: 'Възникна грешка',
+                showConfirmButton: false,
+                timer: 2000,
+                reload: setTimeout(function () {
+                  location.reload();
+                }, 2000)
+              });
+            });
           }
         });
       }
@@ -4182,7 +4499,7 @@ __webpack_require__.r(__webpack_exports__);
       // swich to show administrator content
       editMode: false,
       // swich the edit mode
-      allNews: null,
+      news: null,
       // holds the records from the DB
       page: 1,
       //current page
@@ -4226,49 +4543,53 @@ __webpack_require__.r(__webpack_exports__);
         this.adminMode = false;
       }
     },
-    nextPage: function nextPage() {
-      // call getPage method for next page
-      if (this.page < this.pages) {
-        this.page++;
-        this.getPage();
-      }
-    },
-    prevPage: function prevPage() {
-      //call getPage method for previous page
-      if (this.page > 1) {
-        this.page--;
-        this.getPage();
-      }
-    },
     getPage: function getPage() {
-      //based on user nextPage, prevPage methods or user input calls getAllNews method to send request to backend with the page number
-      this.$route.params.page = this.page;
+      var _this = this;
 
-      if (history.pushState) {
+      //based on user nextPage, prevPage methods or user input calls getCompetitors method to send request to backend with the page number
+      if (this.page != "" && !isNaN(this.page)) {
+        this.$route.params.page = this.page;
         var url = window.location.protocol + "//" + window.location.host + window.location.pathname;
         var slicedUrl = url.slice(0, url.lastIndexOf('/'));
         var newUrl = slicedUrl + '/' + this.$route.params.page;
         window.history.pushState({
           path: newUrl
         }, '', newUrl);
-        this.getAllNews();
+        setTimeout(function () {
+          _this.getNews();
+        }, 200);
       }
     },
-    getAllNews: function getAllNews() {
-      var _this = this;
+    getNews: function getNews() {
+      var _this2 = this;
 
       //request to the backend to get the records
+      this.$loadStart();
+      this.page = parseInt(this.$route.params.page);
       axios.get("/api/moreNews?page=" + this.$route.params.page).then(function (_ref) {
         var data = _ref.data;
-        _this.allNews = data.data;
-        _this.pages = data.last_page;
-      }).catch(function () {});
+        _this2.news = data.data;
+        _this2.pages = data.last_page;
+
+        _this2.$loadEnd(500);
+      }).catch(function () {
+        swal({
+          type: 'error',
+          title: 'Възникна грешка',
+          showConfirmButton: false,
+          timer: 2000,
+          reload: setTimeout(function () {
+            location.reload();
+          }, 2000)
+        });
+      });
     },
     createNews: function createNews() {
-      var _this2 = this;
+      var _this3 = this;
 
       //request to the backend to create a new record
       if (this.$gate.isAdmin()) {
+        this.$loadStart();
         this.form.post('/api/news').then(function () {
           toast({
             type: 'success',
@@ -4276,10 +4597,22 @@ __webpack_require__.r(__webpack_exports__);
           });
           $('#newsModal').modal('hide');
 
-          _this2.getAllNews();
+          _this3.getNews();
 
-          _this2.form.reset();
-        }).catch(function () {});
+          _this3.form.reset();
+
+          _this3.$loadEnd(500);
+        }).catch(function () {
+          swal({
+            type: 'error',
+            title: 'Възникна грешка',
+            showConfirmButton: false,
+            timer: 2000,
+            reload: setTimeout(function () {
+              location.reload();
+            }, 2000)
+          });
+        });
       }
     },
     editNews: function editNews(data) {
@@ -4289,10 +4622,12 @@ __webpack_require__.r(__webpack_exports__);
       this.form.fill(data);
     },
     updateNews: function updateNews() {
-      var _this3 = this;
+      var _this4 = this;
 
       // request to the backend to edit a specific record
       if (this.$gate.isAdmin()) {
+        /* $("#loader").fadeIn(0) */
+        this.$loadStart();
         this.form.patch('/api/news/' + this.form.id).then(function () {
           $('#newsModal').modal('hide');
           toast({
@@ -4300,12 +4635,24 @@ __webpack_require__.r(__webpack_exports__);
             title: 'Промяната приложена успешно!'
           });
 
-          _this3.getAllNews();
-        }).catch(function () {});
+          _this4.getNews();
+
+          _this4.$loadEnd(500);
+        }).catch(function () {
+          swal({
+            type: 'error',
+            title: 'Възникна грешка',
+            showConfirmButton: false,
+            timer: 2000,
+            reload: setTimeout(function () {
+              location.reload();
+            }, 2000)
+          });
+        });
       }
     },
     deleteNews: function deleteNews(id) {
-      var _this4 = this;
+      var _this5 = this;
 
       // request to the backend to delete a record
       if (this.$gate.isAdmin()) {
@@ -4320,9 +4667,23 @@ __webpack_require__.r(__webpack_exports__);
           confirmButtonText: 'Да, изтрий го!'
         }).then(function (result) {
           if (result.value) {
+            _this5.$loadStart();
+
             axios.delete('/api/news/' + id).then(function () {
-              _this4.getAllNews();
-            }).catch(function () {});
+              _this5.getNews();
+
+              _this5.$loadEnd(500);
+            }).catch(function () {
+              swal({
+                type: 'error',
+                title: 'Възникна грешка',
+                showConfirmButton: false,
+                timer: 2000,
+                reload: setTimeout(function () {
+                  location.reload();
+                }, 2000)
+              });
+            });
           }
         });
       }
@@ -4333,7 +4694,7 @@ __webpack_require__.r(__webpack_exports__);
       $("#newsModal").modal("show");
     },
     onFileSelect: function onFileSelect(event) {
-      var _this5 = this;
+      var _this6 = this;
 
       //instantiate new FileReader object for the selected file
       var file = event.target.files[0];
@@ -4341,14 +4702,14 @@ __webpack_require__.r(__webpack_exports__);
       var reader = new FileReader();
 
       reader.onloadend = function () {
-        _this5.form.photos = reader.result;
+        _this6.form.photos = reader.result;
       };
 
       reader.readAsDataURL(file);
     }
   },
   mounted: function mounted() {
-    this.getAllNews();
+    this.getNews();
     this.changeAdminMode();
   }
 });
@@ -4541,9 +4902,22 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       //request to the backend to get the records
+      this.$loadStart();
       axios.get("/api/schedules").then(function (data) {
         _this.schedules = data.data;
-      }).catch(function () {});
+
+        _this.$loadEnd(500);
+      }).catch(function () {
+        swal({
+          type: 'error',
+          title: 'Възникна грешка',
+          showConfirmButton: false,
+          timer: 2000,
+          reload: setTimeout(function () {
+            location.reload();
+          }, 2000)
+        });
+      });
     },
     showModal: function showModal() {
       // display the form to insert DB records
@@ -4555,6 +4929,7 @@ __webpack_require__.r(__webpack_exports__);
 
       //request to the backend to create a new record
       if (this.$gate.isAdmin()) {
+        this.$loadStart();
         this.form.post('/api/schedules').then(function () {
           toast({
             type: 'success',
@@ -4565,7 +4940,19 @@ __webpack_require__.r(__webpack_exports__);
           _this2.getSchedules();
 
           _this2.form.reset();
-        }).catch(function () {});
+
+          _this2.$loadEnd(500);
+        }).catch(function () {
+          swal({
+            type: 'error',
+            title: 'Възникна грешка',
+            showConfirmButton: false,
+            timer: 2000,
+            reload: setTimeout(function () {
+              location.reload();
+            }, 2000)
+          });
+        });
       }
     },
     editSchedule: function editSchedule(data) {
@@ -4579,6 +4966,7 @@ __webpack_require__.r(__webpack_exports__);
 
       // request to the backend to update specific record
       if (this.$gate.isAdmin()) {
+        this.$loadStart();
         this.form.patch('/api/schedules/' + this.form.id).then(function () {
           $('#scheduleModal').modal('hide');
           toast({
@@ -4587,7 +4975,19 @@ __webpack_require__.r(__webpack_exports__);
           });
 
           _this3.getSchedules();
-        }).catch(function () {});
+
+          _this3.$loadEnd(500);
+        }).catch(function () {
+          swal({
+            type: 'error',
+            title: 'Възникна грешка',
+            showConfirmButton: false,
+            timer: 2000,
+            reload: setTimeout(function () {
+              location.reload();
+            }, 2000)
+          });
+        });
       }
     },
     deleteSchedule: function deleteSchedule(id) {
@@ -4606,9 +5006,23 @@ __webpack_require__.r(__webpack_exports__);
           confirmButtonText: 'Да, изтрий го!'
         }).then(function (result) {
           if (result.value) {
+            _this4.$loadStart();
+
             axios.delete('/api/schedules/' + id).then(function () {
               _this4.getSchedules();
-            }).catch(function () {});
+
+              _this4.$loadEnd(500);
+            }).catch(function () {
+              swal({
+                type: 'error',
+                title: 'Възникна грешка',
+                showConfirmButton: false,
+                timer: 2000,
+                reload: setTimeout(function () {
+                  location.reload();
+                }, 2000)
+              });
+            });
           }
         });
       }
@@ -4726,7 +5140,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4734,12 +5147,13 @@ __webpack_require__.r(__webpack_exports__);
       // swich to show administrator content
       sliders: null,
       // holds the records from the DB
-      sliderInterval: setInterval(this.runInterval, 6000),
+      sliderInterval: null,
       // display different slider every 6 seconds
       sliderMode: true,
       // swich the slider mode
       editMode: false,
       // swich the edit mode
+      progress: true,
       form: new Form({
         //instantiate a new Form object
         id: null,
@@ -4770,8 +5184,13 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       //request to the backend to get the records
+      this.$loadStart();
       axios.get("/api/Sliders").then(function (data) {
         _this.sliders = data.data;
+
+        _this.$loadEnd(500);
+
+        _this.sliderInterval = setInterval(_this.runInterval, 6000);
       });
     },
     choiseSlider: function choiseSlider() {
@@ -4808,6 +5227,7 @@ __webpack_require__.r(__webpack_exports__);
 
       //request to the backend to create a new record
       if (this.$gate.isAdmin()) {
+        this.$loadStart();
         this.form.post('/api/Sliders').then(function () {
           toast({
             type: 'success',
@@ -4818,7 +5238,19 @@ __webpack_require__.r(__webpack_exports__);
           _this3.getSliders();
 
           _this3.form.reset();
-        }).catch(function () {});
+
+          _this3.$loadEnd(500);
+        }).catch(function () {
+          swal({
+            type: 'error',
+            title: 'Възникна грешка',
+            showConfirmButton: false,
+            timer: 2000,
+            reload: setTimeout(function () {
+              location.reload();
+            }, 2000)
+          });
+        });
       }
     },
     editSlider: function editSlider(data) {
@@ -4832,6 +5264,7 @@ __webpack_require__.r(__webpack_exports__);
 
       // request to the backend to update specific record
       if (this.$gate.isAdmin()) {
+        this.$loadStart();
         this.form.patch('/api/Sliders/' + this.form.id).then(function () {
           $('#sliderModal').modal('hide');
           toast({
@@ -4840,7 +5273,19 @@ __webpack_require__.r(__webpack_exports__);
           });
 
           _this4.getSliders();
-        }).catch(function () {});
+
+          _this4.$loadEnd(500);
+        }).catch(function () {
+          swal({
+            type: 'error',
+            title: 'Възникна грешка',
+            showConfirmButton: false,
+            timer: 2000,
+            reload: setTimeout(function () {
+              location.reload();
+            }, 2000)
+          });
+        });
       }
     },
     deleteSlider: function deleteSlider(id) {
@@ -4859,6 +5304,8 @@ __webpack_require__.r(__webpack_exports__);
           confirmButtonText: 'Да, изтрий го!'
         }).then(function (result) {
           if (result.value) {
+            _this5.$loadStart();
+
             axios.delete('/api/Sliders/' + id).then(function () {
               _this5.getSliders();
 
@@ -4866,7 +5313,19 @@ __webpack_require__.r(__webpack_exports__);
                 type: 'success',
                 title: 'Записът е успешно изтрит!'
               });
-            }).catch(function () {});
+
+              _this5.$loadEnd(500);
+            }).catch(function () {
+              swal({
+                type: 'error',
+                title: 'Възникна грешка',
+                showConfirmButton: false,
+                timer: 2000,
+                reload: setTimeout(function () {
+                  location.reload();
+                }, 2000)
+              });
+            });
           }
         });
       }
@@ -4883,56 +5342,98 @@ __webpack_require__.r(__webpack_exports__);
       // change the slider when called
       var currentSlide = $(".active");
       var nextSlide = currentSlide.next();
-      currentSlide.fadeOut(0).removeClass("active");
-      nextSlide.fadeIn(500).addClass("active");
+      var movement = parseInt($("#sliderContiner").width() / 2);
+      currentSlide.animate({
+        left: "-=" + movement
+      }, 1500, function () {
+        currentSlide.fadeOut(0).removeClass("active");
+        currentSlide.css("left", 0);
+      });
 
       if (nextSlide.length == 0) {
-        $(".slider").first().fadeIn(500).addClass("active");
+        nextSlide = $(".slider").first();
       }
 
-      ;
+      nextSlide.css("left", movement);
+      nextSlide.fadeIn(0).addClass("active");
+      nextSlide.animate({
+        left: "-=" + movement
+      }, 1500, function () {
+        nextSlide.css("left", 0);
+        currentSlide.css("left", 0);
+      });
     },
     leftArrow: function leftArrow() {
+      var _this6 = this;
+
       // display previous slider and clear the interval if needed
+      this.progress = false;
+
       if (this.sliderMode) {
         clearInterval(this.sliderInterval);
       }
 
       var currentSlide = $(".active");
       var prevSlide = currentSlide.prev();
-      currentSlide.fadeOut(0).removeClass("active");
-      prevSlide.fadeIn(0).addClass("active");
+      var movement = parseInt($("#sliderContiner").width() / 2);
+      currentSlide.animate({
+        left: "+=" + movement
+      }, 1500, function () {
+        currentSlide.fadeOut(0).removeClass("active");
+        currentSlide.css("left", 0);
+      });
 
       if (prevSlide.length == 0) {
-        $(".slider").last().fadeIn(0).addClass("active");
+        prevSlide = $(".slider").last();
       }
+
+      prevSlide.css("left", -movement);
+      prevSlide.fadeIn(0).addClass("active");
+      prevSlide.animate({
+        left: "+=" + movement
+      }, 1500, function () {
+        prevSlide.css("left", 0);
+        currentSlide.css("left", 0);
+        _this6.progress = true;
+      });
 
       if (this.sliderMode) {
         this.sliderInterval = setInterval(this.runInterval, 6000);
       }
     },
-    leftArrowHover: function leftArrowHover() {
-      // change the arrow color
-      $('.fa-caret-left').toggleClass('green').toggleClass('orange');
-    },
-    rightArrowHover: function rightArrowHover() {
-      // change the arrow color
-      $('.fa-caret-right').toggleClass('green').toggleClass('orange');
-    },
     rightArrow: function rightArrow() {
+      var _this7 = this;
+
       // display next slider and clear the interval if needed
+      this.progress = false;
+
       if (this.sliderMode) {
         clearInterval(this.sliderInterval);
       }
 
       var currentSlide = $(".active");
       var nextSlide = currentSlide.next();
-      currentSlide.fadeOut(0).removeClass("active");
-      nextSlide.fadeIn(0).addClass("active");
+      var movement = parseInt($("#sliderContiner").width() / 2);
+      currentSlide.animate({
+        left: "-=" + movement
+      }, 1500, function () {
+        currentSlide.fadeOut(0).removeClass("active");
+        currentSlide.css("left", 0);
+      });
 
       if (nextSlide.length == 0) {
-        $(".slider").first().fadeIn(0).addClass("active");
+        nextSlide = $(".slider").first();
       }
+
+      nextSlide.css("left", movement);
+      nextSlide.fadeIn(0).addClass("active");
+      nextSlide.animate({
+        left: "-=" + movement
+      }, 1500, function () {
+        nextSlide.css("left", 0);
+        currentSlide.css("left", 0);
+        _this7.progress = true;
+      });
 
       if (this.sliderMode) {
         this.sliderInterval = setInterval(this.runInterval, 6000);
@@ -61166,288 +61667,290 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row flex-xl-nowrap" }, [
-    _c("div", { staticClass: "col-2" }, [
-      !_vm.croper && !_vm.resizer
-        ? _c(
-            "button",
-            {
-              staticClass: "w-100 btn btn-secondary",
-              on: {
-                click: function($event) {
-                  _vm.croper = true
-                }
-              }
-            },
-            [_vm._v("Изрежи")]
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.croper
-        ? _c("div", { staticClass: "input-group-text" }, [
+  return this.$gate.isAdmin()
+    ? _c("div", { staticClass: "row flex-xl-nowrap" }, [
+        _c("div", { staticClass: "col-2" }, [
+          !_vm.croper && !_vm.resizer
+            ? _c(
+                "button",
+                {
+                  staticClass: "w-100 btn btn-secondary",
+                  on: {
+                    click: function($event) {
+                      _vm.croper = true
+                    }
+                  }
+                },
+                [_vm._v("Изрежи")]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.croper
+            ? _c("div", { staticClass: "input-group-text" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.croperMethod,
+                      expression: "croperMethod"
+                    }
+                  ],
+                  attrs: { type: "radio", name: "resolution", value: "free" },
+                  domProps: { checked: _vm._q(_vm.croperMethod, "free") },
+                  on: {
+                    change: function($event) {
+                      _vm.croperMethod = "free"
+                    }
+                  }
+                }),
+                _vm._v("\n             Свободно")
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.croper
+            ? _c("div", { staticClass: "input-group-text" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.croperMethod,
+                      expression: "croperMethod"
+                    }
+                  ],
+                  attrs: { type: "radio", name: "resolution", value: "16:9" },
+                  domProps: { checked: _vm._q(_vm.croperMethod, "16:9") },
+                  on: {
+                    change: function($event) {
+                      _vm.croperMethod = "16:9"
+                    }
+                  }
+                }),
+                _vm._v("\n             16:9")
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.croper
+            ? _c("div", { staticClass: "input-group-text" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.croperMethod,
+                      expression: "croperMethod"
+                    }
+                  ],
+                  attrs: { type: "radio", name: "resolution", value: "4:3" },
+                  domProps: { checked: _vm._q(_vm.croperMethod, "4:3") },
+                  on: {
+                    change: function($event) {
+                      _vm.croperMethod = "4:3"
+                    }
+                  }
+                }),
+                _vm._v("\n             4:3")
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.croper
+            ? _c(
+                "button",
+                {
+                  staticClass: "w-100 btn btn-secondary mt-1",
+                  on: {
+                    click: function($event) {
+                      _vm.cropImg()
+                    }
+                  }
+                },
+                [_vm._v("Изрежи")]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          !_vm.croper && !_vm.resizer
+            ? _c(
+                "button",
+                {
+                  staticClass: "w-100 btn btn-secondary mt-1",
+                  on: {
+                    click: function($event) {
+                      _vm.resizer = true
+                    }
+                  }
+                },
+                [_vm._v("Смали")]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.resizer
+            ? _c("p", { staticClass: "dwhite" }, [
+                _vm._v("Дължина - " + _vm._s(this.photoWidth) + "px.")
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.resizer
+            ? _c("p", { staticClass: "dwhite" }, [
+                _vm._v("Височина - " + _vm._s(this.photoHeight) + "px.")
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          !_vm.croper && !_vm.resizer
+            ? _c(
+                "button",
+                {
+                  staticClass: "w-100 btn btn-secondary mt-1",
+                  on: {
+                    click: function($event) {
+                      _vm.rotateImg()
+                    }
+                  }
+                },
+                [_vm._v("Завърти")]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          !_vm.croper && !_vm.resizer
+            ? _c(
+                "button",
+                {
+                  staticClass: "w-100 btn btn-secondary mt-1",
+                  on: {
+                    click: function($event) {
+                      _vm.mirrorImgX()
+                    }
+                  }
+                },
+                [
+                  _vm._v("Огледало "),
+                  _c("i", { staticClass: "fas fa-arrows-alt-h" })
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          !_vm.croper && !_vm.resizer
+            ? _c(
+                "button",
+                {
+                  staticClass: "w-100 btn btn-secondary mt-1",
+                  on: {
+                    click: function($event) {
+                      _vm.mirrorImgY()
+                    }
+                  }
+                },
+                [
+                  _vm._v("Огледало "),
+                  _c("i", { staticClass: "fas fa-arrows-alt-v" })
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.croper || _vm.resizer
+            ? _c(
+                "button",
+                {
+                  attrs: { button: "w-100 btn btn-secondary mt-1" },
+                  on: {
+                    click: function($event) {
+                      _vm.closeMenus()
+                    }
+                  }
+                },
+                [_vm._v("Затвори")]
+              )
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-10 pl-0 pr-0" }, [
+          _c("span", { staticClass: "col-12 dwhite pl-4 bg-secondary" }, [
+            _vm._v("размер на изгледа : "),
             _c("input", {
               directives: [
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.croperMethod,
-                  expression: "croperMethod"
+                  value: _vm.photoSize,
+                  expression: "photoSize"
                 }
               ],
-              attrs: { type: "radio", name: "resolution", value: "free" },
-              domProps: { checked: _vm._q(_vm.croperMethod, "free") },
+              staticClass: "col-8",
+              attrs: { type: "range", min: "1", max: "100", id: "myRange" },
+              domProps: { value: _vm.photoSize },
               on: {
-                change: function($event) {
-                  _vm.croperMethod = "free"
+                mousemove: function($event) {
+                  _vm.setViewSize()
+                },
+                __r: function($event) {
+                  _vm.photoSize = $event.target.value
                 }
               }
             }),
-            _vm._v("\n             Свободно")
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.croper
-        ? _c("div", { staticClass: "input-group-text" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.croperMethod,
-                  expression: "croperMethod"
-                }
-              ],
-              attrs: { type: "radio", name: "resolution", value: "16:9" },
-              domProps: { checked: _vm._q(_vm.croperMethod, "16:9") },
-              on: {
-                change: function($event) {
-                  _vm.croperMethod = "16:9"
-                }
-              }
-            }),
-            _vm._v("\n             16:9")
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.croper
-        ? _c("div", { staticClass: "input-group-text" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.croperMethod,
-                  expression: "croperMethod"
-                }
-              ],
-              attrs: { type: "radio", name: "resolution", value: "4:3" },
-              domProps: { checked: _vm._q(_vm.croperMethod, "4:3") },
-              on: {
-                change: function($event) {
-                  _vm.croperMethod = "4:3"
-                }
-              }
-            }),
-            _vm._v("\n             4:3")
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.croper
-        ? _c(
-            "button",
-            {
-              staticClass: "w-100 btn btn-secondary mt-1",
-              on: {
-                click: function($event) {
-                  _vm.cropImg()
-                }
-              }
-            },
-            [_vm._v("Изрежи")]
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      !_vm.croper && !_vm.resizer
-        ? _c(
-            "button",
-            {
-              staticClass: "w-100 btn btn-secondary mt-1",
-              on: {
-                click: function($event) {
-                  _vm.resizer = true
-                }
-              }
-            },
-            [_vm._v("Смали")]
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.resizer
-        ? _c("p", { staticClass: "dwhite" }, [
-            _vm._v("Дължина - " + _vm._s(this.photoWidth) + "px.")
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.resizer
-        ? _c("p", { staticClass: "dwhite" }, [
-            _vm._v("Височина - " + _vm._s(this.photoHeight) + "px.")
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      !_vm.croper && !_vm.resizer
-        ? _c(
-            "button",
-            {
-              staticClass: "w-100 btn btn-secondary mt-1",
-              on: {
-                click: function($event) {
-                  _vm.rotateImg()
-                }
-              }
-            },
-            [_vm._v("Завърти")]
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      !_vm.croper && !_vm.resizer
-        ? _c(
-            "button",
-            {
-              staticClass: "w-100 btn btn-secondary mt-1",
-              on: {
-                click: function($event) {
-                  _vm.mirrorImgX()
-                }
-              }
-            },
-            [
-              _vm._v("Огледало "),
-              _c("i", { staticClass: "fas fa-arrows-alt-h" })
-            ]
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      !_vm.croper && !_vm.resizer
-        ? _c(
-            "button",
-            {
-              staticClass: "w-100 btn btn-secondary mt-1",
-              on: {
-                click: function($event) {
-                  _vm.mirrorImgY()
-                }
-              }
-            },
-            [
-              _vm._v("Огледало "),
-              _c("i", { staticClass: "fas fa-arrows-alt-v" })
-            ]
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.croper || _vm.resizer
-        ? _c(
-            "button",
-            {
-              attrs: { button: "w-100 btn btn-secondary mt-1" },
-              on: {
-                click: function($event) {
-                  _vm.closeMenus()
-                }
-              }
-            },
-            [_vm._v("Затвори")]
-          )
-        : _vm._e()
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "col-10 pl-0 pr-0" }, [
-      _c("span", { staticClass: "col-12 dwhite pl-4 bg-secondary" }, [
-        _vm._v("размер на изгледа : "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.photoSize,
-              expression: "photoSize"
-            }
-          ],
-          staticClass: "col-8",
-          attrs: { type: "range", min: "1", max: "100", id: "myRange" },
-          domProps: { value: _vm.photoSize },
-          on: {
-            mousemove: function($event) {
-              _vm.setViewSize()
-            },
-            __r: function($event) {
-              _vm.photoSize = $event.target.value
-            }
-          }
-        }),
-        _vm._v("\n            " + _vm._s(this.photoSize) + "%")
-      ]),
-      _c("br"),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "resizer-container col-12 pl-0 pr-0",
-          style:
-            "height:" +
-            this.photoHeight +
-            "px; width:" +
-            this.photoWidth +
-            "px;"
-        },
-        [
-          _c("img", {
-            style:
-              "height:" +
-              this.photoHeight +
-              "px;" +
-              " width:" +
-              this.photoWidth +
-              "px;",
-            attrs: {
-              id: "output",
-              src: "/storage/images/" + this.$route.params.photo,
-              alt: "your image"
-            },
-            on: { load: _vm.getSize }
-          }),
+            _vm._v("\n            " + _vm._s(this.photoSize) + "%")
+          ]),
+          _c("br"),
           _vm._v(" "),
           _c(
             "div",
             {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: this.croper,
-                  expression: "this.croper"
-                }
-              ],
+              staticClass: "resizer-container col-12 pl-0 pr-0",
               style:
                 "height:" +
-                this.croperHeight +
+                this.photoHeight +
                 "px; width:" +
-                this.croperWidth +
-                "px",
-              attrs: { id: "croper", draggable: "true" },
-              on: { mouseup: _vm.setCroper }
+                this.photoWidth +
+                "px;"
             },
             [
-              _c("i", {
-                staticClass: "fas fa-arrows-alt",
-                attrs: { id: "cropercursor" }
-              })
+              _c("img", {
+                style:
+                  "height:" +
+                  this.photoHeight +
+                  "px;" +
+                  " width:" +
+                  this.photoWidth +
+                  "px;",
+                attrs: {
+                  id: "output",
+                  src: "/storage/images/" + this.$route.params.photo,
+                  alt: "your image"
+                },
+                on: { load: _vm.getSize }
+              }),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: this.croper,
+                      expression: "this.croper"
+                    }
+                  ],
+                  style:
+                    "height:" +
+                    this.croperHeight +
+                    "px; width:" +
+                    this.croperWidth +
+                    "px",
+                  attrs: { id: "croper", draggable: "true" },
+                  on: { mouseup: _vm.setCroper }
+                },
+                [
+                  _c("i", {
+                    staticClass: "fas fa-arrows-alt",
+                    attrs: { id: "cropercursor" }
+                  })
+                ]
+              )
             ]
           )
-        ]
-      )
-    ])
-  ])
+        ])
+      ])
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -61471,9 +61974,100 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container-fluid" })
+  return _vm._m(0)
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "container-fluid" }, [
+      _c("div", { staticClass: "row", attrs: { id: "loader" } }, [
+        _c(
+          "div",
+          { staticClass: "d-inline-block", attrs: { id: "spinners" } },
+          [
+            _c(
+              "div",
+              {
+                staticClass: "spinner-grow text-primary",
+                attrs: { role: "status" }
+              },
+              [_c("span", { staticClass: "sr-only" }, [_vm._v("Loading...")])]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "spinner-grow text-secondary",
+                attrs: { role: "status" }
+              },
+              [_c("span", { staticClass: "sr-only" }, [_vm._v("Loading...")])]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "spinner-grow text-success",
+                attrs: { role: "status" }
+              },
+              [_c("span", { staticClass: "sr-only" }, [_vm._v("Loading...")])]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "spinner-grow text-danger",
+                attrs: { role: "status" }
+              },
+              [_c("span", { staticClass: "sr-only" }, [_vm._v("Loading...")])]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "spinner-grow text-warning",
+                attrs: { role: "status" }
+              },
+              [_c("span", { staticClass: "sr-only" }, [_vm._v("Loading...")])]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "spinner-grow text-info",
+                attrs: { role: "status" }
+              },
+              [_c("span", { staticClass: "sr-only" }, [_vm._v("Loading...")])]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "spinner-grow text-light",
+                attrs: { role: "status" }
+              },
+              [_c("span", { staticClass: "sr-only" }, [_vm._v("Loading...")])]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "spinner-grow text-dark",
+                attrs: { role: "status" }
+              },
+              [
+                _c("span", { staticClass: "sr-only text-dark" }, [
+                  _vm._v("Loading...")
+                ])
+              ]
+            )
+          ]
+        )
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -62324,11 +62918,11 @@ var render = function() {
           }
         }),
         _vm._v(" "),
-        _c("ul", { staticClass: "pl-2 pr-2 pt-2 pb-2" }, [
+        _c("ul", { staticClass: "p-2" }, [
           _c(
             "li",
             {
-              staticClass: "mt-2 pt-1 pb-1 bg-dark text-white rounded",
+              staticClass: "mt-2 py-1 bg-dark text-white rounded",
               on: {
                 click: function($event) {
                   _vm.uploadImg()
@@ -62341,7 +62935,7 @@ var render = function() {
           _c(
             "li",
             {
-              staticClass: "mt-2 pt-1 pb-1 bg-dark text-white rounded",
+              staticClass: "mt-2 py-1 bg-dark text-white rounded",
               on: {
                 click: function($event) {
                   _vm.changePass()
@@ -62354,7 +62948,7 @@ var render = function() {
           _c(
             "li",
             {
-              staticClass: "mt-5 pt-1 pb-1 bg-danger text-white rounded",
+              staticClass: "mt-5 py-1 bg-danger text-white rounded",
               on: {
                 click: function($event) {
                   _vm.deleteUser()
@@ -62377,8 +62971,8 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "col-12 col-md-10" }, [
-      this.$gate.isAdmin() && _vm.showUsersTable
+    _c("div", { staticClass: "col-12 col-md-8" }, [
+      this.$gate.isAdmin() && !_vm.showUsersTable
         ? _c("table", { staticClass: "table table-dark" }, [
             _vm._m(0),
             _vm._v(" "),
@@ -62450,10 +63044,46 @@ var render = function() {
           ])
         : _vm._e(),
       _vm._v(" "),
-      _vm._m(1),
-      _vm._v(" "),
-      _vm._m(2)
+      _vm._m(1)
     ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass:
+          "bg-dark col-12 col-md-2 m-0 px-1 border border-secondary rounded"
+      },
+      [
+        _c("h3", { staticClass: "mb-0 dwhite text-center" }, [
+          _vm._v("Потребители")
+        ]),
+        _vm._v(" "),
+        _vm._l(this.users, function(userList) {
+          return _c(
+            "div",
+            {
+              key: userList.id,
+              staticClass: "bg-light col-12 rounded p-1 mt-1"
+            },
+            [
+              _c("div", { staticClass: "col-2 d-inline-block p-0 m-0" }, [
+                _c("img", {
+                  staticClass: "img-fluid rounded-circle",
+                  attrs: { src: "/storage/images/" + userList.photos, alt: "" }
+                })
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "pl-1" }, [
+                _vm._v(
+                  _vm._s(userList.firstName) + " " + _vm._s(userList.lastName)
+                )
+              ])
+            ]
+          )
+        })
+      ],
+      2
+    ),
     _vm._v(" "),
     _c(
       "div",
@@ -62473,7 +63103,7 @@ var render = function() {
           { staticClass: "modal-dialog modal-xl", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(3),
+              _vm._m(2),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body pl-0 pr-0 pb-0 pt-0" }, [
                 _c("span", { staticClass: "col-12 dwhite pl-4 bg-secondary" }, [
@@ -62600,27 +63230,22 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-12 col-md-6 float-left" }, [
-      _c("div", { staticClass: "bg-dark rounded-top mt-2" }, [
-        _c("h3", { staticClass: "dwhite text-center" }, [_vm._v("Вашите теми")])
-      ]),
-      _vm._v(" "),
-      _c("div")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-12 col-md-6 float-left" }, [
-      _c("div", { staticClass: "bg-dark rounded-top mt-2" }, [
-        _c("h3", { staticClass: "dwhite text-center" }, [
-          _vm._v("Вашите коментари")
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div")
-    ])
+    return _c(
+      "div",
+      { staticClass: "col-12 m-0 p-0 border border-secondary rounded" },
+      [
+        _c(
+          "h3",
+          {
+            staticClass:
+              "bg-light rounded-top mb-0 py-1 text-center border-secondary"
+          },
+          [_vm._v("Разговори")]
+        ),
+        _vm._v(" "),
+        _c("div")
+      ]
+    )
   },
   function() {
     var _vm = this
@@ -63814,11 +64439,9 @@ var render = function() {
                     "a",
                     {
                       staticClass: "page-link",
-                      on: {
-                        click: function($event) {
-                          $event.preventDefault()
-                          _vm.prevPage()
-                        }
+                      attrs: {
+                        href:
+                          "./" + (this.page > 1 ? this.page - 1 : this.pages)
                       }
                     },
                     [_c("i", { staticClass: "fas fa-chevron-left" })]
@@ -63882,11 +64505,9 @@ var render = function() {
                     "a",
                     {
                       staticClass: "page-link",
-                      on: {
-                        click: function($event) {
-                          $event.preventDefault()
-                          _vm.nextPage()
-                        }
+                      attrs: {
+                        href:
+                          "./" + (this.page < this.pages ? this.page + 1 : 1)
                       }
                     },
                     [_c("i", { staticClass: "fas fa-chevron-right" })]
@@ -64539,11 +65160,9 @@ var render = function() {
                     "a",
                     {
                       staticClass: "page-link",
-                      on: {
-                        click: function($event) {
-                          $event.preventDefault()
-                          _vm.prevPage()
-                        }
+                      attrs: {
+                        href:
+                          "./" + (this.page > 1 ? this.page - 1 : this.pages)
                       }
                     },
                     [_c("i", { staticClass: "fas fa-chevron-left" })]
@@ -64607,11 +65226,9 @@ var render = function() {
                     "a",
                     {
                       staticClass: "page-link",
-                      on: {
-                        click: function($event) {
-                          $event.preventDefault()
-                          _vm.nextPage()
-                        }
+                      attrs: {
+                        href:
+                          "./" + (this.page < this.pages ? this.page + 1 : 1)
                       }
                     },
                     [_c("i", { staticClass: "fas fa-chevron-right" })]
@@ -65443,12 +66060,9 @@ var render = function() {
                       "a",
                       {
                         staticClass: "page-link",
-                        attrs: { href: "" },
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            _vm.prevPage()
-                          }
+                        attrs: {
+                          href:
+                            "./" + (this.page > 1 ? this.page - 1 : this.pages)
                         }
                       },
                       [_c("i", { staticClass: "fas fa-chevron-left" })]
@@ -65512,12 +66126,9 @@ var render = function() {
                       "a",
                       {
                         staticClass: "page-link",
-                        attrs: { href: "" },
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            _vm.nextPage()
-                          }
+                        attrs: {
+                          href:
+                            "./" + (this.page < this.pages ? this.page + 1 : 1)
                         }
                       },
                       [_c("i", { staticClass: "fas fa-chevron-right" })]
@@ -65527,7 +66138,7 @@ var render = function() {
               ])
             : _vm._e(),
           _vm._v(" "),
-          _vm._l(_vm.allNews, function(news) {
+          _vm._l(_vm.news, function(news) {
             return _c("div", { key: news.id }, [
               _c("div", { staticClass: "mt-3 news" }, [
                 _c(
@@ -65968,7 +66579,7 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _c("announcement-component")
+      _c("router-view")
     ],
     1
   )
@@ -66724,7 +67335,6 @@ var render = function() {
         ? _c(
             "a",
             {
-              staticClass: "float-right",
               attrs: { href: "" },
               on: {
                 click: function($event) {
@@ -66736,152 +67346,146 @@ var render = function() {
             [_c("i", { staticClass: "fas fa-file-import fa-3x green" })]
           )
         : _vm._e(),
+      _c("br"),
       _vm._v(" "),
-      _c("div", { staticClass: "col-12 col-lg-9 col-md-8" }, [
-        _c("div", [
-          _vm._m(0),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "sliderContiner" },
-            _vm._l(_vm.sliders, function(slider, index) {
-              return _c(
-                "div",
-                {
-                  key: slider.id,
-                  class: { active: index == 0, slider: slider }
-                },
-                [
-                  _vm.sliderMode
-                    ? _c("div", [
-                        _c("h3", { staticClass: "text-center dwhite" }, [
-                          _vm._v(_vm._s(slider.title))
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "a",
-                          {
-                            attrs: { href: "" },
+      _c("div", { staticClass: "col-12 col-lg-9 col-md-8 overflow-x-hidden" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c(
+          "div",
+          { attrs: { id: "sliderContiner" } },
+          _vm._l(_vm.sliders, function(slider, index) {
+            return _c(
+              "div",
+              { key: slider.id, class: { active: index == 0, slider: slider } },
+              [
+                _vm.sliderMode
+                  ? _c("div", [
+                      _c("h3", { staticClass: "text-center dwhite" }, [
+                        _vm._v(_vm._s(slider.title))
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          attrs: { href: "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              _vm.choiseSlider()
+                            }
+                          }
+                        },
+                        [
+                          _c("img", {
+                            attrs: {
+                              src: "/storage/images/" + slider.photos,
+                              alt: slider.title
+                            }
+                          })
+                        ]
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                !_vm.sliderMode
+                  ? _c("div", [
+                      _c("h3", { staticClass: "text-center dwhite" }, [
+                        _vm._v(_vm._s(slider.title))
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "p",
+                        {
+                          staticClass:
+                            "dwhite d-inline-block pr-2 viewSliderDescription"
+                        },
+                        [
+                          _c("img", {
+                            staticClass: "w-50 float-left",
+                            attrs: {
+                              src: "/storage/images/" + slider.photos,
+                              alt: slider.title
+                            },
                             on: {
                               click: function($event) {
-                                $event.preventDefault()
                                 _vm.choiseSlider()
                               }
                             }
-                          },
-                          [
-                            _c("img", {
-                              attrs: {
-                                src: "/storage/images/" + slider.photos,
-                                alt: slider.title
-                              }
-                            })
-                          ]
-                        )
-                      ])
-                    : _vm._e(),
-                  _vm._v(" "),
-                  !_vm.sliderMode
-                    ? _c("div", [
-                        _c("h3", { staticClass: "text-center dwhite" }, [
-                          _vm._v(_vm._s(slider.title))
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "p",
-                          {
-                            staticClass:
-                              "dwhite d-inline-block pr-2 viewSliderDescription"
-                          },
-                          [
-                            _c("img", {
-                              staticClass: "w-50 float-left",
-                              attrs: {
-                                src: "/storage/images/" + slider.photos,
-                                alt: slider.title
-                              },
-                              on: {
-                                click: function($event) {
-                                  _vm.choiseSlider()
-                                }
-                              }
-                            }),
-                            _vm._v(
-                              "\n                            " +
-                                _vm._s(slider.description) +
-                                "\n                        "
-                            )
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _vm.adminMode
-                          ? _c(
-                              "div",
-                              { staticClass: "p-1 d-inline-block w-100" },
-                              [
-                                _c("hr", { staticClass: "mb-0 mt-0" }),
-                                _vm._v(" "),
-                                _c(
-                                  "a",
-                                  {
-                                    attrs: { href: "" },
-                                    on: {
-                                      click: function($event) {
-                                        $event.preventDefault()
-                                        _vm.editSlider(slider)
-                                      }
+                          }),
+                          _vm._v(
+                            "\n                        " +
+                              _vm._s(slider.description) +
+                              "\n                    "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _vm.adminMode
+                        ? _c(
+                            "div",
+                            { staticClass: "p-1 d-inline-block w-100" },
+                            [
+                              _c("hr", { staticClass: "mb-0 mt-0" }),
+                              _vm._v(" "),
+                              _c(
+                                "a",
+                                {
+                                  attrs: { href: "" },
+                                  on: {
+                                    click: function($event) {
+                                      $event.preventDefault()
+                                      _vm.editSlider(slider)
                                     }
-                                  },
-                                  [
-                                    _c("i", {
-                                      staticClass: "fas fa-edit yellow"
-                                    }),
-                                    _vm._v(" ")
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _vm.adminMode
-                                  ? _c(
-                                      "a",
-                                      {
-                                        attrs: { href: "" },
-                                        on: {
-                                          click: function($event) {
-                                            $event.preventDefault()
-                                            _vm.deleteSlider(slider.id)
-                                          }
+                                  }
+                                },
+                                [
+                                  _c("i", {
+                                    staticClass: "fas fa-edit yellow"
+                                  }),
+                                  _vm._v(" ")
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _vm.adminMode
+                                ? _c(
+                                    "a",
+                                    {
+                                      attrs: { href: "" },
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          _vm.deleteSlider(slider.id)
                                         }
-                                      },
-                                      [
-                                        _c("i", {
-                                          staticClass: "fas fa-trash red"
-                                        }),
-                                        _vm._v(" ")
-                                      ]
-                                    )
-                                  : _vm._e(),
-                                _vm._v(" "),
-                                _c(
-                                  "a",
-                                  {
-                                    attrs: { href: "/Снимки/" + slider.photos }
-                                  },
-                                  [
-                                    _c("i", { staticClass: "fas fa-cut blue" }),
-                                    _vm._v(" ")
-                                  ]
-                                )
-                              ]
-                            )
-                          : _vm._e()
-                      ])
-                    : _vm._e()
-                ]
-              )
-            }),
-            0
-          )
-        ]),
+                                      }
+                                    },
+                                    [
+                                      _c("i", {
+                                        staticClass: "fas fa-trash red"
+                                      }),
+                                      _vm._v(" ")
+                                    ]
+                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _c(
+                                "a",
+                                { attrs: { href: "/Снимки/" + slider.photos } },
+                                [
+                                  _c("i", { staticClass: "fas fa-cut blue" }),
+                                  _vm._v(" ")
+                                ]
+                              )
+                            ]
+                          )
+                        : _vm._e()
+                    ])
+                  : _vm._e()
+              ]
+            )
+          }),
+          0
+        ),
         _vm._v(" "),
         _c(
           "div",
@@ -67118,7 +67722,7 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _c("announcement-component")
+      _c("router-view")
     ],
     1
   )
@@ -67135,14 +67739,8 @@ var staticRenderFns = [
         _c("i", {
           staticClass: "fas fa-angle-double-left fa-3x green",
           on: {
-            mouseout: function($event) {
-              _vm.leftArrowHover()
-            },
-            mouseover: function($event) {
-              _vm.leftArrowHover()
-            },
             click: function($event) {
-              _vm.leftArrow()
+              _vm.progress ? _vm.leftArrow() : null
             }
           }
         }),
@@ -67150,14 +67748,8 @@ var staticRenderFns = [
         _c("i", {
           staticClass: "fas fa-angle-double-right fa-3x green",
           on: {
-            mouseout: function($event) {
-              _vm.rightArrowHover()
-            },
-            mouseover: function($event) {
-              _vm.rightArrowHover()
-            },
             click: function($event) {
-              _vm.rightArrow()
+              _vm.progress ? _vm.rightArrow() : null
             }
           }
         })
@@ -81268,7 +81860,6 @@ window.DragElement = _DragElement__WEBPACK_IMPORTED_MODULE_1__["default"];
  * Vue Globally Registered Components
  */
 
-Vue.component('announcement-component', __webpack_require__(/*! ./components/content/AnnouncementsComponent.vue */ "./resources/js/components/content/AnnouncementsComponent.vue").default);
 Vue.component('master-navigation', __webpack_require__(/*! ./components/MasterNavigationComponent.vue */ "./resources/js/components/MasterNavigationComponent.vue").default);
 Vue.component('master-header', __webpack_require__(/*! ./components/MasterHeaderComponent.vue */ "./resources/js/components/MasterHeaderComponent.vue").default);
 Vue.component('master-footer', __webpack_require__(/*! ./components/MasterFooterComponent.vue */ "./resources/js/components/MasterFooterComponent.vue").default);
@@ -81282,10 +81873,18 @@ Vue.component('contacts-component', __webpack_require__(/*! ./components/Contact
 Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]);
 var routes = [{
   path: '/',
-  component: __webpack_require__(/*! ./components/content/SlidersComponent.vue */ "./resources/js/components/content/SlidersComponent.vue").default
+  component: __webpack_require__(/*! ./components/content/SlidersComponent.vue */ "./resources/js/components/content/SlidersComponent.vue").default,
+  children: [{
+    path: '/',
+    component: __webpack_require__(/*! ./components/content/AnnouncementsComponent.vue */ "./resources/js/components/content/AnnouncementsComponent.vue").default
+  }]
 }, {
   path: '/Новини/:page',
-  component: __webpack_require__(/*! ./components/content/NewsComponent.vue */ "./resources/js/components/content/NewsComponent.vue").default
+  component: __webpack_require__(/*! ./components/content/NewsComponent.vue */ "./resources/js/components/content/NewsComponent.vue").default,
+  children: [{
+    path: '/',
+    component: __webpack_require__(/*! ./components/content/AnnouncementsComponent.vue */ "./resources/js/components/content/AnnouncementsComponent.vue").default
+  }]
 }, {
   path: '/Треньори',
   component: __webpack_require__(/*! ./components/content/CoachsComponent.vue */ "./resources/js/components/content/CoachsComponent.vue").default
@@ -81359,9 +81958,28 @@ Vue.filter('getAge', function (birthday) {
 
   return age;
 });
+
+Vue.prototype.$loadStart = function loadStart() {
+  $("#loader").fadeIn(0);
+  var spinners = $("#spinners"),
+      parent = spinners.parent(),
+      marginLeft,
+      marginTop;
+  marginLeft = (parseInt(parent.width()) - parseInt(spinners.width())) / 2;
+  marginTop = (parseInt(parent.height()) - parseInt(spinners.height())) / 2;
+  spinners.css("margin-left", marginLeft + "px");
+  spinners.css("margin-top", marginTop + "px");
+};
+
+Vue.prototype.$loadEnd = function loadEnd(time) {
+  setTimeout(function () {
+    $("#loader").fadeOut(0);
+  }, time);
+};
 /**
  * Vue-Istance
  */
+
 
 var app = new Vue({
   el: '#app',
@@ -81418,13 +82036,13 @@ if (token) {
  * allows your team to easily build robust real-time web applications.
  */
 // import Echo from 'laravel-echo'
-// window.Pusher = require('pusher-js');
+// window.Pusher = require('pusher-js')
 // window.Echo = new Echo({
 //     broadcaster: 'pusher',
 //     key: process.env.MIX_PUSHER_APP_KEY,
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
-// });
+// })
 
 /***/ }),
 

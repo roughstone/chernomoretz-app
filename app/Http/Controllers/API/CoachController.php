@@ -40,7 +40,7 @@ class CoachController extends Controller
             if ($request->photos) {
                 $fileName = time().'.'.explode('/', explode(':', substr($request->photos, 0, strpos($request->photos, ';')))[1])[1];
 
-                Image::make($request->photos)->save(public_path('/storage/coachs/'.$fileName));
+                Image::make($request->photos)->save(public_path('/storage/images/'.$fileName));
             }
             $object = new Coach();
 
@@ -79,8 +79,8 @@ class CoachController extends Controller
             if (strlen($request->photos) > 20) {
                 $fileName = time().'.'.explode('/', explode(':', substr($request->photos, 0, strpos($request->photos, ';')))[1])[1];
 
-                Image::make($request->photos)->save(public_path('/storage/coachs/'.$fileName));
-                unlink('../public/storage/coachs/' . $object->photos);
+                Image::make($request->photos)->save(public_path('/storage/images/'.$fileName));
+                unlink('../public/storage/images/' . $object->photos);
             } else {
                 $fileName = $object->photos;
             }
@@ -109,7 +109,7 @@ class CoachController extends Controller
 
             $coach->delete();
 
-            unlink('../public/storage/coachs/' . $coach->photos);
+            unlink('../public/storage/images/' . $coach->photos);
         }
     }
 }

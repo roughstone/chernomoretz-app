@@ -61,7 +61,7 @@
             }
         },
         mounted() {
-            this.$route.params.contactsForm = false; //when component is mounted push contactsForm parameter to the router and set id to false.
+            this.$route.params.contactsForm = false //when component is mounted push contactsForm parameter to the router and set id to false.
         }
     }
 </script>

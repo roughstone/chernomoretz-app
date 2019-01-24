@@ -81,7 +81,7 @@
                 this.contactsForm = false
                 this.contactsMode = true
                 this.$route.params.contactsForm = false
-                this.form.reset();
+                this.form.reset()
             },
             changeContacts() {
                 if(this.contactsMode) {
@@ -91,11 +91,13 @@
                 }
             },
             sendQuestion() {
+                this.$loadStart()
                 this.form.post('/user-question')
                 .then(() => {
                     toast({type: 'success', title: 'Вашето съобщение е изпратено успешно!'})
-                    $('#contactsModal').modal('hide');
+                    $('#contactsModal').modal('hide')
                     this.closeModal()
+                    this.$loadEnd(500)
                 })
                 .catch(() => {
 

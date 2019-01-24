@@ -48,6 +48,7 @@
             <contacts-component></contacts-component>
                 <router-view></router-view>
             </div>
+            <master-footer></master-footer>
         </div>
 @auth
     <script>

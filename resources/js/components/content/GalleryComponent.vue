@@ -120,7 +120,7 @@ Size is set to "col-3" grid proportion with zero padding to show 4 records per r
         },
         methods: {
             showModal(){ // show the form modal
-                $("#photosModal").modal("show");
+                $("#photosModal").modal("show")
             },
             changeAdminMode() { //check is the user administrator
                 if(this.$gate.isAdmin()) {
@@ -130,27 +130,47 @@ Size is set to "col-3" grid proportion with zero padding to show 4 records per r
                 }
             },
             getPhotos() { //request to the backend to get the records
+                this.$loadStart()
                 axios.get("/api/gallery/"+ this.$route.params.id)
                 .then(({ data }) => {
                     this.gallery = data
                     this.allPhotos = data.length
                     this.displayGallery()
+                    this.$loadEnd(500)
                 })
                 .catch(() => {
-
-                });
+                    swal({
+                        type: 'error',
+                        title: 'Възникна грешка',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        reload: setTimeout(() => {
+                            location.reload()
+                        }, 2000)
+                    })
+                })
             },
             createPhoto(){ //request to the backend to create a new record
                 if(this.$gate.isAdmin()) {
+                    this.$loadStart()
                     this.form.post('/api/gallery/' + this.$route.params.id)
                     .then(() => {
                         toast({type: 'success', title: 'Успешно добавихте нов треньор!'})
-                        $('#photosModal').modal('hide');
+                        $('#photosModal').modal('hide')
                         this.getPhotos()
-                        this.form.reset();
+                        this.form.reset()
+                        this.$loadEnd(500)
                     })
                     .catch(() => {
-
+                        swal({
+                            type: 'error',
+                            title: 'Възникна грешка',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            reload: setTimeout(() => {
+                                location.reload()
+                            }, 2000)
+                        })
                     })
                 }
             },
@@ -167,23 +187,33 @@ Size is set to "col-3" grid proportion with zero padding to show 4 records per r
                     confirmButtonText: 'Да, изтрий го!'
                     }).then((result) => {
                         if (result.value) {
+                            this.$loadStart()
                             axios.delete('/api/gallery/' + id)
                             .then(() => {
-                                this.getPhotos();
+                                this.getPhotos()
+                                this.$loadEnd(500)
                             })
                             .catch(() => {
-
+                                swal({
+                                    type: 'error',
+                                    title: 'Възникна грешка',
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    reload: setTimeout(() => {
+                                        location.reload()
+                                    }, 2000)
+                                })
                             })
                         }
                     })
                 }
             },
             onFileSelect(event) { //instantiate new FileReader object for the selected file
-                let file = event.target.files[0];
-                this.form.photos = event.target.files[0];
-                let reader = new FileReader();
+                let file = event.target.files[0]
+                this.form.photos = event.target.files[0]
+                let reader = new FileReader()
                 reader.onloadend = () => {
-                    this.form.photos = reader.result;
+                    this.form.photos = reader.result
                 }
                 reader.readAsDataURL(file)
             },

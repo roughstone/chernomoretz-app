@@ -67,7 +67,7 @@ class PhotosController extends Controller
 
             $photo->delete();
 
-            unlink('../public/storage/galleries/' . $photo->photos);
+            unlink('../public/storage/images/' . $photo->photos);
         }
     }
 }

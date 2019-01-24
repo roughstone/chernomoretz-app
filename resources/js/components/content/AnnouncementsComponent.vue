@@ -123,11 +123,11 @@
                 if (this.editMode) {
                     this.form.originalData.id = this.form.id
                     this.form.originalData.photos = this.form.photos
-                    this.form.reset();
+                    this.form.reset()
                 } else if (!this.editMode){
                     this.form.originalData.id = null
                     this.form.originalData.photos = null
-                    this.form.reset();
+                    this.form.reset()
                 }
             },
             changeAdminMode() { //check is the user administrator
@@ -138,44 +138,77 @@
                 }
             },
             getAnnouncements() { //request to the backend to get the records
+                 this.$loadStart()
                 axios.get("/api/news")
-                .then(( data ) => {this.announcements = data.data})
+                .then(( data ) => {
+                    this.announcements = data.data
+                    this.$loadEnd(500)
+                    })
                 .catch(() => {
-
-                });
+                    swal({
+                        type: 'error',
+                        title: 'Възникна грешка',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        reload: setTimeout(() => {
+                            location.reload()
+                        }, 2000)
+                    })
+                })
             },
             showModal(){ // display the form to insert DB records
                 this.editMode = false
-                $("#announcementModal").modal("show");
+                $("#announcementModal").modal("show")
             },
             createAnnouncement(){ //request to the backend to create a new record
                 if(this.$gate.isAdmin()) {
+                    this.$loadStart()
                     this.form.post('/api/news')
                     .then(() => {
-                        toast({type: 'success', title: 'Успешно добавихте ново обявление!'});
-                        $('#announcementModal').modal('hide');
-                        this.getAnnouncements();
-                        this.form.reset();
+                        toast({type: 'success', title: 'Успешно добавихте ново обявление!'})
+                        $('#announcementModal').modal('hide')
+                        this.getAnnouncements()
+                        this.form.reset()
+                        this.$loadEnd(500)
                     })
                     .catch(() => {
-
+                        swal({
+                            type: 'error',
+                            title: 'Възникна грешка',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            reload: setTimeout(() => {
+                                location.reload()
+                            }, 2000)
+                        })
                     })
                 }
             },
             editAnnouncement(announcement){ // display the form to edit DB records
-                this.editMode = true;
-                $("#announcementModal").modal("show");
-                this.form.fill( announcement );
+                this.editMode = true
+                $("#announcementModal").modal("show")
+                this.form.fill( announcement )
             },
             updateAnnouncement() { // request to the backend to edit a specific record
                 if(this.$gate.isAdmin()) {
+                    this.$loadStart()
                     this.form.patch('/api/news/' + this.form.id)
                     .then(() => {
-                        $('#announcementModal').modal('hide');
+                        $('#announcementModal').modal('hide')
                         toast({type: 'success', title: 'Промяната приложена успешно!'})
-                        this.getAnnouncements();
+                        this.getAnnouncements()
+                        this.$loadEnd(500)
                     })
                     .catch(() => {
+                        swal({
+                            type: 'error',
+                            title: 'Възникна грешка',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            reload: setTimeout(() => {
+                                location.reload()
+                            }, 2000)
+                        })
                     })
                 }
             },
@@ -192,30 +225,40 @@
                     confirmButtonText: 'Да, изтрий го!'
                     }).then((result) => {
                         if (result.value) {
+                            this.$loadStart()
                             axios.delete('/api/news/' + id)
                             .then(() => {
-                                this.getAnnouncements();
+                                this.getAnnouncements()
+                                this.$loadEnd(500)
                             })
                             .catch(() => {
-
+                                swal({
+                                    type: 'error',
+                                    title: 'Възникна грешка',
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    reload: setTimeout(() => {
+                                        location.reload()
+                                    }, 2000)
+                                })
                             })
                         }
                     })
                 }
             },
             onFileSelect(event) { //instantiate new FileReader object for the selected file
-                let file = event.target.files[0];
-                this.form.photos = event.target.files[0];
-                let reader = new FileReader();
+                let file = event.target.files[0]
+                this.form.photos = event.target.files[0]
+                let reader = new FileReader()
                 reader.onloadend = () => {
-                   this.form.photos = reader.result;
+                   this.form.photos = reader.result
                 }
                 reader.readAsDataURL(file)
             },
         },
         mounted() {
-            this.changeAdminMode();
-            this.getAnnouncements();
+            this.changeAdminMode()
+            this.getAnnouncements()
         }
     }
 </script>

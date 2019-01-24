@@ -16,7 +16,7 @@ class CompetitorsController extends Controller
      */
     public function index()
     {
-        return Competitor::paginate(9);
+        return Competitor::paginate(1);
     }
 
     /**
@@ -40,7 +40,7 @@ class CompetitorsController extends Controller
             if ($request->photos) {
                 $fileName = time().'.'.explode('/', explode(':', substr($request->photos, 0, strpos($request->photos, ';')))[1])[1];
 
-                Image::make($request->photos)->save(public_path('/storage/competitors/'.$fileName));
+                Image::make($request->photos)->save(public_path('/storage/images/'.$fileName));
             }
             $object = new Competitor();
 
@@ -79,8 +79,8 @@ class CompetitorsController extends Controller
             if (strlen($request->photos) > 20) {
                 $fileName = time().'.'.explode('/', explode(':', substr($request->photos, 0, strpos($request->photos, ';')))[1])[1];
 
-                Image::make($request->photos)->save(public_path('/storage/competitors/'.$fileName));
-                unlink('../public/storage/competitors/' . $object->photos);
+                Image::make($request->photos)->save(public_path('/storage/images/'.$fileName));
+                unlink('../public/storage/images/' . $object->photos);
             } else {
                 $fileName = $object->photos;
             }
@@ -109,7 +109,7 @@ class CompetitorsController extends Controller
 
             $competitor->delete();
 
-            unlink('../public/storage/competitors/' . $competitor->photos);
+            unlink('../public/storage/images/' . $competitor->photos);
         }
     }
 }

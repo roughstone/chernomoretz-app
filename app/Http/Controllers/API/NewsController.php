@@ -45,7 +45,7 @@ class NewsController extends Controller
             if ($request->photos) {
                 $fileName = time().'.'.explode('/', explode(':', substr($request->photos, 0, strpos($request->photos, ';')))[1])[1];
 
-                Image::make($request->photos)->save(public_path('/storage/news/'.$fileName));
+                Image::make($request->photos)->save(public_path('/storage/images/'.$fileName));
             }
             $object = new News();
 
@@ -83,8 +83,8 @@ class NewsController extends Controller
             if (strlen($request->photos) > 20) {
                 $fileName = time().'.'.explode('/', explode(':', substr($request->photos, 0, strpos($request->photos, ';')))[1])[1];
 
-                Image::make($request->photos)->save(public_path('/storage/news/'.$fileName));
-                unlink('../public/storage/news/' . $object->photos);
+                Image::make($request->photos)->save(public_path('/storage/images/'.$fileName));
+                unlink('../public/storage/images/' . $object->photos);
             } else {
                 $fileName = $object->photos;
             }
@@ -112,7 +112,7 @@ class NewsController extends Controller
 
             $news->delete();
 
-            unlink('../public/storage/news/' . $news->photos);
+            unlink('../public/storage/images/' . $news->photos);
         }
     }
 }

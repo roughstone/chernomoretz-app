@@ -41,7 +41,7 @@ class GalleriesController extends Controller
             if ($request->photos) {
                 $fileName = time().'.'.explode('/', explode(':', substr($request->photos, 0, strpos($request->photos, ';')))[1])[1];
 
-                Image::make($request->photos)->save(public_path('/storage/galleries/'.$fileName));
+                Image::make($request->photos)->save(public_path('/storage/images/'.$fileName));
             }
             $object = new Gallery();
 
@@ -78,8 +78,8 @@ class GalleriesController extends Controller
             if (strlen($request->photos) > 20) {
                 $fileName = time().'.'.explode('/', explode(':', substr($request->photos, 0, strpos($request->photos, ';')))[1])[1];
 
-                Image::make($request->photos)->save(public_path('/storage/galleries/'.$fileName));
-                unlink('../public/storage/galleries/' . $object->photos);
+                Image::make($request->photos)->save(public_path('/storage/images/'.$fileName));
+                unlink('../public/storage/images/' . $object->photos);
             } else {
                 $fileName = $object->photos;
             }
@@ -106,11 +106,11 @@ class GalleriesController extends Controller
         if (\Gate::allows('admin')) {
 
             foreach($gallery->galleryPhotos as $photo) {
-                unlink('../public/storage/galleries/' . $photo->photos);
+                unlink('../public/storage/images/' . $photo->photos);
                 $photo->delete();
             }
 
-            unlink('../public/storage/galleries/' . $gallery->photos);
+            unlink('../public/storage/images/' . $gallery->photos);
             $gallery->delete();
         }
     }

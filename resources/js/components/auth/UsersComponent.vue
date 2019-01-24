@@ -7,20 +7,20 @@
                 <button class="mt-2  btn btn-primary" v-if="this.$gate.isAdmin() && !showUsersTable" @click="getUsers()">скрий <i class="fas fa-users"></i></button>
                 <p class="mt-2 pt-2"> Здравей {{user.firstName}}!</p>
                 <img class="rounded-circle mt-2 img-fluid" :src="'/storage/images/' + user.photos" :alt="user.firstName + ' ' + user.lastName">
-                <ul class="pl-2 pr-2 pt-2 pb-2">
-                    <li class="mt-2 pt-1 pb-1 bg-dark text-white rounded" @click="uploadImg()">
+                <ul class="p-2">
+                    <li class="mt-2 py-1 bg-dark text-white rounded" @click="uploadImg()">
                         <i class="fas fa-user-edit"></i> снимка</li>
-                    <li class="mt-2 pt-1 pb-1 bg-dark text-white rounded" @click="changePass()">
+                    <li class="mt-2 py-1 bg-dark text-white rounded" @click="changePass()">
                         <i class="fas fa-edit"></i> парола</li>
-                    <li class="mt-5 pt-1 pb-1 bg-danger text-white rounded" @click="deleteUser()">
+                    <li class="mt-5 py-1 bg-danger text-white rounded" @click="deleteUser()">
                         <i class="fas fa-trash"></i> изтрий профила</li>
                 </ul>
                 <input type="file" style="display:none" id="imgupload" @change="onFileSelect" name="photos" class="form-control">
             </div>
         </div>
 
-        <div class="col-12 col-md-10">
-            <table v-if="this.$gate.isAdmin() && showUsersTable" class="table table-dark">
+        <div class="col-12 col-md-8">
+            <table v-if="this.$gate.isAdmin() && !showUsersTable" class="table table-dark">
                   <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -48,13 +48,20 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="col-12 col-md-6 float-left">
-                <div class="bg-dark rounded-top mt-2"><h3 class="dwhite text-center">Вашите теми</h3></div>
+
+            <div class="col-12 m-0 p-0 border border-secondary rounded">
+                <h3 class="bg-light rounded-top mb-0 py-1 text-center border-secondary">Разговори</h3>
                 <div></div>
             </div>
-            <div class="col-12 col-md-6 float-left">
-                <div class="bg-dark rounded-top mt-2"><h3 class="dwhite text-center">Вашите коментари</h3></div>
-                <div></div>
+        </div>
+
+        <div class="bg-dark col-12 col-md-2 m-0 px-1 border border-secondary rounded">
+            <h3 class="mb-0 dwhite text-center">Потребители</h3>
+            <div class="bg-light col-12 rounded p-1 mt-1" v-for="userList in this.users" :key="userList.id">
+                <div class="col-2 d-inline-block p-0 m-0">
+                    <img :src="'/storage/images/' + userList.photos" alt="" class="img-fluid rounded-circle">
+                </div>
+                <span class="pl-1">{{ userList.firstName }} {{ userList.lastName }}</span>
             </div>
         </div>
 

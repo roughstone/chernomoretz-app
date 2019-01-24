@@ -14,7 +14,7 @@
             <div class="page-button float-left d-inline-block">
 <!--The following <a> has click event with .prevent called to prevent the default behavior of the <a>
     and wich calls "prevPage" method. The logic open the previous page of content. -->
-                <a class="page-link" @click.prevent="prevPage()"><i class="fas fa-chevron-left"></i></a>
+                <a :href="'./'+ ((this.page > 1) ? (this.page - 1) : this.pages)" class="page-link"><i class="fas fa-chevron-left"></i></a>
             </div>
             <div class="page-input float-left d-inline-block">
                 <p class="page-text">Страница</p>
@@ -29,7 +29,7 @@
             <div class="page-button float-left d-inline-block">
 <!--The following <a> has click event with .prevent called to prevent the default behavior of the <a>
     and wich calls "nextPage" method. The logic open the next page of content. -->
-                <a class="page-link" @click.prevent="nextPage()"><i class="fas fa-chevron-right"></i></a>
+                <a :href="'./'+ ((this.page < this.pages) ? (this.page + 1) : 1)" class="page-link"><i class="fas fa-chevron-right"></i></a>
             </div>
         </div>
 <!--The following <div> is multiplied by Vuejs v-for directive for each record form "competitors" parameter.  -->
@@ -170,77 +170,98 @@
                 if (this.editMode) {
                     this.form.originalData.id = this.form.id
                     this.form.originalData.photos = this.form.photos
-                    this.form.reset();
+                    this.form.reset()
                 } else if (!this.editMode){
                     this.form.originalData.id = null
                     this.form.originalData.photos = null
-                    this.form.reset();
+                    this.form.reset()
                 }
             },
             showModal(){ // display the form to insert DB records
                 this.editMode = false
-                $("#competitorsModal").modal("show");
+                $("#competitorsModal").modal("show")
             },
             getCompetitors() { //request to the backend to get the records
+                this.$loadStart()
+                this.page = parseInt(this.$route.params.page)
                 axios.get("/api/competitors?page="+ this.$route.params.page)
                 .then(({ data }) => {
                     this.competitors = data.data
                     this.pages = data.last_page
+                    this.$loadEnd(500)
                 })
                 .catch(() => {
-
-                });
-            },
-            nextPage() { // call getPage method for next page
-                if (this.page < this.pages) {
-                this.page++
-                this.getPage()
-                }
-            },
-            prevPage() { //call getPage method for previous page
-                if (this.page > 1) {
-                    this.page--
-                    this.getPage()
-                }
+                    swal({
+                        type: 'error',
+                        title: 'Възникна грешка',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        reload: setTimeout(() => {
+                            location.reload()
+                        }, 2000)
+                    })
+                })
             },
             getPage() { //based on user nextPage, prevPage methods or user input calls getCompetitors method to send request to backend with the page number
-                this.$route.params.page = this.page
-                 if (history.pushState) {
-                        let url = window.location.protocol + "//" + window.location.host + window.location.pathname;
-                        let slicedUrl = url.slice(0, url.lastIndexOf('/'))
-                        let newUrl = slicedUrl + '/' + this.$route.params.page
-                        window.history.pushState({path:newUrl},'',newUrl);
-                        this.createCompetitor()
-                    }
+                if(this.page != "" && !isNaN(this.page)) {
+                    this.$route.params.page = this.page
+                    let url = window.location.protocol + "//" + window.location.host + window.location.pathname
+                    let slicedUrl = url.slice(0, url.lastIndexOf('/'))
+                    let newUrl = slicedUrl + '/' + this.$route.params.page
+                    window.history.pushState({path:newUrl},'',newUrl)
+                    setTimeout(() => {
+                    this.getCompetitors()},200)
+                }
             },
             createCompetitor(){ //request to the backend to create a new record
                 if(this.$gate.isAdmin()) {
+                    this.$loadStart()
                     this.form.post('/api/competitors')
                     .then(() => {
                         toast({type: 'success', title: 'Успешно добавихте нов треньор!'})
-                        $('#competitorsModal').modal('hide');
+                        $('#competitorsModal').modal('hide')
                         this.getCompetitors()
-                        this.form.reset();
+                        this.form.reset()
+                        this.$loadEnd(500)
                     })
                     .catch(() => {
-
+                       /*  swal({
+                            type: 'error',
+                            title: 'Възникна грешка',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            reload: setTimeout(() => {
+                                location.reload()
+                            }, 2000)
+                        }) */
                     })
                 }
             },
             editCompetitor(data){ // display the form to edit DB records
-                this.editMode = true;
-                $("#competitorsModal").modal("show");
-                this.form.fill( data );
+                this.editMode = true
+                $("#competitorsModal").modal("show")
+                this.form.fill( data )
             },
             updateCompetitor() { // request to the backend to edit a specific record
                 if(this.$gate.isAdmin()) {
+                    this.$loadStart()
                     this.form.patch('/api/competitors/' + this.form.id)
                     .then(() => {
-                        $('#competitorsModal').modal('hide');
+                        $('#competitorsModal').modal('hide')
                         toast({type: 'success', title: 'Промяната приложена успешно!'})
-                        this.getCompetitors();
+                        this.getCompetitors()
+                        this.$loadEnd(500)
                     })
                     .catch(() => {
+                        swal({
+                            type: 'error',
+                            title: 'Възникна грешка',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            reload: setTimeout(() => {
+                                location.reload()
+                            }, 2000)
+                        })
                     })
                 }
             },
@@ -257,12 +278,22 @@
                     confirmButtonText: 'Да, изтрий го!'
                     }).then((result) => {
                         if (result.value) {
+                            this.$loadStart()
                             axios.delete('/api/competitors/' + id)
                             .then(() => {
-                                this.getCompetitors();
+                                this.getCompetitors()
+                                this.$loadEnd(500)
                             })
                             .catch(() => {
-
+                                swal({
+                                    type: 'error',
+                                    title: 'Възникна грешка',
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    reload: setTimeout(() => {
+                                        location.reload()
+                                    }, 2000)
+                                })
                             })
                         }
                     })
@@ -276,18 +307,18 @@
                     }
             },
             onFileSelect(event) { //instantiate new FileReader object for the selected file
-                let file = event.target.files[0];
-                this.form.photos = event.target.files[0];
-                let reader = new FileReader();
+                let file = event.target.files[0]
+                this.form.photos = event.target.files[0]
+                let reader = new FileReader()
                 reader.onloadend = () => {
-                    this.form.photos = reader.result;
+                    this.form.photos = reader.result
                 }
                 reader.readAsDataURL(file)
             },
         },
         mounted() {
-            this.changeAdminMode();
-            this.getCompetitors();
+            this.changeAdminMode()
+            this.getCompetitors()
         }
     }
 </script>

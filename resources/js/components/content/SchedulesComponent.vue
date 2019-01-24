@@ -143,10 +143,10 @@
             clearForm() { // clear the form based on editMode parameter condition keep data
                 if (this.editMode) {
                     this.form.originalData.id = this.form.id
-                    this.form.reset();
+                    this.form.reset()
                 } else if (!this.editMode){
                     this.form.originalData.id = null
-                    this.form.reset();
+                    this.form.reset()
                 }
             },
             changeAdminMode() { //check is the user administrator
@@ -157,44 +157,77 @@
                 }
             },
             getSchedules() { //request to the backend to get the records
+                this.$loadStart()
                 axios.get("/api/schedules")
-                .then(( data ) => {this.schedules = data.data})
+                .then(( data ) => {
+                    this.schedules = data.data
+                    this.$loadEnd(500)
+                    })
                 .catch(() => {
-
-                });
+                    swal({
+                        type: 'error',
+                        title: 'Възникна грешка',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        reload: setTimeout(() => {
+                            location.reload()
+                        }, 2000)
+                    })
+                })
             },
             showModal(){ // display the form to insert DB records
                 this.editMode = false
-                $("#scheduleModal").modal("show");
+                $("#scheduleModal").modal("show")
             },
             createSchedule(){ //request to the backend to create a new record
                 if(this.$gate.isAdmin()) {
+                    this.$loadStart()
                     this.form.post('/api/schedules')
                     .then(() => {
-                        toast({type: 'success', title: 'Успешно добавихте нов график!'});
-                        $('#scheduleModal').modal('hide');
-                        this.getSchedules();
-                        this.form.reset();
+                        toast({type: 'success', title: 'Успешно добавихте нов график!'})
+                        $('#scheduleModal').modal('hide')
+                        this.getSchedules()
+                        this.form.reset()
+                        this.$loadEnd(500)
                     })
                     .catch(() => {
-
+                        swal({
+                            type: 'error',
+                            title: 'Възникна грешка',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            reload: setTimeout(() => {
+                                location.reload()
+                            }, 2000)
+                        })
                     })
                 }
             },
             editSchedule(data){ // display the form to edit DB records
-                this.editMode = true;
-                $("#scheduleModal").modal("show");
-                this.form.fill( data );
+                this.editMode = true
+                $("#scheduleModal").modal("show")
+                this.form.fill( data )
             },
             updateSchedule() { // request to the backend to update specific record
                 if(this.$gate.isAdmin()) {
+                    this.$loadStart()
                     this.form.patch('/api/schedules/' + this.form.id)
                     .then(() => {
-                        $('#scheduleModal').modal('hide');
+                        $('#scheduleModal').modal('hide')
                         toast({type: 'success', title: 'Промяната приложена успешно!'})
-                        this.getSchedules();
+                        this.getSchedules()
+                        this.$loadEnd(500)
                     })
                     .catch(() => {
+                        swal({
+                            type: 'error',
+                            title: 'Възникна грешка',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            reload: setTimeout(() => {
+                                location.reload()
+                            }, 2000)
+                        })
                     })
                 }
             },
@@ -211,12 +244,22 @@
                     confirmButtonText: 'Да, изтрий го!'
                     }).then((result) => {
                         if (result.value) {
+                            this.$loadStart()
                             axios.delete('/api/schedules/' + id)
                             .then(() => {
-                                this.getSchedules();
+                                this.getSchedules()
+                                this.$loadEnd(500)
                                 })
                             .catch(() => {
-
+                                swal({
+                                    type: 'error',
+                                    title: 'Възникна грешка',
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    reload: setTimeout(() => {
+                                        location.reload()
+                                    }, 2000)
+                                })
                             })
                         }
                     })

@@ -13,7 +13,7 @@
                 <div class="page-button float-left d-inline-block">
     <!--The following <a> has click event with .prevent called to prevent the default behavior of the <a>
         and wich calls "prevPage" method. The logic open the previous page of content. -->
-                    <a class="page-link" @click.prevent="prevPage()"><i class="fas fa-chevron-left"></i></a>
+                    <a :href="'./'+ ((this.page > 1) ? (this.page - 1) : this.pages)" class="page-link"><i class="fas fa-chevron-left"></i></a>
                 </div>
                 <div class="page-input float-left d-inline-block">
                     <p class="page-text">Страница</p>
@@ -28,7 +28,7 @@
                 <div class="page-button float-left d-inline-block">
 <!--The following <a> has click event with .prevent called to prevent the default behavior of the <a>
     and wich calls "nextPage" method. The logic open the next page of content. -->
-                <a class="page-link" @click.prevent="nextPage()"><i class="fas fa-chevron-right"></i></a>
+                <a :href="'./'+ ((this.page < this.pages) ? (this.page + 1) : 1)" class="page-link"><i class="fas fa-chevron-right"></i></a>
             </div>
         </div>
 <!--The following <div> is multiplied by Vuejs v-for directive for each record form "galleries" parameter.  -->
@@ -128,16 +128,16 @@ and wich calls "deleteGalleries" method passing the gallery id to it. -->
                 if (this.editMode) {
                     this.form.originalData.id = this.form.id
                     this.form.originalData.photos = this.form.photos
-                    this.form.reset();
+                    this.form.reset()
                 } else if (!this.editMode){
                     this.form.originalData.id = null
                     this.form.originalData.photos = null
-                    this.form.reset();
+                    this.form.reset()
                 }
             },
             showModal(){ // display the form to insert DB records
                 this.editMode = false
-                $("#galleriesModal").modal("show");
+                $("#galleriesModal").modal("show")
             },
             changeAdminMode() { //check is the user administrator
                 if(this.$gate.isAdmin()) {
@@ -146,66 +146,87 @@ and wich calls "deleteGalleries" method passing the gallery id to it. -->
                     this.adminMode = false
                 }
             },
-            nextPage() { // call getPage method for next page
-                if (this.page < this.pages) {
-                this.page++
-                this.getPage()
+            getPage() { //based on user nextPage, prevPage methods or user input calls getCompetitors method to send request to backend with the page number
+                if(this.page != "" && !isNaN(this.page)) {
+                    this.$route.params.page = this.page
+                    let url = window.location.protocol + "//" + window.location.host + window.location.pathname
+                    let slicedUrl = url.slice(0, url.lastIndexOf('/'))
+                    let newUrl = slicedUrl + '/' + this.$route.params.page
+                    window.history.pushState({path:newUrl},'',newUrl)
+                    setTimeout(() => {
+                    this.getGalleries()},200)
                 }
-            },
-            prevPage() { //call getPage method for previous page
-                if (this.page > 1) {
-                    this.page--
-                    this.getPage()
-                }
-            },
-            getPage() { //based on user nextPage, prevPage methods or user input calls getGalleries method to send request to backend with the page number
-                this.$route.params.page = this.page
-                 if (history.pushState) {
-                        let url = window.location.protocol + "//" + window.location.host + window.location.pathname;
-                        let slicedUrl = url.slice(0, url.lastIndexOf('/'))
-                        let newUrl = slicedUrl + '/' + this.$route.params.page
-                        window.history.pushState({path:newUrl},'',newUrl);
-                        this.getGalleries()
-                    }
             },
             getGalleries() { //request to the backend to get the records
+                this.$loadStart()
+                this.page = parseInt(this.$route.params.page)
                 axios.get("/api/galleries/"+ this.$route.params.type +"?page=" + this.$route.params.page)
                 .then(({ data }) => {
                     this.galleries = data.data
                     this.pages = data.last_page
+                    this.$loadEnd(500)
                 })
                 .catch(() => {
-
-                });
+                    swal({
+                        type: 'error',
+                        title: 'Възникна грешка',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        reload: setTimeout(() => {
+                            location.reload()
+                        }, 2000)
+                    })
+                })
             },
             createGalleries(){ //request to the backend to create a new record
                 if(this.$gate.isAdmin()) {
+                    this.$loadStart()
                     this.form.post('/api/galleries')
                     .then(() => {
                         toast({type: 'success', title: 'Успешно добавихте нов треньор!'})
-                        $('#galleriesModal').modal('hide');
+                        $('#galleriesModal').modal('hide')
                         this.getGalleries()
-                        this.form.reset();
+                        this.form.reset()
+                        this.$loadEnd(500)
                     })
                     .catch(() => {
-
+                        swal({
+                            type: 'error',
+                            title: 'Възникна грешка',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            reload: setTimeout(() => {
+                                location.reload()
+                            }, 2000)
+                        })
                     })
                 }
             },
             editGalleries(data){ // display the form to edit DB records
-                this.editMode = true;
-                $("#galleriesModal").modal("show");
-                this.form.fill( data );
+                this.editMode = true
+                $("#galleriesModal").modal("show")
+                this.form.fill( data )
             },
             updateGalleries() { // request to the backend to edit a specific record
                 if(this.$gate.isAdmin()) {
+                    this.$loadStart()
                     this.form.patch('/api/galleries/' + this.form.id)
                     .then(() => {
-                        $('#galleriesModal').modal('hide');
+                        $('#galleriesModal').modal('hide')
                         toast({type: 'success', title: 'Промяната приложена успешно!'})
-                        this.getGalleries();
+                        this.getGalleries()
+                        this.$loadEnd(500)
                     })
                     .catch(() => {
+                        swal({
+                            type: 'error',
+                            title: 'Възникна грешка',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            reload: setTimeout(() => {
+                                location.reload()
+                            }, 2000)
+                        })
                     })
                 }
             },
@@ -222,23 +243,33 @@ and wich calls "deleteGalleries" method passing the gallery id to it. -->
                     confirmButtonText: 'Да, изтрий го!'
                     }).then((result) => {
                         if (result.value) {
+                            this.$loadStart()
                             axios.delete('/api/galleries/' + id)
                             .then(() => {
-                                this.getGalleries();
+                                this.getGalleries()
+                                this.$loadEnd(500)
                             })
                             .catch(() => {
-
+                                swal({
+                                    type: 'error',
+                                    title: 'Възникна грешка',
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    reload: setTimeout(() => {
+                                        location.reload()
+                                    }, 2000)
+                                })
                             })
                         }
                     })
                 }
             },
             onFileSelect(event) { //instantiate new FileReader object for the selected file
-                let file = event.target.files[0];
-                this.form.photos = event.target.files[0];
-                let reader = new FileReader();
+                let file = event.target.files[0]
+                this.form.photos = event.target.files[0]
+                let reader = new FileReader()
                 reader.onloadend = () => {
-                    this.form.photos = reader.result;
+                    this.form.photos = reader.result
                 }
                 reader.readAsDataURL(file)
             },

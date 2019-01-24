@@ -14,7 +14,7 @@
             <div class="page-button float-left d-inline-block">
 <!--The following <a> has click event with .prevent called to prevent the default behavior of the <a>
     and wich calls "prevPage" method. The logic open the previous page of content. -->
-                <a href="" class="page-link" @click.prevent="prevPage()"><i class="fas fa-chevron-left"></i></a>
+                <a :href="'./'+ ((this.page > 1) ? (this.page - 1) : this.pages)" class="page-link"><i class="fas fa-chevron-left"></i></a>
             </div>
             <div class="page-input float-left d-inline-block">
                 <p class="page-text">Страница</p>
@@ -29,11 +29,11 @@
             <div class="page-button float-left d-inline-block">
 <!--The following <a> has click event with .prevent called to prevent the default behavior of the <a>
     and wich calls "nextPage" method. The logic open the next page of content. -->
-                <a href="" class="page-link" @click.prevent="nextPage()"><i class="fas fa-chevron-right"></i></a>
+                <a :href="'./'+ ((this.page < this.pages) ? (this.page + 1) : 1)" class="page-link"><i class="fas fa-chevron-right"></i></a>
             </div>
         </div>
-<!--The following <div> is multiplied by Vuejs v-for directive for each record form "allNews" parameter.  -->
-        <div v-for="news in allNews" :key="news.id">
+<!--The following <div> is multiplied by Vuejs v-for directive for each record form "news" parameter.  -->
+        <div v-for="news in news" :key="news.id">
             <div class="mt-3 news">
                 <a href="" @click.prevent="editNews(news)">
                     <h3 class=" pl-3 dwhite">{{ news.title }}</h3>
@@ -126,7 +126,7 @@
         </div>
     </div>
 <!-- Display the globaly registrated vuejs announcement component. -->
-    <announcement-component></announcement-component>
+    <router-view></router-view>
 </div>
 </template>
 
@@ -136,7 +136,7 @@
             return {
                 adminMode : false, // swich to show administrator content
                 editMode : false, // swich the edit mode
-                allNews : null, // holds the records from the DB
+                news : null, // holds the records from the DB
                 page: 1, //current page
                 pages: null, //numer of pages
                 form : new Form({ //instantiate a new Form object
@@ -154,11 +154,11 @@
                 if (this.editMode) {
                     this.form.originalData.id = this.form.id
                     this.form.originalData.photos = this.form.photos
-                    this.form.reset();
+                    this.form.reset()
                 } else if (!this.editMode){
                     this.form.originalData.id = null
                     this.form.originalData.photos = null
-                    this.form.reset();
+                    this.form.reset()
                 }
             },
             changeAdminMode() { //check is the user administrator
@@ -168,67 +168,88 @@
                     this.adminMode = false
                 }
             },
-            nextPage() { // call getPage method for next page
-                if (this.page < this.pages) {
-                this.page++
-                this.getPage()
+            getPage() { //based on user nextPage, prevPage methods or user input calls getCompetitors method to send request to backend with the page number
+                if(this.page != "" && !isNaN(this.page)) {
+                    this.$route.params.page = this.page
+                    let url = window.location.protocol + "//" + window.location.host + window.location.pathname
+                    let slicedUrl = url.slice(0, url.lastIndexOf('/'))
+                    let newUrl = slicedUrl + '/' + this.$route.params.page
+                    window.history.pushState({path:newUrl},'',newUrl)
+                    setTimeout(() => {
+                    this.getNews()},200)
                 }
             },
-            prevPage() { //call getPage method for previous page
-                if (this.page > 1) {
-                    this.page--
-                    this.getPage()
-                }
-            },
-            getPage() { //based on user nextPage, prevPage methods or user input calls getAllNews method to send request to backend with the page number
-                this.$route.params.page = this.page
-                 if (history.pushState) {
-                        let url = window.location.protocol + "//" + window.location.host + window.location.pathname;
-                        let slicedUrl = url.slice(0, url.lastIndexOf('/'))
-                        let newUrl = slicedUrl + '/' + this.$route.params.page
-                        window.history.pushState({path:newUrl},'',newUrl);
-                        this.getAllNews()
-                    }
-            },
-            getAllNews() { //request to the backend to get the records
+            getNews() { //request to the backend to get the records
+                this.$loadStart()
+                this.page = parseInt(this.$route.params.page)
                 axios.get("/api/moreNews?page="+ this.$route.params.page)
                 .then(({ data }) => {
-                    this.allNews = data.data
+                    this.news = data.data
                     this.pages = data.last_page
+                    this.$loadEnd(500)
                 })
                 .catch(() => {
-
-                });
+                    swal({
+                        type: 'error',
+                        title: 'Възникна грешка',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        reload: setTimeout(() => {
+                            location.reload()
+                        }, 2000)
+                    })
+                })
             },
             createNews(){ //request to the backend to create a new record
                 if(this.$gate.isAdmin()) {
+                    this.$loadStart()
                     this.form.post('/api/news')
                     .then(() => {
-                        toast({type: 'success', title: 'Успешно добавихте ново обявление!'});
-                        $('#newsModal').modal('hide');
-                        this.getAllNews();
-                        this.form.reset();
+                        toast({type: 'success', title: 'Успешно добавихте ново обявление!'})
+                        $('#newsModal').modal('hide')
+                        this.getNews()
+                        this.form.reset()
+                        this.$loadEnd(500)
                     })
                     .catch(() => {
-
+                        swal({
+                            type: 'error',
+                            title: 'Възникна грешка',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            reload: setTimeout(() => {
+                                location.reload()
+                            }, 2000)
+                        })
                     })
                 }
             },
             editNews(data){ // display the form to edit DB records
-                this.editMode = true;
-                $("#newsModal").modal("show");
-                this.form.fill( data );
+                this.editMode = true
+                $("#newsModal").modal("show")
+                this.form.fill( data )
             },
             updateNews() { // request to the backend to edit a specific record
                 if(this.$gate.isAdmin()) {
+                    /* $("#loader").fadeIn(0) */
+                    this.$loadStart()
                     this.form.patch('/api/news/' + this.form.id)
                     .then(() => {
-                        $('#newsModal').modal('hide');
+                        $('#newsModal').modal('hide')
                         toast({type: 'success', title: 'Промяната приложена успешно!'})
-                        this.getAllNews();
+                        this.getNews()
+                        this.$loadEnd(500)
                     })
                     .catch(() => {
-
+                        swal({
+                            type: 'error',
+                            title: 'Възникна грешка',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            reload: setTimeout(() => {
+                                location.reload()
+                            }, 2000)
+                        })
                     })
                 }
             },
@@ -245,12 +266,22 @@
                     confirmButtonText: 'Да, изтрий го!'
                     }).then((result) => {
                         if (result.value) {
+                            this.$loadStart()
                             axios.delete('/api/news/' + id)
                             .then(() => {
-                                this.getAllNews();
+                                this.getNews()
+                                this.$loadEnd(500)
                             })
                             .catch(() => {
-
+                                swal({
+                                    type: 'error',
+                                    title: 'Възникна грешка',
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    reload: setTimeout(() => {
+                                        location.reload()
+                                    }, 2000)
+                                })
                             })
                         }
                     })
@@ -258,20 +289,20 @@
             },
             showModal(){ // display the form to insert DB records
                 this.editMode = false
-                $("#newsModal").modal("show");
+                $("#newsModal").modal("show")
             },
             onFileSelect(event) { //instantiate new FileReader object for the selected file
-                let file = event.target.files[0];
-                this.form.photos = event.target.files[0];
-                let reader = new FileReader();
+                let file = event.target.files[0]
+                this.form.photos = event.target.files[0]
+                let reader = new FileReader()
                 reader.onloadend = () => {
-                   this.form.photos = reader.result;
+                   this.form.photos = reader.result
                 }
                 reader.readAsDataURL(file)
             },
         },
         mounted() {
-            this.getAllNews();
+            this.getNews()
             this.changeAdminMode()
         }
     }

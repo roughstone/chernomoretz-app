@@ -10587,7 +10587,6 @@ a.text-dark:focus {
 }
 
 .sliderNav {
-  z-index: 50;
   display: block;
   position: absolute;
   top: 0.2vw;
@@ -10596,17 +10595,34 @@ a.text-dark:focus {
   padding-right: 30px;
 }
 
+.sliderNav i:hover {
+  color: orange;
+  cursor: pointer;
+  z-index: 100;
+}
+
 .slider {
   display: none;
 }
 
-.active {
-  display: block;
-  background-color: rgba(0, 0, 0, 0.25);
+.overflow-x-hidden {
+  overflow: hidden;
+}
+
+#sliderContiner {
+  position: relative;
   margin-top: 0.5vw;
+  width: 200%;
+  height: 40vw;
+}
+
+.active {
+  background-color: rgba(0, 0, 0, 0.25);
+  display: block;
+  position: absolute;
+  float: left;
   padding-bottom: 0.5vw;
-  border-radius: 1vw;
-  width: 100%;
+  width: 50%;
 }
 
 .active img {
@@ -10770,6 +10786,17 @@ a.text-dark:focus {
 
 .galleryMenu span:nth-child(3):active {
   box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.75);
+}
+
+#loader {
+  display: none;
+  position: fixed;
+  z-index: 10000;
+  background-color: rgba(0, 0, 0, 0.9);
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
 }
 
 .coachs {
@@ -27241,6 +27268,11 @@ html {
 @media only screen and (max-width: 768px) {
   .title {
     display: none;
+  }
+
+  .navbar a {
+    font-size: 3.5vw;
+    text-align: center;
   }
 }
 

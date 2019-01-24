@@ -1,6 +1,6 @@
 <!-- Edit images from /public/storage/images -->
 <template>
-    <div class="row flex-xl-nowrap">
+    <div v-if="this.$gate.isAdmin()" class="row flex-xl-nowrap">
 <!-- The following <div> contain the tools for editing a photo -->
         <div class="col-2">
 <!-- The following <button> is shown if parameters croper and resizer are set to false. The click event set the parameter croper to true-->
@@ -86,7 +86,7 @@
                 drager.dragElement(document.getElementById("croper"), document.getElementById("cropercursor"))
             },
             setCroper() { // croper logic
-                let croper = document.getElementById("croper"); //get croper element by id
+                let croper = document.getElementById("croper") //get croper element by id
                 this.form.croperTop = parseInt(croper.style.top) //get croper top from style and conver from string to integer
                 this.croperTop = this.form.croperTop
                 this.form.croperLeft = parseInt(croper.style.left) //get croper left from style and conver from string to integer
@@ -94,20 +94,20 @@
                 this.form.croperWidth = parseInt(croper.style.width) //get croper width from style and conver from string to integer
                 this.croperWidth = this.form.croperWidth
                 if(this.croperMethod == "4:3") { // logic to set the cropper height to 4:3 aspect ratio
-                    this.form.croperHeight = this.form.croperWidth / 4 * 3;
+                    this.form.croperHeight = this.form.croperWidth / 4 * 3
                     this.croperHeight = this.form.croperHeight
                 } else if (this.croperMethod == "16:9") { // logic to set the cropper height to 16:9 aspect ratio
-                    this.form.croperHeight = this.form.croperWidth / 16 * 9;
+                    this.form.croperHeight = this.form.croperWidth / 16 * 9
                     this.croperHeight = this.form.croperHeight
                 } else {
                     this.form.croperHeight = parseInt(croper.style.height, 10) //get croper height from style and conver from string to integer
                     this.croperHeight = this.form.croperHeight
                 }
                 if(this.photoSize != '100') { // if the user change the view size of the photo performs the logic
-                        this.form.croperTop = this.croperTop /100*(200 - parseInt(this.photoSize));
-                        this.form.croperLeft = this.croperLeft /100*(200 - parseInt(this.photoSize));
-                        this.form.croperHeight = this.croperHeight /100*(200 - parseInt(this.photoSize));
-                        this.form.croperWidth = this.croperWidth /100*(200 - parseInt(this.photoSize));
+                        this.form.croperTop = this.croperTop /100*(200 - parseInt(this.photoSize))
+                        this.form.croperLeft = this.croperLeft /100*(200 - parseInt(this.photoSize))
+                        this.form.croperHeight = this.croperHeight /100*(200 - parseInt(this.photoSize))
+                        this.form.croperWidth = this.croperWidth /100*(200 - parseInt(this.photoSize))
                 }
             },
             setViewSize() { // logic to correctly set the view size of the image
@@ -124,27 +124,79 @@
                 this.photoWidth = this.keepWidth * parseFloat(text)
             },
             rotateImg() { // send data to backend to rotate the image
-                this.form.method = 'rotate';
+                this.$loadStart()
+                this.form.method = 'rotate'
                 if(this.$gate.isAdmin()) {
-                    this.form.post('/api/editImg').then(location.reload())
+                    this.form.post('/api/editImg')
+                    .then(location.reload())
+                    .catch(() => {
+                        swal({
+                            type: 'error',
+                            title: 'Възникна грешка',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            reload: setTimeout(() => {
+                                location.reload()
+                            }, 2000)
+                        })
+                    })
                 }
             },
             cropImg() { // send data to backend to crop the image
-                this.form.method = 'crop';
+                this.$loadStart()
+                this.form.method = 'crop'
                 if(this.$gate.isAdmin()) {
-                    this.form.post('/api/editImg').then(location.reload())
+                    this.form.post('/api/editImg')
+                    .then(location.reload())
+                    .catch(() => {
+                        swal({
+                            type: 'error',
+                            title: 'Възникна грешка',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            reload: setTimeout(() => {
+                                location.reload()
+                            }, 2000)
+                        })
+                    })
                 }
             },
             mirrorImgX() { // send data to backend to flip the image horizontally
-                this.form.method = 'flipX';
+                this.$loadStart()
+                this.form.method = 'flipX'
                 if(this.$gate.isAdmin()) {
-                    this.form.post('/api/editImg').then(location.reload())
+                    this.form.post('/api/editImg')
+                    .then(location.reload())
+                    .catch(() => {
+                        swal({
+                            type: 'error',
+                            title: 'Възникна грешка',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            reload: setTimeout(() => {
+                                location.reload()
+                            }, 2000)
+                        })
+                    })
                 }
             },
             mirrorImgY() { // send data to backend to flip the image vertically
-                this.form.method = 'flipY';
+                this.$loadStart()
+                this.form.method = 'flipY'
                 if(this.$gate.isAdmin()) {
-                    this.form.post('/api/editImg').then(location.reload())
+                    this.form.post('/api/editImg')
+                    .then(location.reload())
+                    .catch(() => {
+                        swal({
+                            type: 'error',
+                            title: 'Възникна грешка',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            reload: setTimeout(() => {
+                                location.reload()
+                            }, 2000)
+                        })
+                    })
                 }
             },
             closeMenus() { // reset all the data by reloading the page

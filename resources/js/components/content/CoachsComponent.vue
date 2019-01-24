@@ -143,52 +143,85 @@ and wich calls "deleteCoach" method passing the coach id to it. -->
                 if (this.editMode) {
                     this.form.originalData.id = this.form.id
                     this.form.originalData.photos = this.form.photos
-                    this.form.reset();
+                    this.form.reset()
                 } else if (!this.editMode){
                     this.form.originalData.id = null
                     this.form.originalData.photos = null
-                    this.form.reset();
+                    this.form.reset()
                 }
             },
             showModal(){ // display the form to insert DB records
                 this.editMode = false
-                $("#coachsModal").modal("show");
+                $("#coachsModal").modal("show")
             },
             getCoachs() { //request to the backend to get the records
+                this.$loadStart()
                 axios.get("/api/coachs")
-                .then(({ data }) => {this.coachs = data.data})
+                .then(({ data }) => {
+                    this.coachs = data.data
+                    this.$loadEnd(500)
+                    })
                 .catch(() => {
-
-                });
+                    swal({
+                        type: 'error',
+                        title: 'Възникна грешка',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        reload: setTimeout(() => {
+                            location.reload()
+                        }, 2000)
+                    })
+                })
             },
             createCoach(){ //request to the backend to create a new record
                 if(this.$gate.isAdmin()) {
+                    this.$loadStart()
                     this.form.post('/api/coachs')
                     .then(() => {
                         toast({type: 'success', title: 'Успешно добавихте нов треньор!'})
-                        $('#coachsModal').modal('hide');
+                        $('#coachsModal').modal('hide')
                         this.getCoachs()
-                        this.form.reset();
+                        this.form.reset()
+                        this.$loadEnd(500)
                     })
                     .catch(() => {
-
+                        swal({
+                            type: 'error',
+                            title: 'Възникна грешка',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            reload: setTimeout(() => {
+                                location.reload()
+                            }, 2000)
+                        })
                     })
                 }
             },
             editCoach(data){ // display the form to edit DB records
-                this.editMode = true;
-                $("#coachsModal").modal("show");
-                this.form.fill( data );
+                this.editMode = true
+                $("#coachsModal").modal("show")
+                this.form.fill( data )
             },
             updateCoach() { // request to the backend to edit a specific record
                 if(this.$gate.isAdmin()) {
+                    this.$loadStart()
                     this.form.patch('/api/coachs/' + this.form.id)
                     .then(() => {
-                        $('#coachsModal').modal('hide');
+                        $('#coachsModal').modal('hide')
                         toast({type: 'success', title: 'Промяната приложена успешно!'})
-                        this.getCoachs();
+                        this.getCoachs()
+                        this.$loadEnd(500)
                     })
                     .catch(() => {
+                        swal({
+                            type: 'error',
+                            title: 'Възникна грешка',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            reload: setTimeout(() => {
+                                location.reload()
+                            }, 2000)
+                        })
                     })
                 }
             },
@@ -205,12 +238,22 @@ and wich calls "deleteCoach" method passing the coach id to it. -->
                     confirmButtonText: 'Да, изтрий го!'
                     }).then((result) => {
                         if (result.value) {
+                            this.$loadStart()
                             axios.delete('/api/coachs/' + id)
                             .then(() => {
-                                this.getCoachs();
+                                this.getCoachs()
+                                this.$loadEnd(500)
                             })
                             .catch(() => {
-
+                                swal({
+                                    type: 'error',
+                                    title: 'Възникна грешка',
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    reload: setTimeout(() => {
+                                        location.reload()
+                                    }, 2000)
+                                })
                             })
                         }
                     })
@@ -224,18 +267,18 @@ and wich calls "deleteCoach" method passing the coach id to it. -->
                     }
             },
             onFileSelect(event) { //instantiate new FileReader object for the selected file
-                let file = event.target.files[0];
-                this.form.photos = event.target.files[0];
-                let reader = new FileReader();
+                let file = event.target.files[0]
+                this.form.photos = event.target.files[0]
+                let reader = new FileReader()
                 reader.onloadend = () => {
-                    this.form.photos = reader.result;
+                    this.form.photos = reader.result
                 }
                 reader.readAsDataURL(file)
             },
         },
         mounted() {
-            this.changeAdminMode();
-            this.getCoachs();
+            this.changeAdminMode()
+            this.getCoachs()
         }
     }
 </script>

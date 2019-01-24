@@ -5,47 +5,46 @@
     He holds <a> with a click event that open the form to insert new records to the DB.
     On the click event the prevent method was called to prevent the default behavior of the <a>
     The href attribute is empty to keep the pointer:cursor behavior of the <a> -->
-    <a href="" class="float-right" v-if="adminMode" @click.prevent="showModal()"><i class="fas fa-file-import fa-3x green"></i></a>
-    <div class="col-12 col-lg-9 col-md-8">
-        <div>
+    <a href="" v-if="adminMode" @click.prevent="showModal()"><i class="fas fa-file-import fa-3x green"></i></a><br>
+    <div class="col-12 col-lg-9 col-md-8 overflow-x-hidden">
 <!-- The following <div> holds the navigation of the slider. The color of the <i> change by methods instead of CSS class:hover-->
-            <div class="sliderNav d-flex justify-content-between" v-once>
-                <i @mouseout="leftArrowHover()" @mouseover="leftArrowHover()" class="fas fa-angle-double-left fa-3x green" @click="leftArrow()"></i>
-                <i @mouseout="rightArrowHover()" @mouseover="rightArrowHover()" class="fas fa-angle-double-right fa-3x green" @click="rightArrow()"></i>
-            </div>
-            <div class="sliderContiner">
+        <div class="sliderNav d-flex justify-content-between" v-once>
+            <i v-on:click="progress ? leftArrow() : null" class="fas fa-angle-double-left fa-3x green"></i>
+            <i v-on:click="progress ? rightArrow() : null"  class="fas fa-angle-double-right fa-3x green"></i>
+        </div>
+        <div id="sliderContiner">
 <!--The following <div> is multiplied by Vuejs v-for directive for each record form "sliders" parameter.  -->
-                <div  v-for="(slider, index) in sliders" :key="slider.id" :class="{ active: index==0, slider}">
+            <div  v-for="(slider, index) in sliders" :key="slider.id" :class="{ active: index==0, slider}">
 <!-- The following <div> is shown if sliderMode parameter is true -->
-                    <div v-if="sliderMode">
-                        <h3 class="text-center dwhite">{{ slider.title }}</h3>
-                        <a href="" @click.prevent="choiseSlider()"> <!-- toggle sliderMode parameter-->
-                        <img :src="'/storage/images/' + slider.photos" :alt="slider.title">
-                        </a>
-                    </div>
+                <div v-if="sliderMode">
+                    <h3 class="text-center dwhite">{{ slider.title }}</h3>
+                    <a href="" @click.prevent="choiseSlider()"> <!-- toggle sliderMode parameter-->
+                    <img :src="'/storage/images/' + slider.photos" :alt="slider.title">
+                    </a>
+                </div>
 <!-- The following <div> is shown if sliderMode parameter is false -->
-                    <div v-if="!sliderMode">
-                        <h3 class="text-center dwhite">{{ slider.title }}</h3>
-                        <p class="dwhite d-inline-block pr-2 viewSliderDescription">
-                            <img class="w-50 float-left" @click="choiseSlider()" :src="'/storage/images/' + slider.photos" :alt="slider.title">
-                            {{ slider.description }}
-                        </p>
+                <div v-if="!sliderMode">
+                    <h3 class="text-center dwhite">{{ slider.title }}</h3>
+                    <p class="dwhite d-inline-block pr-2 viewSliderDescription">
+                        <img class="w-50 float-left" @click="choiseSlider()" :src="'/storage/images/' + slider.photos" :alt="slider.title">
+                        {{ slider.description }}
+                    </p>
 <!-- The following <div> is shown if adminMode parameter is true (the user is administrator)-->
-                        <div v-if="adminMode" class="p-1 d-inline-block w-100">
-                            <hr class="mb-0 mt-0">
+                    <div v-if="adminMode" class="p-1 d-inline-block w-100">
+                        <hr class="mb-0 mt-0">
 <!--The following <a> has click event with .prevent called to prevent the default behavior of the <a>
-    and wich calls "editSlider" method passing the slider object to it. -->
-                            <a href="" @click.prevent="editSlider(slider)"><i class="fas fa-edit yellow"></i>&#160;</a>
+and wich calls "editSlider" method passing the slider object to it. -->
+                        <a href="" @click.prevent="editSlider(slider)"><i class="fas fa-edit yellow"></i>&#160;</a>
 <!--The following <a> has click event with .prevent called to prevent the default behavior of the <a>
-    and wich calls "deleteSlider" method passing the slider id to it. -->
-                            <a href="" v-if="adminMode" @click.prevent="deleteSlider(slider.id)"><i class="fas fa-trash red"></i>&#160;</a>
+and wich calls "deleteSlider" method passing the slider id to it. -->
+                        <a href="" v-if="adminMode" @click.prevent="deleteSlider(slider.id)"><i class="fas fa-trash red"></i>&#160;</a>
 <!--The following <a> has binded href atribute to imagerComponent and passing the photo title to it.  -->
-                            <a :href="'/Снимки/' + slider.photos"><i class="fas fa-cut blue"></i>&#160;</a>
-                        </div>
+                        <a :href="'/Снимки/' + slider.photos"><i class="fas fa-cut blue"></i>&#160;</a>
                     </div>
                 </div>
             </div>
         </div>
+
 <!--The following <div> is created based on "bootstrap" and "vForm" packages -->
         <div class="modal fade" id="sliderModal" tabindex="-1" role="dialog" aria-labelledby="sliderModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
@@ -90,7 +89,7 @@
         </div>
     </div>
 <!-- Display the globaly registrated vuejs announcement component. -->
-    <announcement-component></announcement-component>
+    <router-view></router-view>
 </div>
 </template>
 
@@ -100,9 +99,10 @@
             return {
                 adminMode: false, // swich to show administrator content
                 sliders: null, // holds the records from the DB
-                sliderInterval : setInterval(this.runInterval, 6000), // display different slider every 6 seconds
+                sliderInterval : null, // display different slider every 6 seconds
                 sliderMode : true, // swich the slider mode
                 editMode : false, // swich the edit mode
+                progress : true,
                 form: new Form({ //instantiate a new Form object
                     id: null,   // id of DB record
                     title : null, // title of DB record
@@ -116,34 +116,40 @@
                 if (this.editMode) {
                     this.form.originalData.id = this.form.id
                     this.form.originalData.photos = this.form.photos
-                    this.form.reset();
+                    this.form.reset()
                 } else if (!this.editMode){
                     this.form.originalData.id = null
                     this.form.originalData.photos = null
-                    this.form.reset();
+                    this.form.reset()
                 }
             },
             getSliders() { //request to the backend to get the records
+                this.$loadStart()
                 axios.get("/api/Sliders")
-                .then(( data ) => {this.sliders = data.data});
+                .then(( data ) => {
+                    this.sliders = data.data
+                    this.$loadEnd(500)
+                    this.sliderInterval = setInterval(this.runInterval, 6000)
+                })
+
             },
             choiseSlider() { // change the way that shows the content
                 if (this.sliderMode) {
-                this.sliderMode = false;
-                clearInterval(this.sliderInterval);
+                this.sliderMode = false
+                clearInterval(this.sliderInterval)
                 } else {
-                    this.sliderMode = true;
-                    this.sliderInterval = setInterval(this.runInterval, 6000);
+                    this.sliderMode = true
+                    this.sliderInterval = setInterval(this.runInterval, 6000)
                 }
             },
             showModal(){ // display the form to insert DB records
                 this.editMode = false
-                $("#sliderModal").modal("show");
+                $("#sliderModal").modal("show")
             },
             onFileSelect(event) { //instantiate new FileReader object for the selected file
-                let file = event.target.files[0];
-                this.form.photos = event.target.files[0];
-                let reader = new FileReader();
+                let file = event.target.files[0]
+                this.form.photos = event.target.files[0]
+                let reader = new FileReader()
                 reader.onloadend = () => {
                    this.form.photos = reader.result
                 }
@@ -151,32 +157,54 @@
             },
             createSlider(){ //request to the backend to create a new record
                 if(this.$gate.isAdmin()) {
+                    this.$loadStart()
                     this.form.post('/api/Sliders')
                     .then(() => {
                         toast({type: 'success', title: 'Успешно добавихте нов слайд!'})
-                        $('#sliderModal').modal('hide');
+                        $('#sliderModal').modal('hide')
                         this.getSliders()
-                        this.form.reset();
+                        this.form.reset()
+                        this.$loadEnd(500)
+
                     })
                     .catch(() => {
-
+                        swal({
+                            type: 'error',
+                            title: 'Възникна грешка',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            reload: setTimeout(() => {
+                                location.reload()
+                            }, 2000)
+                        })
                     })
                 }
             },
             editSlider(data){ // display the form to edit DB records
-                this.editMode = true;
-                $("#sliderModal").modal("show");
-                this.form.fill( data );
+                this.editMode = true
+                $("#sliderModal").modal("show")
+                this.form.fill( data )
             },
             updateSlider() { // request to the backend to update specific record
                 if(this.$gate.isAdmin()) {
+                    this.$loadStart()
                     this.form.patch('/api/Sliders/' + this.form.id)
                     .then(() => {
-                        $('#sliderModal').modal('hide');
+                        $('#sliderModal').modal('hide')
                         toast({type: 'success', title: 'Промяната приложена успешно!'})
-                        this.getSliders();
+                        this.getSliders()
+                        this.$loadEnd(500)
                     })
                     .catch(() => {
+                        swal({
+                            type: 'error',
+                            title: 'Възникна грешка',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            reload: setTimeout(() => {
+                                location.reload()
+                            }, 2000)
+                        })
                     })
                 }
             },
@@ -193,13 +221,23 @@
                     confirmButtonText: 'Да, изтрий го!'
                     }).then((result) => {
                         if (result.value) {
+                            this.$loadStart()
                             axios.delete('/api/Sliders/' + id)
                             .then(() => {
-                                this.getSliders();
+                                this.getSliders()
                                 toast({type: 'success', title: 'Записът е успешно изтрит!'})
+                                this.$loadEnd(500)
                             })
                             .catch(() => {
-
+                                swal({
+                                    type: 'error',
+                                    title: 'Възникна грешка',
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    reload: setTimeout(() => {
+                                        location.reload()
+                                    }, 2000)
+                                })
                             })
                         }
                     })
@@ -213,63 +251,82 @@
                 }
             },
             runInterval(){ // change the slider when called
-                var currentSlide = $(".active");
-                var nextSlide = currentSlide.next();
+                let currentSlide = $(".active")
+                let nextSlide = currentSlide.next()
+                let movement = parseInt($("#sliderContiner").width() / 2)
 
-                currentSlide.fadeOut(0).removeClass("active");
-                nextSlide.fadeIn(500).addClass("active");
-
+                currentSlide.animate({left: "-="+movement},1500,() => {
+                    currentSlide.fadeOut(0).removeClass("active")
+                    currentSlide.css("left", 0)
+                })
                 if (nextSlide.length == 0) {
-                    $(".slider").first().fadeIn(500).addClass("active");
-                };
+                    nextSlide = $(".slider").first()
+                }
+                nextSlide.css("left", movement)
+                nextSlide.fadeIn(0).addClass("active")
+                nextSlide.animate({left: "-="+movement},1500,() => {
+                    nextSlide.css("left", 0)
+                    currentSlide.css("left", 0)
+               })
             },
             leftArrow(){ // display previous slider and clear the interval if needed
+                this.progress = false
                 if (this.sliderMode) {
-                clearInterval(this.sliderInterval);
+                clearInterval(this.sliderInterval)
                 }
-                var currentSlide = $(".active");
-                var prevSlide = currentSlide.prev();
+                let currentSlide = $(".active")
+                let prevSlide = currentSlide.prev()
+                let movement = parseInt($("#sliderContiner").width() / 2)
 
-                currentSlide.fadeOut(0).removeClass("active");
-                prevSlide.fadeIn(0).addClass("active");
-
+                currentSlide.animate({left: "+="+movement},1500,() => {
+                    currentSlide.fadeOut(0).removeClass("active")
+                    currentSlide.css("left", 0)
+                })
                 if (prevSlide.length == 0) {
-                    $(".slider").last().fadeIn(0).addClass("active");
+                    prevSlide = $(".slider").last()
                 }
+                prevSlide.css("left", (-movement))
+                prevSlide.fadeIn(0).addClass("active")
+                prevSlide.animate({left: "+="+movement},1500,() => {
+                    prevSlide.css("left", 0)
+                    currentSlide.css("left", 0)
+                    this.progress = true
+               })
                 if (this.sliderMode) {
-                this.sliderInterval = setInterval(this.runInterval, 6000);
+                this.sliderInterval = setInterval(this.runInterval, 6000)
                 }
-            },
-            leftArrowHover() { // change the arrow color
-                $('.fa-caret-left').toggleClass('green').toggleClass('orange');
-            },
-            rightArrowHover() { // change the arrow color
-                $('.fa-caret-right').toggleClass('green').toggleClass('orange');
             },
             rightArrow(){ // display next slider and clear the interval if needed
+                this.progress = false
                 if (this.sliderMode) {
-                    clearInterval(this.sliderInterval);
+                    clearInterval(this.sliderInterval)
                 }
-                var currentSlide = $(".active");
-                var nextSlide = currentSlide.next();
+                let currentSlide = $(".active")
+                let nextSlide = currentSlide.next()
+                let movement = parseInt($("#sliderContiner").width() / 2)
 
-                currentSlide.fadeOut(0).removeClass("active");
-                nextSlide.fadeIn(0).addClass("active");
-
+                currentSlide.animate({left: "-="+movement},1500,() => {
+                    currentSlide.fadeOut(0).removeClass("active")
+                    currentSlide.css("left", 0)
+                })
                 if (nextSlide.length == 0) {
-                    $(".slider").first().fadeIn(0).addClass("active");
+                    nextSlide = $(".slider").first()
                 }
+                nextSlide.css("left", movement)
+                nextSlide.fadeIn(0).addClass("active")
+                nextSlide.animate({left: "-="+movement},1500,() => {
+                    nextSlide.css("left", 0)
+                    currentSlide.css("left", 0)
+                    this.progress = true
+                })
                 if (this.sliderMode) {
-                this.sliderInterval = setInterval(this.runInterval, 6000);
+                this.sliderInterval = setInterval(this.runInterval, 6000)
                 }
             },
         },
         mounted() {
-            this.getSliders();
-            this.changeAdminMode();
+            this.getSliders()
+            this.changeAdminMode()
         }
     }
 </script>
-
-
-
