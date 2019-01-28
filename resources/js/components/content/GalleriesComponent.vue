@@ -47,7 +47,7 @@ and wich calls "editGalleries" method passing the gallery object to it. -->
 and wich calls "deleteGalleries" method passing the gallery id to it. -->
                         <a href="" @click.prevent="deleteGalleries(gallery.id)"><i class="fas fa-trash red fa-2x"></i>&#160;</a>
 <!--The following <a> has binded href atribute to imagerComponent and passing the photo title to it.  -->
-                        <a :href="'/Снимки/' + gallery.photos"><i class="fas fa-cut blue fa-2x"></i>&#160;</a>
+                        <a :href="'/Снимки/' + gallery.photos + '/Категория/galleries'"><i class="fas fa-cut blue fa-2x"></i>&#160;</a>
                     </div>
                 </div>
                 </router-link>

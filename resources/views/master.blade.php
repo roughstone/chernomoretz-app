@@ -8,7 +8,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
 
@@ -22,7 +21,7 @@
     <body>
         <div class="flex-center position-ref full-height" id="app">
             @if (Route::has('login'))
-            <div class="loginPanel fixed-top">
+            <div class="loginPanel">
                 @auth
                     <a href="{{ url('/Профил') }}"><i class="far fa-user green"></i> Моят профил &#160</a>
                     <a href="{{ route('logout') }}"
@@ -35,11 +34,11 @@
                         @csrf
                     </form>
                 @else
-                    <a href="" class="fixed-top-right" data-toggle="modal" data-target="#userModal">
+                    <a href="" data-toggle="modal" data-target="#userModal">
                         <i class="fas fa-sign-in-alt green"></i></i>&#160Вход
                     </a>
                 @endauth
-            </div>
+                </div>
             @endif
             <authentication-component></authentication-component>
             <master-header></master-header>

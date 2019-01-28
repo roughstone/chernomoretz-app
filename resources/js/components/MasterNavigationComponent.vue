@@ -2,20 +2,14 @@
 <template>
 <nav id="navBar" class="navbar navbar-expand-lg navbar-dark">
 
-
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
+    <i class="fas fa-bars fa-3x"></i>
 </button>
 
 <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-    <li class="nav-item">
-        <router-link class="nav-link pt-0 pb-0" to="/"><i class="fas fa-home purple"></i> Начало</router-link>
-    </li>
-    <li class="nav-item">
-        <router-link class="nav-link pt-0 pb-0" to="/Новини/1"><i class="far fa-newspaper purple"></i> Новини</router-link>
-    </li>
-
+    <li class="nav-item"><router-link class="nav-link pt-0 pb-0" to="/"><i class="fas fa-home purple"></i> Начало</router-link></li>
+    <li class="nav-item"><router-link class="nav-link pt-0 pb-0" to="/Новини/1"><i class="far fa-newspaper purple"></i> Новини</router-link></li>
     <li class="nav-item dropdown">
         <a class="nav-link pt-0 pb-0 dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-users purple"></i> Отбор
@@ -25,12 +19,8 @@
             <router-link class="dropdown-item" to="/Състезатели/1">Състезатели</router-link>
         </div>
     </li>
-    <li class="nav-item">
-        <router-link class="nav-link pt-0 pb-0" to="/График"><i class="fas fa-clipboard-list purple"></i> График</router-link>
-    </li>
-
-    <li class="nav-item dropdown">
-        <a class="nav-link pt-0 pb-0 dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <li class="nav-item"><router-link class="nav-link pt-0 pb-0" to="/График"><i class="fas fa-clipboard-list purple"></i> График</router-link></li>
+    <li class="nav-item dropdown"><a class="nav-link pt-0 pb-0 dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="far fa-images purple"></i> Галерия
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">

@@ -53,7 +53,7 @@ const routes = [
     { path: '/График', component: require('./components/content/SchedulesComponent.vue').default},
     { path: '/Галерии/:type/Страница/:page', component: require('./components/content/GalleriesComponent.vue').default},
     { path: '/Галерии/:type/Галерия/:title/Id/:id', component: require('./components/content/GalleryComponent.vue').default},
-    { path: '/Снимки/:photo', component: require('./components/ImagerComponent.vue').default},
+    { path: '/Снимки/:photo/Категория/:category', component: require('./components/ImagerComponent.vue').default},
     { path: '/Профил', component: require('./components/auth/UsersComponent.vue').default},
 ]
 

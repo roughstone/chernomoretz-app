@@ -14,7 +14,7 @@
             <div class="page-button float-left d-inline-block">
 <!--The following <a> has click event with .prevent called to prevent the default behavior of the <a>
     and wich calls "prevPage" method. The logic open the previous page of content. -->
-                <a :href="'./'+ ((this.page > 1) ? (this.page - 1) : this.pages)" class="page-link"><i class="fas fa-chevron-left"></i></a>
+                <a href="" @click.prevent="((page > 1) ? (page -= 1) : page = pages), getPage()" class="page-link"><i class="fas fa-chevron-left"></i></a>
             </div>
             <div class="page-input float-left d-inline-block">
                 <p class="page-text">Страница</p>
@@ -29,7 +29,7 @@
             <div class="page-button float-left d-inline-block">
 <!--The following <a> has click event with .prevent called to prevent the default behavior of the <a>
     and wich calls "nextPage" method. The logic open the next page of content. -->
-                <a :href="'./'+ ((this.page < this.pages) ? (this.page + 1) : 1)" class="page-link"><i class="fas fa-chevron-right"></i></a>
+                <a href="" @click.prevent="'./'+ ((page < pages) ? (page += 1) : page = 1), getPage()" class="page-link"><i class="fas fa-chevron-right"></i></a>
             </div>
         </div>
 <!--The following <div> is multiplied by Vuejs v-for directive for each record form "competitors" parameter.  -->
@@ -50,8 +50,8 @@
                         <p class="text-left">{{ competitor.birthday | getAge }}</p>
                     </div>
                     <div class="col-12">
-                        <p class="text-center h6 mb-0 underline">Състезател по</p>
-                        <p class="text-center h4">{{ competitor.sport }}</p>
+                        <p class="text-center mb-0 underline">Състезател по</p>
+                        <p class="text-center">{{ competitor.sport }}</p>
                     </div>
                 </a>
 <!-- The following <div> is shown if adminMode parameter is false (the user is not administrator)-->
@@ -64,7 +64,7 @@
     and wich calls "deleteCompetitor" method passing the competitor id to it. -->
                     <a href="" @click.prevent="deleteCompetitor(competitor.id)"><i class="fas fa-trash red"></i>&#160;</a>
 <!--The following <a> has binded href atribute to imagerComponent and passing the photo title to it.  -->
-                    <a :href="'/Снимки/' + competitor.photos"><i class="fas fa-cut blue"></i>&#160;</a>
+                    <a :href="'/Снимки/' + competitor.photos +'/Категория/competitors'"><i class="fas fa-cut blue"></i>&#160;</a>
                 </div>
             </div>
         </div>

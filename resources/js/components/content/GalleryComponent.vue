@@ -16,7 +16,7 @@
 
 <!--The following <div> is multiplied by Vuejs v-for directive for each record form "displayedGallery" parameter.
 Size is set to "col-3" grid proportion with zero padding to show 4 records per row.  -->
-            <div class="col-3 d-inline-block pl-0 pr-0" v-for="(photo, index) in displayedGallery" :key="photo.photo">
+            <div class="col-6 col-md-3 d-inline-block pl-0 pr-0" v-for="(photo, index) in displayedGallery" :key="photo.photo">
 <!--The following <div> has bind inline style background-image with the image name got from the DB -->
                 <div class="photoGallery" @click="singlePhotoModal(index)" :style="{ 'background-image': 'url(/storage/images/' + photo.photos + ')' }">
                 </div>
@@ -26,7 +26,7 @@ Size is set to "col-3" grid proportion with zero padding to show 4 records per r
                         <i class="fas fa-trash red fa-lg"></i>&#160;</a>
 <!--The following <a> checks is the user an administrator if it is, the <a> is displayed on the document.
     The binding href attribute is a path with the name of the image file to the Vuejs component which can edit it. -->
-                <a :href="'/Снимки/' + photo.photos" v-if="adminMode"><i class="fas fa-cut blue fa-lg"></i>&#160;</a>
+                <a :href="'/Снимки/' + photo.photos + '/Категория/photos'" v-if="adminMode"><i class="fas fa-cut blue fa-lg"></i>&#160;</a>
             </div>
 <!--The following <div> is displayed only if the records from the DB are more than the integer provided in the "loadedPhoto" parameter. -->
             <div class="col-12 d-inline-block mt-3 dwhite" v-if="allPhotos > loadedPhoto">
@@ -111,7 +111,7 @@ Size is set to "col-3" grid proportion with zero padding to show 4 records per r
                 photoIndex : null, //holds the index of a single record
                 thePhoto : null, //holds the signle record
                 allPhotos : null, // holds the number of all the photos get from the DB
-                loadedPhoto : 16, // the numer of photos to display
+                loadedPhoto : 12, // the numer of photos to display
                 form : new Form ({ // instantiate a new Form object
                     title : null, // title of/for the DB record
                     photos : null, // image of/for the DB record
@@ -250,8 +250,8 @@ Size is set to "col-3" grid proportion with zero padding to show 4 records per r
                 }
             },
             loadMorePhoto() { // set the number of recors to display
-                this.loadedPhoto +=16
-                this.displayGallery()
+                this.loadedPhoto +=12
+                setTimeout(() => {this.displayGallery()}, 100)
             }
         },
         mounted() {

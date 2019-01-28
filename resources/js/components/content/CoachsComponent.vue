@@ -39,7 +39,7 @@ and wich calls "editCoach" method passing the coach object to it. -->
 and wich calls "deleteCoach" method passing the coach id to it. -->
                     <a href="" @click.prevent="deleteCoach(coach.id)"><i class="fas fa-trash red"></i>&#160;</a>
 <!--The following <a> has binded href atribute to imagerComponent and passing the photo title to it.  -->
-                    <a :href="'/Снимки/' + coach.photos"><i class="fas fa-cut blue"></i>&#160;</a>
+                    <a :href="'/Снимки/' + coach.photos+'/Категория/coachs'"><i class="fas fa-cut blue"></i>&#160;</a>
                 </div>
             </div>
         </div>

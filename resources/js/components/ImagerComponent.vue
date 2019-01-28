@@ -72,6 +72,7 @@
                 croperMethod : 'free', // the croper aspect ratio
                 form: new Form({ // //instantiate a new Form object
                     photo: this.$route.params.photo, // the photo title to be send to the backend
+                    category: this.$route.params.category,
                     method: null, // the method to to be send to the backend
                 })
             }
@@ -126,78 +127,94 @@
             rotateImg() { // send data to backend to rotate the image
                 this.$loadStart()
                 this.form.method = 'rotate'
-                if(this.$gate.isAdmin()) {
-                    this.form.post('/api/editImg')
-                    .then(location.reload())
-                    .catch(() => {
-                        swal({
-                            type: 'error',
-                            title: 'Възникна грешка',
-                            showConfirmButton: false,
-                            timer: 2000,
-                            reload: setTimeout(() => {
-                                location.reload()
-                            }, 2000)
+                setTimeout(() => {
+                    if(this.$gate.isAdmin()) {
+                        this.form.post('/api/editImg')
+                        .then(function (response) {
+                            window.location.assign("http://club-chernomorecz.com/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BA%D0%B8/"+response.data+"/%D0%9A%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D1%8F/news")
                         })
-                    })
-                }
+                        .catch(() => {
+                            swal({
+                                type: 'error',
+                                title: 'Възникна грешка',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                reload: setTimeout(() => {
+                                    /* location.reload() */
+                                }, 2000)
+                            })
+                        })
+                    }
+                },100)
             },
             cropImg() { // send data to backend to crop the image
                 this.$loadStart()
                 this.form.method = 'crop'
-                if(this.$gate.isAdmin()) {
-                    this.form.post('/api/editImg')
-                    .then(location.reload())
-                    .catch(() => {
-                        swal({
-                            type: 'error',
-                            title: 'Възникна грешка',
-                            showConfirmButton: false,
-                            timer: 2000,
-                            reload: setTimeout(() => {
-                                location.reload()
-                            }, 2000)
+                setTimeout(() => {
+                    if(this.$gate.isAdmin()) {
+                        this.form.post('/api/editImg')
+                        .then(function (response) {
+                            window.location.assign("http://club-chernomorecz.com/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BA%D0%B8/"+response.data+"/%D0%9A%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D1%8F/news")
                         })
-                    })
-                }
+                        .catch(() => {
+                            swal({
+                                type: 'error',
+                                title: 'Възникна грешка',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                reload: setTimeout(() => {
+                                    /* location.reload() */
+                                }, 2000)
+                            })
+                        })
+                    }
+                },100)
             },
             mirrorImgX() { // send data to backend to flip the image horizontally
-                this.$loadStart()
+                /* this.$loadStart() */
                 this.form.method = 'flipX'
-                if(this.$gate.isAdmin()) {
-                    this.form.post('/api/editImg')
-                    .then(location.reload())
-                    .catch(() => {
-                        swal({
-                            type: 'error',
-                            title: 'Възникна грешка',
-                            showConfirmButton: false,
-                            timer: 2000,
-                            reload: setTimeout(() => {
-                                location.reload()
-                            }, 2000)
+                setTimeout(() => {
+                    if(this.$gate.isAdmin()) {
+                        this.form.post('/api/editImg')
+                        .then(function (response) {
+                            window.location.assign("http://club-chernomorecz.com/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BA%D0%B8/"+response.data+"/%D0%9A%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D1%8F/news")
                         })
-                    })
-                }
+                        .catch(() => {
+                            swal({
+                                type: 'error',
+                                title: 'Възникна грешка',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                reload: setTimeout(() => {
+                                    location.reload()
+                                }, 2000)
+                            })
+                        })
+                    }
+                },100)
             },
             mirrorImgY() { // send data to backend to flip the image vertically
                 this.$loadStart()
                 this.form.method = 'flipY'
-                if(this.$gate.isAdmin()) {
-                    this.form.post('/api/editImg')
-                    .then(location.reload())
-                    .catch(() => {
-                        swal({
-                            type: 'error',
-                            title: 'Възникна грешка',
-                            showConfirmButton: false,
-                            timer: 2000,
-                            reload: setTimeout(() => {
-                                location.reload()
-                            }, 2000)
+                setTimeout(() => {
+                    if(this.$gate.isAdmin()) {
+                        this.form.post('/api/editImg')
+                        .then(function (response) {
+                            window.location.assign("http://club-chernomorecz.com/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BA%D0%B8/"+response.data+"/%D0%9A%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D1%8F/news")
                         })
-                    })
-                }
+                        .catch(() => {
+                            swal({
+                                type: 'error',
+                                title: 'Възникна грешка',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                reload: setTimeout(() => {
+                                    /* location.reload() */
+                                }, 2000)
+                            })
+                        })
+                    }
+                },100)
             },
             closeMenus() { // reset all the data by reloading the page
                 location.reload()

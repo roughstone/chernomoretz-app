@@ -12,7 +12,7 @@
 <!--The following <div> is multiplied by Vuejs v-for directive for each record form "announcements" parameter.  -->
         <div v-for="announcement in announcements" :key="announcement.id">
             <div class="mt-3 announcement">
-                <a href="#" @click.prevent="editAnnouncement(announcement)">
+                <a href="" @click.prevent="editAnnouncement(announcement)">
                     <p class="mb-0 float-left dwhite"><img :class="'img-fluid w-50 p-1 float-left'" :src="'/storage/images/' + announcement.photos" :alt="announcement.title">{{ announcement.title }}</p>
                     <div v-if="!adminMode" class="p-1 d-inline-block w-100">
                         <hr class="mb-0 mt-0">
@@ -33,7 +33,7 @@
                     <i class="fas fa-trash red"></i>&#160;</a>
                     <h5 class="mb-0 mt-0 mr-1 float-right dwhite">Дата: {{ announcement.date }}</h5>
 <!--The following <a> has binded href atribute to imagerComponent and passing the photo title to it.  -->
-                    <a :href="'/Снимки/' + announcement.photos"><i class="fas fa-cut blue"></i>&#160;</a>
+                    <a :href="'/Снимки/' + announcement.photos +'/Категория/news'"><i class="fas fa-cut blue"></i>&#160;</a>
                 </div>
             </div>
         </div>

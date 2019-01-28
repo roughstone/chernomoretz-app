@@ -1976,6 +1976,7 @@ __webpack_require__.r(__webpack_exports__);
         // //instantiate a new Form object
         photo: this.$route.params.photo,
         // the photo title to be send to the backend
+        category: this.$route.params.category,
         method: null // the method to to be send to the backend
 
       })
@@ -2044,80 +2045,101 @@ __webpack_require__.r(__webpack_exports__);
       this.photoWidth = this.keepWidth * parseFloat(text);
     },
     rotateImg: function rotateImg() {
+      var _this = this;
+
       // send data to backend to rotate the image
       this.$loadStart();
       this.form.method = 'rotate';
-
-      if (this.$gate.isAdmin()) {
-        this.form.post('/api/editImg').then(location.reload()).catch(function () {
-          swal({
-            type: 'error',
-            title: 'Възникна грешка',
-            showConfirmButton: false,
-            timer: 2000,
-            reload: setTimeout(function () {
-              location.reload();
-            }, 2000)
+      setTimeout(function () {
+        if (_this.$gate.isAdmin()) {
+          _this.form.post('/api/editImg').then(function (response) {
+            window.location.assign("http://club-chernomorecz.com/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BA%D0%B8/" + response.data + "/%D0%9A%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D1%8F/news");
+          }).catch(function () {
+            swal({
+              type: 'error',
+              title: 'Възникна грешка',
+              showConfirmButton: false,
+              timer: 2000,
+              reload: setTimeout(function () {
+                /* location.reload() */
+              }, 2000)
+            });
           });
-        });
-      }
+        }
+      }, 100);
     },
     cropImg: function cropImg() {
+      var _this2 = this;
+
       // send data to backend to crop the image
       this.$loadStart();
       this.form.method = 'crop';
-
-      if (this.$gate.isAdmin()) {
-        this.form.post('/api/editImg').then(location.reload()).catch(function () {
-          swal({
-            type: 'error',
-            title: 'Възникна грешка',
-            showConfirmButton: false,
-            timer: 2000,
-            reload: setTimeout(function () {
-              location.reload();
-            }, 2000)
+      setTimeout(function () {
+        if (_this2.$gate.isAdmin()) {
+          _this2.form.post('/api/editImg').then(function (response) {
+            window.location.assign("http://club-chernomorecz.com/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BA%D0%B8/" + response.data + "/%D0%9A%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D1%8F/news");
+          }).catch(function () {
+            swal({
+              type: 'error',
+              title: 'Възникна грешка',
+              showConfirmButton: false,
+              timer: 2000,
+              reload: setTimeout(function () {
+                /* location.reload() */
+              }, 2000)
+            });
           });
-        });
-      }
+        }
+      }, 100);
     },
     mirrorImgX: function mirrorImgX() {
-      // send data to backend to flip the image horizontally
-      this.$loadStart();
-      this.form.method = 'flipX';
+      var _this3 = this;
 
-      if (this.$gate.isAdmin()) {
-        this.form.post('/api/editImg').then(location.reload()).catch(function () {
-          swal({
-            type: 'error',
-            title: 'Възникна грешка',
-            showConfirmButton: false,
-            timer: 2000,
-            reload: setTimeout(function () {
-              location.reload();
-            }, 2000)
+      // send data to backend to flip the image horizontally
+
+      /* this.$loadStart() */
+      this.form.method = 'flipX';
+      setTimeout(function () {
+        if (_this3.$gate.isAdmin()) {
+          _this3.form.post('/api/editImg').then(function (response) {
+            window.location.assign("http://club-chernomorecz.com/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BA%D0%B8/" + response.data + "/%D0%9A%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D1%8F/news");
+          }).catch(function () {
+            swal({
+              type: 'error',
+              title: 'Възникна грешка',
+              showConfirmButton: false,
+              timer: 2000,
+              reload: setTimeout(function () {
+                location.reload();
+              }, 2000)
+            });
           });
-        });
-      }
+        }
+      }, 100);
     },
     mirrorImgY: function mirrorImgY() {
+      var _this4 = this;
+
       // send data to backend to flip the image vertically
       this.$loadStart();
       this.form.method = 'flipY';
-
-      if (this.$gate.isAdmin()) {
-        this.form.post('/api/editImg').then(location.reload()).catch(function () {
-          swal({
-            type: 'error',
-            title: 'Възникна грешка',
-            showConfirmButton: false,
-            timer: 2000,
-            reload: setTimeout(function () {
-              location.reload();
-            }, 2000)
+      setTimeout(function () {
+        if (_this4.$gate.isAdmin()) {
+          _this4.form.post('/api/editImg').then(function (response) {
+            window.location.assign("http://club-chernomorecz.com/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BA%D0%B8/" + response.data + "/%D0%9A%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D1%8F/news");
+          }).catch(function () {
+            swal({
+              type: 'error',
+              title: 'Възникна грешка',
+              showConfirmButton: false,
+              timer: 2000,
+              reload: setTimeout(function () {
+                /* location.reload() */
+              }, 2000)
+            });
           });
-        });
-      }
+        }
+      }, 100);
     },
     closeMenus: function closeMenus() {
       // reset all the data by reloading the page
@@ -2216,16 +2238,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -4170,7 +4182,7 @@ __webpack_require__.r(__webpack_exports__);
       //holds the signle record
       allPhotos: null,
       // holds the number of all the photos get from the DB
-      loadedPhoto: 16,
+      loadedPhoto: 12,
       // the numer of photos to display
       form: new Form({
         // instantiate a new Form object
@@ -4338,9 +4350,13 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     loadMorePhoto: function loadMorePhoto() {
+      var _this5 = this;
+
       // set the number of recors to display
-      this.loadedPhoto += 16;
-      this.displayGallery();
+      this.loadedPhoto += 12;
+      setTimeout(function () {
+        _this5.displayGallery();
+      }, 100);
     }
   },
   mounted: function mounted() {
@@ -5340,28 +5356,30 @@ __webpack_require__.r(__webpack_exports__);
     },
     runInterval: function runInterval() {
       // change the slider when called
-      var currentSlide = $(".active");
+      var currentSlide = $(".active").first();
       var nextSlide = currentSlide.next();
       var movement = parseInt($("#sliderContiner").width() / 2);
-      currentSlide.animate({
-        left: "-=" + movement
-      }, 1500, function () {
-        currentSlide.fadeOut(0).removeClass("active");
-        currentSlide.css("left", 0);
-      });
 
       if (nextSlide.length == 0) {
         nextSlide = $(".slider").first();
       }
 
-      nextSlide.css("left", movement);
-      nextSlide.fadeIn(0).addClass("active");
-      nextSlide.animate({
-        left: "-=" + movement
-      }, 1500, function () {
-        nextSlide.css("left", 0);
-        currentSlide.css("left", 0);
-      });
+      setTimeout(function () {
+        currentSlide.animate({
+          left: "-=" + movement
+        }, 1500, function () {
+          currentSlide.fadeOut(0).removeClass("active");
+          currentSlide.css("left", 0);
+        });
+        nextSlide.css("left", movement);
+        nextSlide.fadeIn(0).addClass("active");
+        nextSlide.animate({
+          left: "-=" + movement
+        }, 1500, function () {
+          nextSlide.css("left", 0);
+          currentSlide.css("left", 0);
+        });
+      }, 100);
     },
     leftArrow: function leftArrow() {
       var _this6 = this;
@@ -5443,6 +5461,9 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     this.getSliders();
     this.changeAdminMode();
+  },
+  beforeDestroy: function beforeDestroy() {
+    clearInterval(this.sliderInterval);
   }
 });
 
@@ -62317,7 +62338,7 @@ var staticRenderFns = [
           "aria-label": "Toggle navigation"
         }
       },
-      [_c("span", { staticClass: "navbar-toggler-icon" })]
+      [_c("i", { staticClass: "fas fa-bars fa-3x" })]
     )
   },
   function() {
@@ -63324,7 +63345,7 @@ var render = function() {
             _c(
               "a",
               {
-                attrs: { href: "#" },
+                attrs: { href: "" },
                 on: {
                   click: function($event) {
                     $event.preventDefault()
@@ -63409,7 +63430,12 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "a",
-                    { attrs: { href: "/Снимки/" + announcement.photos } },
+                    {
+                      attrs: {
+                        href:
+                          "/Снимки/" + announcement.photos + "/Категория/news"
+                      }
+                    },
                     [_c("i", { staticClass: "fas fa-cut blue" }), _vm._v(" ")]
                   )
                 ])
@@ -63918,10 +63944,19 @@ var render = function() {
                         ]
                       ),
                       _vm._v(" "),
-                      _c("a", { attrs: { href: "/Снимки/" + coach.photos } }, [
-                        _c("i", { staticClass: "fas fa-cut blue" }),
-                        _vm._v(" ")
-                      ])
+                      _c(
+                        "a",
+                        {
+                          attrs: {
+                            href:
+                              "/Снимки/" + coach.photos + "/Категория/coachs"
+                          }
+                        },
+                        [
+                          _c("i", { staticClass: "fas fa-cut blue" }),
+                          _vm._v(" ")
+                        ]
+                      )
                     ])
                   : _vm._e()
               ])
@@ -64439,9 +64474,15 @@ var render = function() {
                     "a",
                     {
                       staticClass: "page-link",
-                      attrs: {
-                        href:
-                          "./" + (this.page > 1 ? this.page - 1 : this.pages)
+                      attrs: { href: "" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          _vm.page > 1
+                            ? (_vm.page -= 1)
+                            : (_vm.page = _vm.pages),
+                            _vm.getPage()
+                        }
                       }
                     },
                     [_c("i", { staticClass: "fas fa-chevron-left" })]
@@ -64505,9 +64546,16 @@ var render = function() {
                     "a",
                     {
                       staticClass: "page-link",
-                      attrs: {
-                        href:
-                          "./" + (this.page < this.pages ? this.page + 1 : 1)
+                      attrs: { href: "" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          "./" +
+                            (_vm.page < _vm.pages
+                              ? (_vm.page += 1)
+                              : (_vm.page = 1)),
+                            _vm.getPage()
+                        }
                       }
                     },
                     [_c("i", { staticClass: "fas fa-chevron-right" })]
@@ -64570,13 +64618,11 @@ var render = function() {
                     ),
                     _vm._v(" "),
                     _c("div", { staticClass: "col-12" }, [
-                      _c(
-                        "p",
-                        { staticClass: "text-center h6 mb-0 underline" },
-                        [_vm._v("Състезател по")]
-                      ),
+                      _c("p", { staticClass: "text-center mb-0 underline" }, [
+                        _vm._v("Състезател по")
+                      ]),
                       _vm._v(" "),
-                      _c("p", { staticClass: "text-center h4" }, [
+                      _c("p", { staticClass: "text-center" }, [
                         _vm._v(_vm._s(competitor.sport))
                       ])
                     ])
@@ -64623,7 +64669,14 @@ var render = function() {
                       _vm._v(" "),
                       _c(
                         "a",
-                        { attrs: { href: "/Снимки/" + competitor.photos } },
+                        {
+                          attrs: {
+                            href:
+                              "/Снимки/" +
+                              competitor.photos +
+                              "/Категория/competitors"
+                          }
+                        },
                         [
                           _c("i", { staticClass: "fas fa-cut blue" }),
                           _vm._v(" ")
@@ -65321,7 +65374,14 @@ var render = function() {
                             _vm._v(" "),
                             _c(
                               "a",
-                              { attrs: { href: "/Снимки/" + gallery.photos } },
+                              {
+                                attrs: {
+                                  href:
+                                    "/Снимки/" +
+                                    gallery.photos +
+                                    "/Категория/galleries"
+                                }
+                              },
                               [
                                 _c("i", {
                                   staticClass: "fas fa-cut blue fa-2x"
@@ -65687,7 +65747,10 @@ var render = function() {
         _vm._l(_vm.displayedGallery, function(photo, index) {
           return _c(
             "div",
-            { key: photo.photo, staticClass: "col-3 d-inline-block pl-0 pr-0" },
+            {
+              key: photo.photo,
+              staticClass: "col-6 col-md-3 d-inline-block pl-0 pr-0"
+            },
             [
               _c("div", {
                 staticClass: "photoGallery",
@@ -65722,10 +65785,18 @@ var render = function() {
                 : _vm._e(),
               _vm._v(" "),
               _vm.adminMode
-                ? _c("a", { attrs: { href: "/Снимки/" + photo.photos } }, [
-                    _c("i", { staticClass: "fas fa-cut blue fa-lg" }),
-                    _vm._v(" ")
-                  ])
+                ? _c(
+                    "a",
+                    {
+                      attrs: {
+                        href: "/Снимки/" + photo.photos + "/Категория/photos"
+                      }
+                    },
+                    [
+                      _c("i", { staticClass: "fas fa-cut blue fa-lg" }),
+                      _vm._v(" ")
+                    ]
+                  )
                 : _vm._e()
             ]
           )
@@ -66234,7 +66305,9 @@ var render = function() {
                         "a",
                         {
                           staticClass: "float-left",
-                          attrs: { href: "/Снимки/" + news.photos }
+                          attrs: {
+                            href: "/Снимки/" + news.photos + "/Категория/news"
+                          }
                         },
                         [
                           _c("i", { staticClass: "fas fa-cut blue" }),
@@ -67470,7 +67543,14 @@ var render = function() {
                               _vm._v(" "),
                               _c(
                                 "a",
-                                { attrs: { href: "/Снимки/" + slider.photos } },
+                                {
+                                  attrs: {
+                                    href:
+                                      "/Снимки/" +
+                                      slider.photos +
+                                      "/Категория/slider"
+                                  }
+                                },
                                 [
                                   _c("i", { staticClass: "fas fa-cut blue" }),
                                   _vm._v(" ")
@@ -81901,7 +81981,7 @@ var routes = [{
   path: '/Галерии/:type/Галерия/:title/Id/:id',
   component: __webpack_require__(/*! ./components/content/GalleryComponent.vue */ "./resources/js/components/content/GalleryComponent.vue").default
 }, {
-  path: '/Снимки/:photo',
+  path: '/Снимки/:photo/Категория/:category',
   component: __webpack_require__(/*! ./components/ImagerComponent.vue */ "./resources/js/components/ImagerComponent.vue").default
 }, {
   path: '/Профил',
@@ -83099,8 +83179,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\chernomoretz-app\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\chernomoretz-app\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! D:\archive\chernomoretz-app\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\archive\chernomoretz-app\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

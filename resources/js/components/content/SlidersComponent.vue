@@ -39,7 +39,7 @@ and wich calls "editSlider" method passing the slider object to it. -->
 and wich calls "deleteSlider" method passing the slider id to it. -->
                         <a href="" v-if="adminMode" @click.prevent="deleteSlider(slider.id)"><i class="fas fa-trash red"></i>&#160;</a>
 <!--The following <a> has binded href atribute to imagerComponent and passing the photo title to it.  -->
-                        <a :href="'/Снимки/' + slider.photos"><i class="fas fa-cut blue"></i>&#160;</a>
+                        <a :href="'/Снимки/' + slider.photos +'/Категория/slider'"><i class="fas fa-cut blue"></i>&#160;</a>
                     </div>
                 </div>
             </div>
@@ -131,7 +131,6 @@ and wich calls "deleteSlider" method passing the slider id to it. -->
                     this.$loadEnd(500)
                     this.sliderInterval = setInterval(this.runInterval, 6000)
                 })
-
             },
             choiseSlider() { // change the way that shows the content
                 if (this.sliderMode) {
@@ -251,23 +250,24 @@ and wich calls "deleteSlider" method passing the slider id to it. -->
                 }
             },
             runInterval(){ // change the slider when called
-                let currentSlide = $(".active")
+                let currentSlide = $(".active").first()
                 let nextSlide = currentSlide.next()
                 let movement = parseInt($("#sliderContiner").width() / 2)
-
-                currentSlide.animate({left: "-="+movement},1500,() => {
-                    currentSlide.fadeOut(0).removeClass("active")
-                    currentSlide.css("left", 0)
-                })
                 if (nextSlide.length == 0) {
                     nextSlide = $(".slider").first()
                 }
-                nextSlide.css("left", movement)
-                nextSlide.fadeIn(0).addClass("active")
-                nextSlide.animate({left: "-="+movement},1500,() => {
-                    nextSlide.css("left", 0)
-                    currentSlide.css("left", 0)
-               })
+                setTimeout (() => {
+                    currentSlide.animate({left: "-="+movement} ,1500,() => {
+                        currentSlide.fadeOut(0).removeClass("active")
+                        currentSlide.css("left", 0)
+                    })
+                    nextSlide.css("left", movement)
+                    nextSlide.fadeIn(0).addClass("active")
+                    nextSlide.animate({left: "-="+movement},1500,() => {
+                        nextSlide.css("left", 0)
+                        currentSlide.css("left", 0)
+                })
+                },100)
             },
             leftArrow(){ // display previous slider and clear the interval if needed
                 this.progress = false
@@ -327,6 +327,9 @@ and wich calls "deleteSlider" method passing the slider id to it. -->
         mounted() {
             this.getSliders()
             this.changeAdminMode()
+        },
+        beforeDestroy() {
+            clearInterval(this.sliderInterval);
         }
     }
 </script>

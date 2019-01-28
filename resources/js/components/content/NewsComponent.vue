@@ -57,7 +57,7 @@
                     <a class="float-left" href="" @click.prevent="deleteNews(news.id)">
                     <i class="fas fa-trash red"></i>&#160;</a>
 <!--The following <a> has binded href atribute to imagerComponent and passing the photo title to it.  -->
-                    <a class="float-left" :href="'/Снимки/' + news.photos"><i class="fas fa-cut blue"></i>&#160;</a>
+                    <a class="float-left" :href="'/Снимки/' + news.photos + '/Категория/news'"><i class="fas fa-cut blue"></i>&#160;</a>
                     <h5 class="mb-0 mt-0 mr-1 float-right dwhite">Дата: {{ news.date }}</h5>
                 </div>
             </div>
